@@ -1,0 +1,229 @@
+{
+  "data": {
+    "meta_model": {
+      "packages": [
+        {
+          "name": "address_book.main",
+          "info": "Schema for storing address book information",
+          "enumerations": [
+            {
+              "name": "address_book_color",
+              "values": [
+                {
+                  "name": "violet"
+                },
+                {
+                  "name": "indigo"
+                },
+                {
+                  "name": "blue"
+                },
+                {
+                  "name": "green"
+                },
+                {
+                  "name": "yellow"
+                },
+                {
+                  "name": "orange"
+                },
+                {
+                  "name": "red"
+                }
+              ]
+            },
+            {
+              "name": "address_book_relationship",
+              "values": [
+                {
+                  "name": "parent"
+                },
+                {
+                  "name": "child"
+                },
+                {
+                  "name": "spouse"
+                },
+                {
+                  "name": "sibling"
+                },
+                {
+                  "name": "family"
+                },
+                {
+                  "name": "friend"
+                },
+                {
+                  "name": "colleague"
+                }
+              ]
+            }
+          ],
+          "entities": [
+            {
+              "mysql_": {},
+              "name": "address_book_root",
+              "fields": [
+                {
+                  "name": "name",
+                  "info": "A name for the address book",
+                  "type": "string"
+                },
+                {
+                  "name": "last_updated",
+                  "type": "timestamp"
+                },
+                {
+                  "name": "settings",
+                  "type": "composition",
+                  "composition": {
+                    "name": "address_book_settings",
+                    "package": "address_book.main"
+                  },
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "person",
+                  "type": "composition",
+                  "composition": {
+                    "name": "address_book_person",
+                    "package": "address_book.main"
+                  },
+                  "multiplicity": "set"
+                },
+                {
+                  "name": "city_info",
+                  "type": "composition",
+                  "composition": {
+                    "name": "address_book_city_info",
+                    "package": "address_book.city"
+                  },
+                  "multiplicity": "set"
+                }
+              ]
+            },
+            {
+              "mysql_": {},
+              "name": "address_book_settings",
+              "fields": [
+                {
+                  "name": "last_name_first",
+                  "type": "boolean",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "encrypt_hero_name",
+                  "type": "boolean",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "card_colors",
+                  "type": "enumeration",
+                  "enumeration": {
+                    "name": "address_book_color",
+                    "package": "address_book.main"
+                  },
+                  "multiplicity": "list"
+                }
+              ]
+            },
+            {
+              "mysql_": {},
+              "name": "address_book_person",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "is_key": true
+                },
+                {
+                  "name": "first_name",
+                  "type": "string"
+                },
+                {
+                  "name": "last_name",
+                  "type": "string"
+                },
+                {
+                  "name": "hero_name",
+                  "type": "string",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "email",
+                  "type": "string",
+                  "multiplicity": "list"
+                },
+                {
+                  "name": "picture",
+                  "type": "blob",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "relation",
+                  "type": "composition",
+                  "composition": {
+                    "name": "address_book_relation",
+                    "package": "address_book.main"
+                  },
+                  "multiplicity": "set"
+                },
+                {
+                  "name": "password",
+                  "type": "password1way",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "previous_passwords",
+                  "type": "password1way",
+                  "multiplicity": "list"
+                },
+                {
+                  "name": "main_secret",
+                  "type": "password2way",
+                  "multiplicity": "optional"
+                },
+                {
+                  "name": "other_secrets",
+                  "type": "password2way",
+                  "multiplicity": "list"
+                }
+              ]
+            },
+            {
+              "mysql_": {},
+              "name": "address_book_relation",
+              "fields": [
+                {
+                  "name": "id",
+                  "type": "uuid",
+                  "is_key": true
+                },
+                {
+                  "name": "relationship",
+                  "type": "enumeration",
+                  "enumeration": {
+                    "name": "address_book_relationship",
+                    "package": "address_book.main"
+                  }
+                },
+                {
+                  "name": "person",
+                  "type": "association",
+                  "association": [
+                    {
+                      "value": "address_book"
+                    },
+                    {
+                      "value": "person"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

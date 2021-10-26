@@ -1,0 +1,11 @@
+{
+  "data": {
+    "meta_model": {
+      "root": {
+        "name": "address_book",
+        "entity": "address_book_root",
+        "package": "address_book.main"
+      }
+    }
+  }
+}
