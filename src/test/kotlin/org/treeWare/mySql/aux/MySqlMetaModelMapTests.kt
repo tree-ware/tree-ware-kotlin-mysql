@@ -1,6 +1,6 @@
-package org.treeWare.mysql.aux
+package org.treeWare.mySql.aux
 
-import org.treeWare.metaModel.MYSQL_ADDRESS_BOOK_META_MODEL_FILES
+import org.treeWare.metaModel.MY_SQL_ADDRESS_BOOK_META_MODEL_FILES
 import org.treeWare.metaModel.newMainMetaMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.MultiAuxEncoder
@@ -9,17 +9,17 @@ import kotlin.test.Test
 
 private val metaMetaModel = newMainMetaMetaModel()
 
-class MysqlMetaModelMapTests {
+class MySqlMetaModelMapTests {
     @Test
     fun `MySQL meta-model JSON codec round trip must be lossless`() {
-        MYSQL_ADDRESS_BOOK_META_MODEL_FILES.forEach { file ->
+        MY_SQL_ADDRESS_BOOK_META_MODEL_FILES.forEach { file ->
             testRoundTrip(
                 file,
                 multiAuxEncoder = MultiAuxEncoder(
-                    MYSQL_META_MODEL_MAP_CODEC_AUX_NAME to MysqlMetaModelMapEncoder()
+                    MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME to MySqlMetaModelMapEncoder()
                 ),
                 multiAuxDecodingStateMachineFactory = MultiAuxDecodingStateMachineFactory(
-                    MYSQL_META_MODEL_MAP_CODEC_AUX_NAME to { MysqlMetaModelMapStateMachine(it) }
+                    MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME to { MySqlMetaModelMapStateMachine(it) }
                 ),
                 metaModel = metaMetaModel
             )

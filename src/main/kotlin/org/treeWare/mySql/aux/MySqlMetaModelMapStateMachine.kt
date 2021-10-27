@@ -1,24 +1,24 @@
-package org.treeWare.mysql.aux
+package org.treeWare.mySql.aux
 
 import org.treeWare.model.decoder.stateMachine.AbstractDecodingStateMachine
 import org.treeWare.model.decoder.stateMachine.AuxDecodingStateMachine
 import org.treeWare.model.decoder.stateMachine.DecodingStack
 
-class MysqlMetaModelMapStateMachine(
+class MySqlMetaModelMapStateMachine(
     private val stack: DecodingStack
 ) : AuxDecodingStateMachine, AbstractDecodingStateMachine(true) {
-    private var aux: MysqlMetaModelMap? = null
+    private var aux: MySqlMetaModelMap? = null
 
     override fun newAux() {
         aux = null
     }
 
-    override fun getAux(): MysqlMetaModelMap? {
+    override fun getAux(): MySqlMetaModelMap? {
         return aux
     }
 
     override fun decodeStringValue(value: String): Boolean = when (keyName) {
-        MYSQL_META_MODEL_MAP_CODEC_TABLE_NAME -> {
+        MY_SQL_META_MODEL_MAP_CODEC_TABLE_NAME -> {
             aux?.tableName = value
             true
         }
@@ -26,7 +26,7 @@ class MysqlMetaModelMapStateMachine(
     }
 
     override fun decodeObjectStart(): Boolean {
-        aux = MysqlMetaModelMap()
+        aux = MySqlMetaModelMap()
         return true
     }
 
