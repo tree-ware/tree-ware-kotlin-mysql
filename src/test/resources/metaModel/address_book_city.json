@@ -7,7 +7,7 @@
           "info": "Schema for storing city information",
           "entities": [
             {
-              "mysql_": {},
+              "my_sql_": {},
               "name": "address_book_city",
               "fields": [
                 {
@@ -31,7 +31,7 @@
               ]
             },
             {
-              "mysql_": {
+              "my_sql_": {
                 "table_name": "city_info"
               },
               "name": "address_book_city_info",

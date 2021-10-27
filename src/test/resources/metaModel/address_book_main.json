@@ -61,7 +61,7 @@
           ],
           "entities": [
             {
-              "mysql_": {},
+              "my_sql_": {},
               "name": "address_book_root",
               "fields": [
                 {
@@ -103,7 +103,7 @@
               ]
             },
             {
-              "mysql_": {},
+              "my_sql_": {},
               "name": "address_book_settings",
               "fields": [
                 {
@@ -128,7 +128,7 @@
               ]
             },
             {
-              "mysql_": {},
+              "my_sql_": {},
               "name": "address_book_person",
               "fields": [
                 {
@@ -191,7 +191,7 @@
               ]
             },
             {
-              "mysql_": {},
+              "my_sql_": {},
               "name": "address_book_relation",
               "fields": [
                 {
