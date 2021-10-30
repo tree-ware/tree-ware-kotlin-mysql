@@ -18,6 +18,10 @@ class MySqlMetaModelMapStateMachine(
     }
 
     override fun decodeStringValue(value: String): Boolean = when (keyName) {
+        MY_SQL_META_MODEL_MAP_CODEC_TABLE_PREFIX -> {
+            aux?.tablePrefix = value
+            true
+        }
         MY_SQL_META_MODEL_MAP_CODEC_TABLE_NAME -> {
             aux?.tableName = value
             true

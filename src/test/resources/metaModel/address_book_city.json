@@ -3,6 +3,9 @@
     "meta_model": {
       "packages": [
         {
+          "my_sql_": {
+            "table_prefix": "city"
+          },
           "name": "address_book.city",
           "info": "Schema for storing city information",
           "entities": [

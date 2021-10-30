@@ -3,6 +3,9 @@
     "meta_model": {
       "packages": [
         {
+          "my_sql_": {
+            "table_prefix": "main"
+          },
           "name": "address_book.main",
           "info": "Schema for storing address book information",
           "enumerations": [
