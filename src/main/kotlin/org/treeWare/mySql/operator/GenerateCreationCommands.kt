@@ -23,6 +23,7 @@ private data class CreateTableCommand(val entity: Entity, val command: String)
 private class GenerateCreationCommandsVisitor(
     private val environment: String
 ) : AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+    private var databaseName = ""
     private var createDatabase = ""
     private val createTableBuffer = StringBuffer()
     private val createTables = mutableListOf<CreateTableCommand>()
@@ -37,7 +38,8 @@ private class GenerateCreationCommandsVisitor(
 
     override fun visitMainMeta(leaderMainMeta1: MainModel): TraversalAction {
         val name = getMetaName(getRootMeta(leaderMainMeta1))
-        createDatabase = "CREATE DATABASE IF NOT EXISTS ${environment}_$name;"
+        databaseName = "${environment}_$name"
+        createDatabase = "CREATE DATABASE IF NOT EXISTS ${databaseName};"
         return TraversalAction.CONTINUE
     }
 
@@ -63,7 +65,7 @@ private class GenerateCreationCommandsVisitor(
         val tableName = aux?.tableName ?: entityName
         createTableBuffer.setLength(0) // "clear" the buffer
         createTableBuffer
-            .appendLine("CREATE TABLE IF NOT EXISTS ${tablePrefix}__$tableName (")
+            .appendLine("CREATE TABLE IF NOT EXISTS ${databaseName}.${tablePrefix}__$tableName (")
             .append("  parent_id$ VARCHAR(10000)")
         return TraversalAction.CONTINUE
     }
