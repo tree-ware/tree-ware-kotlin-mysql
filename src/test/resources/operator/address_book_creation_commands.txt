@@ -1,11 +1,11 @@
 CREATE DATABASE IF NOT EXISTS test_address_book;
-CREATE TABLE IF NOT EXISTS main__address_book_root (
+CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_root (
   parent_id$ VARCHAR(10000),
   name VARCHAR(2048),
   last_updated DATETIME,
   settings JSON
 );
-CREATE TABLE IF NOT EXISTS main__address_book_person (
+CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_person (
   parent_id$ VARCHAR(10000),
   id BINARY(16),
   first_name VARCHAR(2048),
@@ -18,13 +18,13 @@ CREATE TABLE IF NOT EXISTS main__address_book_person (
   main_secret JSON,
   other_secrets JSON
 );
-CREATE TABLE IF NOT EXISTS main__address_book_relation (
+CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_relation (
   parent_id$ VARCHAR(10000),
   id BINARY(16),
   relationship VARCHAR(2048),
   person JSON
 );
-CREATE TABLE IF NOT EXISTS city__city_info (
+CREATE TABLE IF NOT EXISTS test_address_book.city__city_info (
   parent_id$ VARCHAR(10000),
   city JSON,
   info VARCHAR(2048),
