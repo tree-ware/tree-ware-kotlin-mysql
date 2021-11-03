@@ -11,16 +11,16 @@ import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.aux.MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME
 import org.treeWare.mySql.aux.MySqlMetaModelMap
 
-fun generateCreationsCommands(environment: String, mainMeta: MainModel): List<String> {
-    val visitor = GenerateCreationCommandsVisitor(environment)
+fun generateCreateCommands(environment: String, mainMeta: MainModel): List<String> {
+    val visitor = GenerateCreateCommandsVisitor(environment)
     metaModelForEach(mainMeta, visitor)
-    return visitor.creationCommands
+    return visitor.createCommands
 }
 
 private data class Entity(val packageName: String, val entityName: String)
 private data class CreateTableCommand(val entity: Entity, val command: String)
 
-private class GenerateCreationCommandsVisitor(
+private class GenerateCreateCommandsVisitor(
     private val environment: String
 ) : AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     private var databaseName = ""
@@ -31,7 +31,7 @@ private class GenerateCreationCommandsVisitor(
     private var packageName = ""
     private var tablePrefix = ""
 
-    val creationCommands: List<String>
+    val createCommands: List<String>
         get() = listOf(createDatabase) + createTables.mapNotNull {
             if (entitiesInCompositionSets.contains(it.entity)) it.command else null
         }

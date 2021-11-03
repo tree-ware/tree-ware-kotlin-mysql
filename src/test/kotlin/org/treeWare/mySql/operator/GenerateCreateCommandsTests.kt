@@ -5,12 +5,12 @@ import org.treeWare.model.readFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GenerateCreationsCommandsTests {
+class GenerateCreateCommandsTests {
     @Test
-    fun `Creation commands must be generated for the database and tables`() {
+    fun `Create-commands must be generated for the database and tables`() {
         val metaModel = newMySqlAddressBookMetaModel(null, null)
-        val commands = generateCreationsCommands("test", metaModel)
-        val expected = readFile("operator/address_book_creation_commands.txt")
+        val commands = generateCreateCommands("test", metaModel)
+        val expected = readFile("operator/address_book_create_commands.txt")
         val actual = commands.joinToString("\n")
         assertEquals(expected, actual)
     }
