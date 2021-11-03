@@ -5,7 +5,7 @@ import com.wix.mysql.EmbeddedMysql.anEmbeddedMysql
 import com.wix.mysql.config.MysqldConfig.aMysqldConfig
 import com.wix.mysql.distribution.Version.v8_0_17
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
-import java.net.ServerSocket
+import org.treeWare.mySql.test.getAvailableServerPort
 import java.sql.Connection
 import java.sql.DriverManager
 import kotlin.test.*
@@ -51,13 +51,6 @@ class CreateDatabaseTests {
         val tableNames = getTableNames(connection, expectedDatabaseName)
         assertEquals(expectedTableNames.joinToString("\n"), tableNames.joinToString("\n"))
     }
-}
-
-private fun getAvailableServerPort(): Int {
-    val socket = ServerSocket(0)
-    val port = socket.localPort
-    socket.close()
-    return port
 }
 
 private fun getDatabaseNames(connection: Connection): List<String> {
