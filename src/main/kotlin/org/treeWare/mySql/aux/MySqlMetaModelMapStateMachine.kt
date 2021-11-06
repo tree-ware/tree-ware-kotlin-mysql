@@ -51,6 +51,4 @@ class MySqlMetaModelMapStateMachine(
         assert(false)
         return false
     }
-
-
 }

@@ -5,14 +5,12 @@ import org.treeWare.metaModel.traversal.AbstractLeader1Follower0MetaModelVisitor
 import org.treeWare.metaModel.traversal.metaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MainModel
-import org.treeWare.model.core.getAux
 import org.treeWare.model.core.getSingleString
 import org.treeWare.model.traversal.TraversalAction
-import org.treeWare.mySql.aux.MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME
-import org.treeWare.mySql.aux.MySqlMetaModelMap
+import org.treeWare.mySql.aux.getMySqlMetaModelMap
 
-fun generateCreateCommands(environment: String, mainMeta: MainModel): List<String> {
-    val visitor = GenerateCreateCommandsVisitor(environment)
+fun generateCreateCommands(mainMeta: MainModel): List<String> {
+    val visitor = GenerateCreateCommandsVisitor()
     metaModelForEach(mainMeta, visitor)
     return visitor.createCommands
 }
@@ -20,9 +18,8 @@ fun generateCreateCommands(environment: String, mainMeta: MainModel): List<Strin
 private data class Entity(val packageName: String, val entityName: String)
 private data class CreateTableCommand(val entity: Entity, val command: String)
 
-private class GenerateCreateCommandsVisitor(
-    private val environment: String
-) : AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+private class GenerateCreateCommandsVisitor :
+    AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     private var databaseName = ""
     private var createDatabase = ""
     private val createTableBuffer = StringBuffer()
@@ -37,8 +34,7 @@ private class GenerateCreateCommandsVisitor(
         }
 
     override fun visitMainMeta(leaderMainMeta1: MainModel): TraversalAction {
-        val name = getMetaName(getRootMeta(leaderMainMeta1))
-        databaseName = "${environment}_$name"
+        databaseName = getMySqlMetaModelMap(leaderMainMeta1)?.validated?.sqlIdentifier ?: ""
         createDatabase = "CREATE DATABASE IF NOT EXISTS ${databaseName};"
         return TraversalAction.CONTINUE
     }
@@ -53,19 +49,18 @@ private class GenerateCreateCommandsVisitor(
     }
 
     override fun visitPackageMeta(leaderPackageMeta1: EntityModel): TraversalAction {
-        val aux = leaderPackageMeta1.getAux<MySqlMetaModelMap>(MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME)
+        val aux = getMySqlMetaModelMap(leaderPackageMeta1)
         packageName = getMetaName(leaderPackageMeta1)
         tablePrefix = aux?.tablePrefix ?: packageName
         return TraversalAction.CONTINUE
     }
 
     override fun visitEntityMeta(leaderEntityMeta1: EntityModel): TraversalAction {
-        val aux = leaderEntityMeta1.getAux<MySqlMetaModelMap>(MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME)
-        val entityName = getMetaName(leaderEntityMeta1)
-        val tableName = aux?.tableName ?: entityName
+        val aux = getMySqlMetaModelMap(leaderEntityMeta1)
+        val tableName = aux?.validated?.sqlIdentifier ?: ""
         createTableBuffer.setLength(0) // "clear" the buffer
         createTableBuffer
-            .appendLine("CREATE TABLE IF NOT EXISTS ${databaseName}.${tablePrefix}__$tableName (")
+            .appendLine("CREATE TABLE IF NOT EXISTS $tableName (")
             .append("  parent_id$ VARCHAR(10000)")
         return TraversalAction.CONTINUE
     }
