@@ -43,8 +43,8 @@ class CreateDatabaseTests {
         val before = getDatabaseNames(connection)
         assertFalse(before.contains(expectedDatabaseName))
 
-        val metaModel = newMySqlAddressBookMetaModel(null, null)
-        createDatabase("test", metaModel, connection)
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        createDatabase(metaModel, connection)
         val after = getDatabaseNames(connection)
         assertTrue(after.contains(expectedDatabaseName))
 
