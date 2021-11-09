@@ -6,6 +6,7 @@ import com.wix.mysql.config.MysqldConfig.aMysqldConfig
 import com.wix.mysql.distribution.Version.v8_0_17
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.mySql.test.getAvailableServerPort
+import org.treeWare.mySql.test.getTableNames
 import java.sql.Connection
 import java.sql.DriverManager
 import kotlin.test.*
@@ -37,7 +38,8 @@ class CreateDatabaseTests {
             "city__city_info",
             "main__address_book_person",
             "main__address_book_relation",
-            "main__address_book_root"
+            "main__address_book_root",
+            "main__address_book_settings"
         )
 
         val before = getDatabaseNames(connection)
@@ -50,6 +52,8 @@ class CreateDatabaseTests {
 
         val tableNames = getTableNames(connection, expectedDatabaseName)
         assertEquals(expectedTableNames.joinToString("\n"), tableNames.joinToString("\n"))
+
+        // TODO(deepak-nulu): verify details of each table.
     }
 }
 
@@ -60,13 +64,4 @@ private fun getDatabaseNames(connection: Connection): List<String> {
     while (resultSet.next()) databaseNames.add(resultSet.getString(1))
     statement.close()
     return databaseNames
-}
-
-private fun getTableNames(connection: Connection, database: String): List<String> {
-    val statement = connection.createStatement()
-    val resultSet = statement.executeQuery("SHOW TABLES IN $database")
-    val tableNames = mutableListOf<String>()
-    while (resultSet.next()) tableNames.add(resultSet.getString(1))
-    statement.close()
-    return tableNames
 }

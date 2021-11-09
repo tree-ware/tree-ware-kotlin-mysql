@@ -5,7 +5,6 @@ import org.treeWare.metaModel.traversal.AbstractLeader1Follower0MetaModelVisitor
 import org.treeWare.metaModel.traversal.metaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MainModel
-import org.treeWare.model.core.getSingleString
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 
@@ -15,36 +14,19 @@ fun generateCreateCommands(mainMeta: MainModel): List<String> {
     return visitor.createCommands
 }
 
-private data class Entity(val packageName: String, val entityName: String)
-private data class CreateTableCommand(val entity: Entity, val command: String)
-
 private class GenerateCreateCommandsVisitor :
     AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
-    private var databaseName = ""
-    private var createDatabase = ""
+    val createCommands = mutableListOf<String>()
+
     private val createTableBuffer = StringBuffer()
-    private val createTables = mutableListOf<CreateTableCommand>()
-    private val entitiesInCompositionSets = HashSet<Entity>()
+    private val keys = mutableListOf<String>()
     private var packageName = ""
     private var tablePrefix = ""
 
-    val createCommands: List<String>
-        get() = listOf(createDatabase) + createTables.mapNotNull {
-            if (entitiesInCompositionSets.contains(it.entity)) it.command else null
-        }
-
     override fun visitMainMeta(leaderMainMeta1: MainModel): TraversalAction {
-        databaseName = getMySqlMetaModelMap(leaderMainMeta1)?.validated?.sqlIdentifier ?: ""
-        createDatabase = "CREATE DATABASE IF NOT EXISTS ${databaseName};"
-        return TraversalAction.CONTINUE
-    }
-
-    override fun visitRootMeta(leaderRootMeta1: EntityModel): TraversalAction {
-        // A table is needed for the root entity even if it is not in a
-        // composition-set, so make it look like it is in a composition-set.
-        val packageName = getSingleString(leaderRootMeta1, "package")
-        val entityName = getSingleString(leaderRootMeta1, "entity")
-        entitiesInCompositionSets.add(Entity(packageName, entityName))
+        val databaseName = getMySqlMetaModelMap(leaderMainMeta1)?.validated?.sqlIdentifier ?: ""
+        val command = "CREATE DATABASE IF NOT EXISTS $databaseName;"
+        createCommands.add(command)
         return TraversalAction.CONTINUE
     }
 
@@ -61,33 +43,33 @@ private class GenerateCreateCommandsVisitor :
         createTableBuffer.setLength(0) // "clear" the buffer
         createTableBuffer
             .appendLine("CREATE TABLE IF NOT EXISTS $tableName (")
-            .append("  parent_id$ VARCHAR(10000)")
+            .appendLine("  $PARENT_ID_COLUMN_NAME VARCHAR(700),")
+        keys.clear()
+        keys.add(PARENT_ID_COLUMN_NAME)
         return TraversalAction.CONTINUE
     }
 
     override fun leaveEntityMeta(leaderEntityMeta1: EntityModel) {
-        createTableBuffer.append("\n);")
-        val entityName = getMetaName(leaderEntityMeta1)
+        createTableBuffer
+            .append("  PRIMARY KEY (")
+            .append(keys.joinToString(", "))
+            .appendLine(")")
+            .append(");")
         val command = createTableBuffer.toString()
-        createTables.add(CreateTableCommand(Entity(packageName, entityName), command))
+        createCommands.add(command)
     }
 
     override fun visitFieldMeta(leaderFieldMeta1: EntityModel): TraversalAction {
-        if (isCompositionFieldMeta(leaderFieldMeta1) && isSetFieldMeta(leaderFieldMeta1)) {
-            val entityInfoMeta = getEntityInfoMeta(leaderFieldMeta1)
-            val packageName = getSingleString(entityInfoMeta, "package")
-            val entityName = getSingleString(entityInfoMeta, "name")
-            entitiesInCompositionSets.add(Entity(packageName, entityName))
-        } else {
-            val columnName = getMetaName(leaderFieldMeta1)
-            val columnType = getColumnType(leaderFieldMeta1)
-            createTableBuffer
-                .appendLine(",")
-                .append("  ")
-                .append(columnName)
-                .append(" ")
-                .append(columnType)
-        }
+        if (isCompositionFieldMeta(leaderFieldMeta1)) return TraversalAction.CONTINUE
+        val columnName = getMetaName(leaderFieldMeta1)
+        val columnType = getColumnType(leaderFieldMeta1)
+        createTableBuffer
+            .append("  ")
+            .append(columnName)
+            .append(" ")
+            .append(columnType)
+            .appendLine(",")
+        if (isKeyFieldMeta(leaderFieldMeta1)) keys.add(columnName)
         return TraversalAction.CONTINUE
     }
 }
@@ -111,6 +93,6 @@ private fun getColumnType(fieldMeta: EntityModel): String =
         FieldType.PASSWORD2WAY -> "JSON"
         FieldType.ENUMERATION -> "VARCHAR(2048)"
         FieldType.ASSOCIATION -> "JSON"
-        FieldType.COMPOSITION -> "JSON"
-        null -> throw IllegalStateException("Null field type")
+        FieldType.COMPOSITION -> throw IllegalStateException("Column type requested for composition field type")
+        null -> throw IllegalStateException("Column type requested for null field type")
     }

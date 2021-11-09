@@ -10,9 +10,9 @@ import org.treeWare.mySql.aux.MySqlMetaModelMapStateMachine
 import org.treeWare.mySql.validation.validateMySqlMetaModelMap
 
 val MY_SQL_ADDRESS_BOOK_META_MODEL_FILES = listOf(
-    "metaModel/address_book_root.json",
-    "metaModel/address_book_main.json",
-    "metaModel/address_book_city.json",
+    "metaModel/my_sql_address_book_root.json",
+    "metaModel/my_sql_address_book_main.json",
+    "metaModel/my_sql_address_book_city.json",
 )
 
 fun newMySqlAddressBookMetaModel(environment: String, hasher: Hasher?, cipher: Cipher?): MutableMainModel {
