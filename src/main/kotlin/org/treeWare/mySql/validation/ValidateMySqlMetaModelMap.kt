@@ -13,7 +13,7 @@ import org.treeWare.mySql.aux.MySqlMetaModelMap
 import org.treeWare.mySql.aux.MySqlMetaModelMapValidated
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 
-fun validateMySqlMetaModelMap(environment: String, mainMeta: MutableMainModel): List<String> {
+fun validateMySqlMetaModelMap(mainMeta: MutableMainModel, environment: String): List<String> {
     val visitor = ValidateMySqlMetaModelMapVisitor(environment)
     mutableMetaModelForEach(mainMeta, visitor)
     return visitor.errors
