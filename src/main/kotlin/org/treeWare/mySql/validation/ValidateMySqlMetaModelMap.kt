@@ -1,9 +1,9 @@
 package org.treeWare.mySql.validation
 
-import org.treeWare.metaModel.getMetaName
-import org.treeWare.metaModel.getRootMeta
+import org.treeWare.metaModel.*
 import org.treeWare.metaModel.traversal.AbstractLeader1Follower0MutableMetaModelVisitor
 import org.treeWare.metaModel.traversal.mutableMetaModelForEach
+import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MutableElementModel
 import org.treeWare.model.core.MutableEntityModel
 import org.treeWare.model.core.MutableMainModel
@@ -20,10 +20,29 @@ fun validateMySqlMetaModelMap(mainMeta: MutableMainModel, environment: String): 
 }
 
 private fun validateDatabaseName(name: String): List<String> =
-    if (name.length > 64) listOf("Specify a database name that is 64 characters or less") else emptyList()
+    if (name.length > 64) listOf("Database name $name must be 64 characters or less") else emptyList()
 
 private fun validateTableName(name: String): List<String> =
-    if (name.length > 64) listOf("Specify a table name that is 64 characters or less") else emptyList()
+    if (name.length > 64) listOf("Table name $name must be 64 characters or less") else emptyList()
+
+private fun validateKeys(entityName: String, entityMeta: EntityModel): List<String> {
+    val fields = getFieldsMeta(entityMeta).values
+    val keyFieldsMeta = filterKeyFields(fields)
+    if (keyFieldsMeta.size > 1) return listOf("Entity $entityName has more than 1 key; only 1 key is supported for MySQL")
+    val keyFieldMeta = keyFieldsMeta.firstOrNull() ?: return emptyList()
+    return when (val keyFieldType = getFieldTypeMeta(keyFieldMeta)) {
+        FieldType.BOOLEAN,
+        FieldType.BYTE,
+        FieldType.SHORT,
+        FieldType.INT,
+        FieldType.LONG,
+        FieldType.FLOAT,
+        FieldType.DOUBLE,
+        FieldType.UUID,
+        FieldType.TIMESTAMP -> emptyList()
+        else -> listOf("Entity $entityName key field type $keyFieldType is not supported for MySQL")
+    }
+}
 
 private class ValidateMySqlMetaModelMapVisitor(
     private val environment: String
@@ -56,8 +75,10 @@ private class ValidateMySqlMetaModelMapVisitor(
         val entityName = getMetaName(leaderEntityMeta1)
         val tableSuffix = aux.tableName ?: entityName
         val tableName = "${tablePrefix}__${tableSuffix}"
-        val nameErrors = validateTableName(tableName)
-        if (nameErrors.isNotEmpty()) errors.addAll(nameErrors)
+        val entityErrors = mutableListOf<String>()
+        entityErrors.addAll(validateTableName(tableName))
+        entityErrors.addAll(validateKeys(entityName, leaderEntityMeta1))
+        if (entityErrors.isNotEmpty()) errors.addAll(entityErrors)
         else aux.validated = MySqlMetaModelMapValidated("$databaseName.$tableName")
         return TraversalAction.ABORT_SUB_TREE
     }
