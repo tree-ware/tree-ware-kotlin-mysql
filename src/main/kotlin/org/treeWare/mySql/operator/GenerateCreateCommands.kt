@@ -24,7 +24,8 @@ private class GenerateCreateCommandsVisitor :
     private var tablePrefix = ""
 
     override fun visitMainMeta(leaderMainMeta1: MainModel): TraversalAction {
-        val databaseName = getMySqlMetaModelMap(leaderMainMeta1)?.validated?.sqlIdentifier ?: ""
+        val databaseName = getMySqlMetaModelMap(leaderMainMeta1)?.validated?.sqlIdentifier
+            ?: return TraversalAction.ABORT_TREE
         val command = "CREATE DATABASE IF NOT EXISTS $databaseName;"
         createCommands.add(command)
         return TraversalAction.CONTINUE
