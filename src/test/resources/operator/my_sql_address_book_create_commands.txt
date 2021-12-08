@@ -1,7 +1,7 @@
 CREATE DATABASE IF NOT EXISTS test_address_book;
 CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_root (
   parent_id$ VARCHAR(700),
-  name VARCHAR(2048),
+  name VARCHAR(1024),
   last_updated DATETIME,
   PRIMARY KEY (parent_id$)
 );
@@ -15,9 +15,9 @@ CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_settings (
 CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_person (
   parent_id$ VARCHAR(700),
   id BINARY(16),
-  first_name VARCHAR(2048),
-  last_name VARCHAR(2048),
-  hero_name VARCHAR(2048),
+  first_name VARCHAR(1024),
+  last_name VARCHAR(1024),
+  hero_name VARCHAR(1024),
   email JSON,
   picture BLOB,
   password JSON,
@@ -29,17 +29,17 @@ CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_person (
 CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_relation (
   parent_id$ VARCHAR(700),
   id BINARY(16),
-  relationship VARCHAR(2048),
+  relationship VARCHAR(1024),
   person JSON,
   PRIMARY KEY (parent_id$, id)
 );
 CREATE TABLE IF NOT EXISTS test_address_book.city__city_info (
   parent_id$ VARCHAR(700),
   id BINARY(16),
-  name VARCHAR(2048),
-  state VARCHAR(2048),
-  country VARCHAR(2048),
-  info VARCHAR(2048),
+  name VARCHAR(1024),
+  state VARCHAR(1024),
+  country VARCHAR(1024),
+  info VARCHAR(1024),
   related_city_info JSON,
   PRIMARY KEY (parent_id$, id)
 );
