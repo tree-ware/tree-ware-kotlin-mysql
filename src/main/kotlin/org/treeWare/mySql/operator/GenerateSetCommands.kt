@@ -19,9 +19,15 @@ fun generateSetCommands(mainModel: MainModel): List<String> {
 
 private class CommandState(parentId: String) {
     private val commandBuffer = StringBuffer()
-    private val columnNames = mutableListOf(PARENT_ID_COLUMN_NAME)
-    private val columnValues = mutableListOf(parentId)
+    private val columnNames = mutableListOf<String>()
+    private val columnValues = mutableListOf<String>()
     private val columnUpdates = mutableListOf<String>()
+
+    init {
+        addColumnName(PARENT_ID_COLUMN_NAME)
+        addColumnValue(parentId)
+        addColumnUpdate(PARENT_ID_COLUMN_NAME, parentId)
+    }
 
     fun insertIntoTable(tableName: String) {
         commandBuffer.appendLine("INSERT INTO $tableName")
@@ -155,7 +161,7 @@ private class GenerateSetCommandsVisitor :
         val lastState = commandStateStack.last()
         lastState.addColumnName(fieldName)
         lastState.addColumnValue(sqlValue)
-        if (!isKeyFieldMeta(leaderValue1.parent.meta)) lastState.addColumnUpdate(fieldName, sqlValue)
+        lastState.addColumnUpdate(fieldName, sqlValue)
         return TraversalAction.CONTINUE
     }
 

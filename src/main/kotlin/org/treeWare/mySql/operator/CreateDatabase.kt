@@ -4,13 +4,20 @@ import org.apache.logging.log4j.LogManager
 import org.treeWare.model.core.MainModel
 import java.sql.Connection
 
+private val logger = LogManager.getLogger()
+
 fun createDatabase(mainMeta: MainModel, connection: Connection, logCommands: Boolean = false) {
-    val logger = if (logCommands) LogManager.getLogger() else null
     val commands = generateCreateCommands(mainMeta)
     commands.forEach { command ->
-        logger?.info(command)
+        if (logCommands) logger.info(command)
         val statement = connection.createStatement()
-        statement.executeUpdate(command)
-        statement.close()
+        try {
+            statement.executeUpdate(command)
+        } catch (e: Exception) {
+            logger.error("Exception for SQL command: $command")
+            throw e
+        } finally {
+            statement.close()
+        }
     }
 }

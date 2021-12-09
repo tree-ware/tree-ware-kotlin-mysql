@@ -10,6 +10,7 @@ import org.treeWare.model.readFile
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getAvailableServerPort
 import org.treeWare.mySql.test.getDatabaseRows
+import org.treeWare.mySql.test.getTableRows
 import java.sql.Connection
 import java.sql.DriverManager
 import kotlin.test.*
@@ -92,5 +93,164 @@ class SetTests {
         val expectedRows = getDatabaseRows(connection, TEST_DATABASE)
 
         assertEquals(expectedRows, model2Rows)
+    }
+
+    @Test
+    fun `Rows must be created when no fields are specified in the model root`() {
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        createDatabase(metaModel, connection)
+
+        val modelJson = """
+            |{
+            |  "data": {
+            |    "address_book": {
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+        val model = getMainModelFromJsonString(metaModel, modelJson)
+        set(model, connection)
+
+        val expected = """
+            |= Table main__address_book_root =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: []
+            |name: null
+            |last_updated: null
+            |
+        """.trimMargin()
+        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `Rows must be created when only composition fields are specified in the model root`() {
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        createDatabase(metaModel, connection)
+
+        val modelJson = """
+            |{
+            |  "data": {
+            |    "address_book": {
+            |      "settings": {
+            |        "last_name_first": true
+            |      }
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+        val model = getMainModelFromJsonString(metaModel, modelJson)
+        set(model, connection)
+
+        val expected = """
+            |= Table main__address_book_root =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: []
+            |name: null
+            |last_updated: null
+            |
+            |= Table main__address_book_settings =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: ["settings"]
+            |last_name_first: 1
+            |encrypt_hero_name: null
+            |card_colors: null
+            |
+        """.trimMargin()
+        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `Rows must be created when no fields are specified in a single-composition entity`() {
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        createDatabase(metaModel, connection)
+
+        val modelJson = """
+            |{
+            |  "data": {
+            |    "address_book": {
+            |      "name": "Super Heroes",
+            |      "settings": {
+            |      }
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+        val model = getMainModelFromJsonString(metaModel, modelJson)
+        set(model, connection)
+
+        val expected = """
+            |= Table main__address_book_root =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: []
+            |name: Super Heroes
+            |last_updated: null
+            |
+            |= Table main__address_book_settings =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: ["settings"]
+            |last_name_first: null
+            |encrypt_hero_name: null
+            |card_colors: null
+            |
+        """.trimMargin()
+        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `Rows must be created when only key fields are specified in a composition-set entity`() {
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        createDatabase(metaModel, connection)
+
+        val modelJson = """
+            |{
+            |  "data": {
+            |    "address_book": {
+            |      "name": "Super Heroes",
+            |      "person": [
+            |        {
+            |          "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
+            |        }
+            |      ]
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+        val model = getMainModelFromJsonString(metaModel, modelJson)
+        set(model, connection)
+
+        val expected = """
+            |= Table main__address_book_root =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: []
+            |name: Super Heroes
+            |last_updated: null
+            |
+            |= Table main__address_book_person =
+            |
+            |* Row 1 *
+            |parent_id${'$'}: ["person"]
+            |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |first_name: null
+            |last_name: null
+            |hero_name: null
+            |email: null
+            |picture: null
+            |password: null
+            |previous_passwords: null
+            |main_secret: null
+            |other_secrets: null
+            |
+        """.trimMargin()
+        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_person")
+        assertEquals(expected, actual)
     }
 }
