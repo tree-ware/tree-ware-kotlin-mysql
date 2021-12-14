@@ -4,7 +4,7 @@ import org.treeWare.metaModel.*
 import org.treeWare.model.core.*
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.encoder.encodeJson
-import org.treeWare.model.traversal.AbstractLeader1Follower0ModelVisitor
+import org.treeWare.model.traversal.AbstractLeader1ModelVisitor
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.model.traversal.forEach
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
@@ -63,7 +63,7 @@ private class CommandState(parentId: String) {
 }
 
 private class GenerateSetCommandsVisitor :
-    AbstractLeader1Follower0ModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+    AbstractLeader1ModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val commands = mutableListOf<String>()
 
     private val commandStateStack = ArrayDeque<CommandState>()
