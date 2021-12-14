@@ -1,7 +1,7 @@
 package org.treeWare.mySql.validation
 
 import org.treeWare.metaModel.*
-import org.treeWare.metaModel.traversal.AbstractLeader1Follower0MutableMetaModelVisitor
+import org.treeWare.metaModel.traversal.AbstractLeader1MutableMetaModelVisitor
 import org.treeWare.metaModel.traversal.mutableMetaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MutableElementModel
@@ -46,7 +46,7 @@ private fun validateKeys(entityName: String, entityMeta: EntityModel): List<Stri
 
 private class ValidateMySqlMetaModelMapVisitor(
     private val environment: String
-) : AbstractLeader1Follower0MutableMetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+) : AbstractLeader1MutableMetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val errors = mutableListOf<String>()
     private var databaseName = ""
     private var tablePrefix = ""

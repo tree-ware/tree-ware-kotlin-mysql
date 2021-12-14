@@ -1,7 +1,7 @@
 package org.treeWare.mySql.operator
 
 import org.treeWare.metaModel.*
-import org.treeWare.metaModel.traversal.AbstractLeader1Follower0MetaModelVisitor
+import org.treeWare.metaModel.traversal.AbstractLeader1MetaModelVisitor
 import org.treeWare.metaModel.traversal.metaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MainModel
@@ -15,7 +15,7 @@ fun generateCreateCommands(mainMeta: MainModel): List<String> {
 }
 
 private class GenerateCreateCommandsVisitor :
-    AbstractLeader1Follower0MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+    AbstractLeader1MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val createCommands = mutableListOf<String>()
 
     private val createTableBuffer = StringBuffer()
