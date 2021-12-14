@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "org.tree-ware"
 version = "1.0-SNAPSHOT"
 
-val log4j2Version = "2.14.1"
+val log4j2Version = "2.16.0"
 val mySqlConnectorVersion = "8.0.27"
 val mySqlEmbeddedVersion = "4.6.1"
 
