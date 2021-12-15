@@ -72,7 +72,7 @@ private class GenerateSetCommandsVisitor :
     override fun visitRoot(leaderRoot1: RootModel): TraversalAction {
         val mainMeta = leaderRoot1.parent.meta ?: throw IllegalStateException("Main meta is missing")
         val unresolvedRootMeta = getRootMeta(mainMeta)
-        val compositionMeta = unresolvedRootMeta.getAux<Resolved>(RESOLVED_AUX)?.compositionMeta
+        val compositionMeta = getMetaModelResolved(unresolvedRootMeta)?.compositionMeta
             ?: throw IllegalStateException("Root meta-model is not resolved")
         val mySqlMap = getMySqlMetaModelMap(compositionMeta) ?: return TraversalAction.CONTINUE
         val validated = mySqlMap.validated ?: throw IllegalStateException("MySQL root meta-model map is not validated")
@@ -90,7 +90,7 @@ private class GenerateSetCommandsVisitor :
 
     override fun visitEntity(leaderEntity1: EntityModel): TraversalAction {
         val parentFieldMeta = leaderEntity1.parent.meta ?: throw IllegalStateException("No parent field for entity")
-        val compositionMeta = parentFieldMeta.getAux<Resolved>(RESOLVED_AUX)?.compositionMeta
+        val compositionMeta = getMetaModelResolved(parentFieldMeta)?.compositionMeta
             ?: throw IllegalStateException("Composition meta-model is not resolved")
         val mySqlMap = getMySqlMetaModelMap(compositionMeta) ?: return TraversalAction.CONTINUE
         val validated =
