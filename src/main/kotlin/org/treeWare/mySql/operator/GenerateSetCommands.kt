@@ -69,7 +69,7 @@ private class GenerateSetCommandsVisitor :
     private val commandStateStack = ArrayDeque<CommandState>()
     private val parentPath = ArrayDeque<String>()
 
-    override fun visit(leaderRoot1: RootModel): TraversalAction {
+    override fun visitRoot(leaderRoot1: RootModel): TraversalAction {
         val mainMeta = leaderRoot1.parent.meta ?: throw IllegalStateException("Main meta is missing")
         val unresolvedRootMeta = getRootMeta(mainMeta)
         val compositionMeta = unresolvedRootMeta.getAux<Resolved>(RESOLVED_AUX)?.compositionMeta
@@ -82,13 +82,13 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun leave(leaderRoot1: RootModel) {
+    override fun leaveRoot(leaderRoot1: RootModel) {
         val commandState = commandStateStack.removeLast()
         commands.add(commandState.getCommand())
     }
 
 
-    override fun visit(leaderEntity1: EntityModel): TraversalAction {
+    override fun visitEntity(leaderEntity1: EntityModel): TraversalAction {
         val parentFieldMeta = leaderEntity1.parent.meta ?: throw IllegalStateException("No parent field for entity")
         val compositionMeta = parentFieldMeta.getAux<Resolved>(RESOLVED_AUX)?.compositionMeta
             ?: throw IllegalStateException("Composition meta-model is not resolved")
@@ -102,13 +102,13 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun leave(leaderEntity1: EntityModel) {
+    override fun leaveEntity(leaderEntity1: EntityModel) {
         val commandState = commandStateStack.removeLast()
         removeKeysFromParentPath(leaderEntity1)
         commands.add(commandState.getCommand())
     }
 
-    override fun visit(leaderField1: SingleFieldModel): TraversalAction {
+    override fun visitSingleField(leaderField1: SingleFieldModel): TraversalAction {
         if (isCompositionFieldMeta(leaderField1.meta)) {
             val fieldName = getFieldName(leaderField1)
             parentPath.addLast("\"$fieldName\"")
@@ -116,17 +116,17 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun leave(leaderField1: SingleFieldModel) {
+    override fun leaveSingleField(leaderField1: SingleFieldModel) {
         if (isCompositionFieldMeta(leaderField1.meta)) parentPath.removeLast()
     }
 
-    override fun visit(leaderField1: ListFieldModel): TraversalAction {
+    override fun visitListField(leaderField1: ListFieldModel): TraversalAction {
         val fieldName = getFieldName(leaderField1)
         addAsJsonValue(fieldName, leaderField1)
         return TraversalAction.ABORT_SUB_TREE
     }
 
-    override fun visit(leaderField1: SetFieldModel): TraversalAction {
+    override fun visitSetField(leaderField1: SetFieldModel): TraversalAction {
         val fieldName = getFieldName(leaderField1)
         if (isCompositionFieldMeta(leaderField1.meta)) {
             parentPath.addLast("\"$fieldName\"")
@@ -134,13 +134,13 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun leave(leaderField1: SetFieldModel) {
+    override fun leaveSetField(leaderField1: SetFieldModel) {
         if (isCompositionFieldMeta(leaderField1.meta)) {
             parentPath.removeLast()
         }
     }
 
-    override fun visit(leaderValue1: PrimitiveModel): TraversalAction {
+    override fun visitPrimitive(leaderValue1: PrimitiveModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
         val value = leaderValue1.value
         val sqlValue: String = if (value == null) "NULL"
@@ -165,21 +165,21 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun visit(leaderValue1: Password1wayModel): TraversalAction {
+    override fun visitPassword1way(leaderValue1: Password1wayModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
         // TODO(deepak-nulu): return errors if there are unhashed/unencrypted passwords instead of excluding them.
         addAsJsonValue(fieldName, leaderValue1, EmptyJsonPolicy.EXCLUDE)
         return TraversalAction.CONTINUE
     }
 
-    override fun visit(leaderValue1: Password2wayModel): TraversalAction {
+    override fun visitPassword2way(leaderValue1: Password2wayModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
         // TODO(deepak-nulu): return errors if there are unhashed/unencrypted passwords instead of excluding them.
         addAsJsonValue(fieldName, leaderValue1, EmptyJsonPolicy.EXCLUDE)
         return TraversalAction.CONTINUE
     }
 
-    override fun visit(leaderValue1: EnumerationModel): TraversalAction {
+    override fun visitEnumeration(leaderValue1: EnumerationModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
         val sqlValue = leaderValue1.value?.let { "'$it'" } ?: "NULL"
         val lastState = commandStateStack.last()
@@ -189,7 +189,7 @@ private class GenerateSetCommandsVisitor :
         return TraversalAction.CONTINUE
     }
 
-    override fun visit(leaderValue1: AssociationModel): TraversalAction {
+    override fun visitAssociation(leaderValue1: AssociationModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
         addAsJsonValue(fieldName, leaderValue1)
         return TraversalAction.CONTINUE
