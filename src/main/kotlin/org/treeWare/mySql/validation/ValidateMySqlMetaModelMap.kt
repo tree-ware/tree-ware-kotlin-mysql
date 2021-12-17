@@ -52,7 +52,7 @@ private class ValidateMySqlMetaModelMapVisitor(
     private var tablePrefix = ""
 
     override fun visitMainMeta(leaderMainMeta1: MutableMainModel): TraversalAction {
-        val name = getMetaName(getRootMeta(leaderMainMeta1))
+        val name = getRootMetaName(leaderMainMeta1)
         databaseName = "${environment}_$name"
         val nameErrors = validateDatabaseName(databaseName)
         if (nameErrors.isNotEmpty()) errors.addAll(nameErrors)
