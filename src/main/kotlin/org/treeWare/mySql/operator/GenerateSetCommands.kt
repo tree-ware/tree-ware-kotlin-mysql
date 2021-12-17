@@ -1,6 +1,9 @@
 package org.treeWare.mySql.operator
 
-import org.treeWare.metaModel.*
+import org.treeWare.metaModel.FieldType
+import org.treeWare.metaModel.getFieldTypeMeta
+import org.treeWare.metaModel.getMetaName
+import org.treeWare.metaModel.isCompositionFieldMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.encoder.encodeJson
@@ -70,9 +73,8 @@ private class GenerateSetCommandsVisitor :
     private val parentPath = ArrayDeque<String>()
 
     override fun visitRoot(leaderRoot1: RootModel): TraversalAction {
-        val mainMeta = leaderRoot1.parent.meta ?: throw IllegalStateException("Main meta is missing")
-        val unresolvedRootMeta = getRootMeta(mainMeta)
-        val compositionMeta = getMetaModelResolved(unresolvedRootMeta)?.compositionMeta
+        val parentMainMeta = leaderRoot1.parent.meta ?: throw IllegalStateException("Main meta is missing")
+        val compositionMeta = getMetaModelResolved(parentMainMeta)?.compositionMeta
             ?: throw IllegalStateException("Root meta-model is not resolved")
         val mySqlMap = getMySqlMetaModelMap(compositionMeta) ?: return TraversalAction.CONTINUE
         val validated = mySqlMap.validated ?: throw IllegalStateException("MySQL root meta-model map is not validated")
