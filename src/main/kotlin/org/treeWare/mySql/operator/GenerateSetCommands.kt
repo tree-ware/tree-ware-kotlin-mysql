@@ -226,7 +226,7 @@ private class GenerateSetCommandsVisitor :
         // Replace entity keys in stack with just the field name (opposite of
         // what was done when visiting the entity).
         parentPath.removeLast()
-        val entityFieldName = entity.parent.meta?.let { getMetaName(it) } ?: ""
+        val entityFieldName = getEntityFieldName(entity) ?: ""
         parentPath.addLast("\"$entityFieldName\"")
     }
 
