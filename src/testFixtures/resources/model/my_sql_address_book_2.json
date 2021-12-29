@@ -1,130 +1,128 @@
 {
-  "data": {
-    "address_book__aux2_": "Aux2 at address_book level",
-    "address_book": {
-      "name__aux2_": "Aux2 with name",
-      "name": "Super Heroes",
-      "last_updated__aux2_": "Aux2 in last_updated",
-      "last_updated": "1587147730",
-      "settings__aux2_": "Aux2 in settings",
-      "settings": {
-        "last_name_first__aux2_": "Aux2 for last_name_first",
-        "last_name_first": false,
-        "card_colors__aux2_": "Aux2 at card_colors list level",
-        "card_colors": [
+  "address_book__aux2_": "Aux2 at address_book level",
+  "address_book": {
+    "name__aux2_": "Aux2 with name",
+    "name": "Super Heroes",
+    "last_updated__aux2_": "Aux2 in last_updated",
+    "last_updated": "1587147730",
+    "settings__aux2_": "Aux2 in settings",
+    "settings": {
+      "last_name_first__aux2_": "Aux2 for last_name_first",
+      "last_name_first": false,
+      "card_colors__aux2_": "Aux2 at card_colors list level",
+      "card_colors": [
+        {
+          "aux2_": "Aux2 for card color 1",
+          "value": "yellow"
+        },
+        {
+          "aux2_": "Aux2 for card color 2",
+          "value": "orange"
+        },
+        {
+          "aux2_": "Aux2 for card color 3",
+          "value": "blue"
+        }
+      ]
+    },
+    "person__aux2_": "Aux2 at person list level",
+    "person": [
+      {
+        "aux2_": "Aux2 with composition element of list",
+        "id__aux2_": "Aux2 in person id",
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "email__aux2_": "Aux2 at list level for person email",
+        "email": [
           {
-            "aux2_": "Aux2 for card color 1",
-            "value": "yellow"
+            "aux2_": "Aux2 for clark.kent email",
+            "value": "clark.kent@dailyplanet.com"
           },
           {
-            "aux2_": "Aux2 for card color 2",
-            "value": "orange"
-          },
+            "aux2_": "Aux2 for superman email",
+            "value": "superman@dc.com"
+          }
+        ],
+        "password__aux2_": "Aux2 for password",
+        "password": {
+          "unhashed": "hello123"
+        },
+        "picture__aux2_": "Aux2 for picture",
+        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
+        "previous_passwords__aux2_": "Aux2 with previous passwords",
+        "previous_passwords": [
           {
-            "aux2_": "Aux2 for card color 3",
-            "value": "blue"
+            "aux2_": "Aux2 for previous password 1",
+            "hashed": "test-hashed-superman",
+            "hash_version": 1
+          }
+        ],
+        "main_secret__aux2_": "Aux2 with main secret",
+        "main_secret": {
+          "unencrypted": "Alien from Krypton"
+        },
+        "relation__aux2_": "Aux2 at relation composition list level",
+        "relation": [
+          {
+            "aux2_": "Some aux2 with composition element of list",
+            "id__aux2_": "Aux2 with id field",
+            "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            "relationship": "colleague",
+            "person": {
+              "path_keys": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "city_info__aux2_": "Aux2 with city info list",
+    "city_info": [
+      {
+        "city__aux2_": "Aux2 with 1:1 composition key inside a list",
+        "id": "836b33db-fd9c-444c-85e2-78df3611a895",
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "info__aux2_": "Aux2 in info",
+        "info": "One of the most populous and most densely populated major city in USA",
+        "related_city_info__aux2_": "Aux2 in related city list",
+        "related_city_info": [
+          {
+            "aux2_": "Aux2 with association 1 in list",
+            "path_keys": [
+              {
+                "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"
+              }
+            ]
           }
         ]
       },
-      "person__aux2_": "Aux2 at person list level",
-      "person": [
-        {
-          "aux2_": "Aux2 with composition element of list",
-          "id__aux2_": "Aux2 in person id",
-          "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-          "email__aux2_": "Aux2 at list level for person email",
-          "email": [
-            {
-              "aux2_": "Aux2 for clark.kent email",
-              "value": "clark.kent@dailyplanet.com"
-            },
-            {
-              "aux2_": "Aux2 for superman email",
-              "value": "superman@dc.com"
-            }
-          ],
-          "password__aux2_": "Aux2 for password",
-          "password": {
-            "unhashed": "hello123"
-          },
-          "picture__aux2_": "Aux2 for picture",
-          "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
-          "previous_passwords__aux2_": "Aux2 with previous passwords",
-          "previous_passwords": [
-            {
-              "aux2_": "Aux2 for previous password 1",
-              "hashed": "test-hashed-superman",
-              "hash_version": 1
-            }
-          ],
-          "main_secret__aux2_": "Aux2 with main secret",
-          "main_secret": {
-            "unencrypted": "Alien from Krypton"
-          },
-          "relation__aux2_": "Aux2 at relation composition list level",
-          "relation": [
-            {
-              "aux2_": "Some aux2 with composition element of list",
-              "id__aux2_": "Aux2 with id field",
-              "id": "05ade278-4b44-43da-a0cc-14463854e397",
-              "relationship": "colleague",
-              "person": {
-                "path_keys": [
-                  {
-                    "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-                  }
-                ]
+      {
+        "info": "Capital of New York state",
+        "name": "Albany",
+        "state": "New York",
+        "country": "United States of America",
+        "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084",
+        "related_city_info": [
+          {
+            "path_keys": [
+              {
+                "id": "836b33db-fd9c-444c-85e2-78df3611a895"
               }
-            }
-          ]
-        }
-      ],
-      "city_info__aux2_": "Aux2 with city info list",
-      "city_info": [
-        {
-          "city__aux2_": "Aux2 with 1:1 composition key inside a list",
-          "id": "836b33db-fd9c-444c-85e2-78df3611a895",
-          "name": "New York City",
-          "state": "New York",
-          "country": "United States of America",
-          "info__aux2_": "Aux2 in info",
-          "info": "One of the most populous and most densely populated major city in USA",
-          "related_city_info__aux2_": "Aux2 in related city list",
-          "related_city_info": [
-            {
-              "aux2_": "Aux2 with association 1 in list",
-              "path_keys": [
-                {
-                  "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "info": "Capital of New York state",
-          "name": "Albany",
-          "state": "New York",
-          "country": "United States of America",
-          "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084",
-          "related_city_info": [
-            {
-              "path_keys": [
-                {
-                  "id": "836b33db-fd9c-444c-85e2-78df3611a895"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "info": "The cultural and financial center of Northern California",
-          "id": "6fe252a4-4460-4064-abac-c8482215d88f",
-          "name": "San Francisco",
-          "state": "California",
-          "country": "United States of America"
-        }
-      ]
-    }
+            ]
+          }
+        ]
+      },
+      {
+        "info": "The cultural and financial center of Northern California",
+        "id": "6fe252a4-4460-4064-abac-c8482215d88f",
+        "name": "San Francisco",
+        "state": "California",
+        "country": "United States of America"
+      }
+    ]
   }
 }

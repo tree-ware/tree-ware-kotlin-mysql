@@ -102,9 +102,7 @@ class SetTests {
 
         val modelJson = """
             |{
-            |  "data": {
-            |    "address_book": {
-            |    }
+            |  "address_book": {
             |  }
             |}
         """.trimMargin()
@@ -131,11 +129,9 @@ class SetTests {
 
         val modelJson = """
             |{
-            |  "data": {
-            |    "address_book": {
-            |      "settings": {
-            |        "last_name_first": true
-            |      }
+            |  "address_book": {
+            |    "settings": {
+            |      "last_name_first": true
             |    }
             |  }
             |}
@@ -171,11 +167,9 @@ class SetTests {
 
         val modelJson = """
             |{
-            |  "data": {
-            |    "address_book": {
-            |      "name": "Super Heroes",
-            |      "settings": {
-            |      }
+            |  "address_book": {
+            |    "name": "Super Heroes",
+            |    "settings": {
             |    }
             |  }
             |}
@@ -211,15 +205,13 @@ class SetTests {
 
         val modelJson = """
             |{
-            |  "data": {
-            |    "address_book": {
-            |      "name": "Super Heroes",
-            |      "person": [
-            |        {
-            |          "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
-            |        }
-            |      ]
-            |    }
+            |  "address_book": {
+            |    "name": "Super Heroes",
+            |    "person": [
+            |      {
+            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
+            |      }
+            |    ]
             |  }
             |}
         """.trimMargin()

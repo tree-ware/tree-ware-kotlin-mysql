@@ -1,236 +1,234 @@
 {
-  "data": {
-    "address_book__aux2_": "Aux2 at address_book level",
-    "address_book__aux3_": "Aux3 at address_book level",
-    "address_book": {
-      "name__aux2_": "Aux2 with name",
-      "name__aux3_": "Aux3 with name",
-      "name": "Super Heroes",
-      "last_updated__aux2_": "Aux2 in last_updated",
-      "last_updated__aux3_": "Aux3 in last_updated",
-      "last_updated": "1587147731",
-      "settings__aux2_": "Aux2 in settings",
-      "settings__aux3_": "Aux3 in settings",
-      "settings": {
-        "last_name_first__aux2_": "Aux2 for last_name_first",
-        "last_name_first__aux3_": "Aux3 for last_name_first",
-        "last_name_first": true,
-        "encrypt_hero_name__aux3_": "Aux3 for encrypt_hero_name",
-        "encrypt_hero_name": false,
-        "card_colors__aux2_": "Aux2 at card_colors list level",
-        "card_colors__aux3_": "Aux3 at card_colors list level",
-        "card_colors": [
+  "address_book__aux2_": "Aux2 at address_book level",
+  "address_book__aux3_": "Aux3 at address_book level",
+  "address_book": {
+    "name__aux2_": "Aux2 with name",
+    "name__aux3_": "Aux3 with name",
+    "name": "Super Heroes",
+    "last_updated__aux2_": "Aux2 in last_updated",
+    "last_updated__aux3_": "Aux3 in last_updated",
+    "last_updated": "1587147731",
+    "settings__aux2_": "Aux2 in settings",
+    "settings__aux3_": "Aux3 in settings",
+    "settings": {
+      "last_name_first__aux2_": "Aux2 for last_name_first",
+      "last_name_first__aux3_": "Aux3 for last_name_first",
+      "last_name_first": true,
+      "encrypt_hero_name__aux3_": "Aux3 for encrypt_hero_name",
+      "encrypt_hero_name": false,
+      "card_colors__aux2_": "Aux2 at card_colors list level",
+      "card_colors__aux3_": "Aux3 at card_colors list level",
+      "card_colors": [
+        {
+          "aux2_": "Aux2 for card color 1",
+          "aux3_": "Aux3 for card color 1",
+          "value": "orange"
+        },
+        {
+          "aux2_": "Aux2 for card color 2",
+          "aux3_": "Aux3 for card color 2",
+          "value": "green"
+        }
+      ]
+    },
+    "person__aux2_": "Aux2 at person list level",
+    "person__aux3_": "Aux3 at person list level",
+    "person": [
+      {
+        "aux2_": "Aux2 with composition element of list",
+        "aux3_": "Aux3 with composition element of list",
+        "id__aux2_": "Aux2 in person id",
+        "id__aux3_": "Aux3 in person id",
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "first_name__aux3_": "Aux3 with person first_name",
+        "first_name": "Clark",
+        "last_name__aux3_": "Aux3 for person last_name",
+        "last_name": "Kent",
+        "hero_name__aux3_": "Aux3 for hero_name",
+        "hero_name": "Superman",
+        "email__aux2_": "Aux2 at list level for person email",
+        "email": [
           {
-            "aux2_": "Aux2 for card color 1",
-            "aux3_": "Aux3 for card color 1",
-            "value": "orange"
+            "aux2_": "Aux2 for clark.kent email",
+            "value": "clark.kent@dailyplanet.com"
           },
           {
-            "aux2_": "Aux2 for card color 2",
-            "aux3_": "Aux3 for card color 2",
-            "value": "green"
+            "aux2_": "Aux2 for superman email",
+            "value": "superman@dc.com"
+          }
+        ],
+        "picture__aux2_": "Aux2 for picture",
+        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
+        "relation__aux2_": "Aux2 at relation composition list level",
+        "relation": [
+          {
+            "aux2_": "Some aux2 with composition element of list",
+            "id__aux2_": "Aux2 with id field",
+            "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            "relationship": "colleague",
+            "person": {
+              "path_keys": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
+          }
+        ],
+        "password__aux2_": "Aux2 for password from address_book_3",
+        "password__aux3_": "Aux3 for password",
+        "password": {
+          "unhashed": "kryptonite"
+        },
+        "previous_passwords__aux2_": "Aux2 with previous passwords",
+        "previous_passwords__aux3_": "Aux3 with previous passwords",
+        "previous_passwords": [
+          {
+            "aux2_": "Aux2 for unhashed password in a list from address_book_3",
+            "aux3_": "Aux3 for unhashed password in a list",
+            "unhashed": "hello123"
+          },
+          {
+            "aux3_": "Aux3 for hashed password in a list",
+            "hashed": "test-hashed-superman",
+            "hash_version": 1
+          }
+        ],
+        "main_secret__aux2_": "Aux2 with main secret",
+        "main_secret": {
+          "unencrypted": "Alien from Krypton"
+        },
+        "other_secrets__aux3_": "Aux3 for other secrets",
+        "other_secrets": [
+          {
+            "aux3_": "Aux3 with unencrypted password in a list",
+            "unencrypted": "secret1"
+          },
+          {
+            "aux3_": "Aux3 with encrypted password in a list",
+            "encrypted": "test-encrypted-secret2",
+            "cipher_version": 1
           }
         ]
       },
-      "person__aux2_": "Aux2 at person list level",
-      "person__aux3_": "Aux3 at person list level",
-      "person": [
-        {
-          "aux2_": "Aux2 with composition element of list",
-          "aux3_": "Aux3 with composition element of list",
-          "id__aux2_": "Aux2 in person id",
-          "id__aux3_": "Aux3 in person id",
-          "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-          "first_name__aux3_": "Aux3 with person first_name",
-          "first_name": "Clark",
-          "last_name__aux3_": "Aux3 for person last_name",
-          "last_name": "Kent",
-          "hero_name__aux3_": "Aux3 for hero_name",
-          "hero_name": "Superman",
-          "email__aux2_": "Aux2 at list level for person email",
-          "email": [
-            {
-              "aux2_": "Aux2 for clark.kent email",
-              "value": "clark.kent@dailyplanet.com"
-            },
-            {
-              "aux2_": "Aux2 for superman email",
-              "value": "superman@dc.com"
+      {
+        "aux3_": "Aux3 with composition element but no aux3 in sub-tree",
+        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+        "first_name": "Lois",
+        "last_name": "Lane",
+        "email": [
+          {
+            "value": "lois.lane@dailyplanet.com"
+          }
+        ],
+        "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
+        "relation": [
+          {
+            "id": "16634916-8f83-4376-ad42-37038e108a0b",
+            "relationship": "colleague",
+            "person": {
+              "path_keys": [
+                {
+                  "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
+                }
+              ]
             }
-          ],
-          "picture__aux2_": "Aux2 for picture",
-          "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
-          "relation__aux2_": "Aux2 at relation composition list level",
-          "relation": [
-            {
-              "aux2_": "Some aux2 with composition element of list",
-              "id__aux2_": "Aux2 with id field",
-              "id": "05ade278-4b44-43da-a0cc-14463854e397",
-              "relationship": "colleague",
-              "person": {
-                "path_keys": [
-                  {
-                    "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-                  }
-                ]
-              }
-            }
-          ],
-          "password__aux2_": "Aux2 for password from address_book_3",
-          "password__aux3_": "Aux3 for password",
-          "password": {
-            "unhashed": "kryptonite"
-          },
-          "previous_passwords__aux2_": "Aux2 with previous passwords",
-          "previous_passwords__aux3_": "Aux3 with previous passwords",
-          "previous_passwords": [
-            {
-              "aux2_": "Aux2 for unhashed password in a list from address_book_3",
-              "aux3_": "Aux3 for unhashed password in a list",
-              "unhashed": "hello123"
-            },
-            {
-              "aux3_": "Aux3 for hashed password in a list",
-              "hashed": "test-hashed-superman",
-              "hash_version": 1
-            }
-          ],
-          "main_secret__aux2_": "Aux2 with main secret",
-          "main_secret": {
-            "unencrypted": "Alien from Krypton"
-          },
-          "other_secrets__aux3_": "Aux3 for other secrets",
-          "other_secrets": [
-            {
-              "aux3_": "Aux3 with unencrypted password in a list",
-              "unencrypted": "secret1"
-            },
-            {
-              "aux3_": "Aux3 with encrypted password in a list",
-              "encrypted": "test-encrypted-secret2",
-              "cipher_version": 1
-            }
-          ]
+          }
+        ],
+        "password": {
+          "hashed": "test-hashed-lois",
+          "hash_version": 1
         },
-        {
-          "aux3_": "Aux3 with composition element but no aux3 in sub-tree",
-          "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-          "first_name": "Lois",
-          "last_name": "Lane",
-          "email": [
-            {
-              "value": "lois.lane@dailyplanet.com"
-            }
-          ],
-          "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
-          "relation": [
-            {
-              "id": "16634916-8f83-4376-ad42-37038e108a0b",
-              "relationship": "colleague",
-              "person": {
-                "path_keys": [
-                  {
-                    "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
-                  }
-                ]
-              }
-            }
-          ],
-          "password": {
-            "hashed": "test-hashed-lois",
+        "previous_passwords": [
+          {
+            "unhashed": "password1"
+          },
+          {
+            "hashed": "test-hashed-password2",
             "hash_version": 1
+          }
+        ],
+        "main_secret": {
+          "encrypted": "test-encrypted-main-secret",
+          "cipher_version": 1
+        },
+        "other_secrets": [
+          {
+            "unencrypted": "secret1"
           },
-          "previous_passwords": [
-            {
-              "unhashed": "password1"
-            },
-            {
-              "hashed": "test-hashed-password2",
-              "hash_version": 1
-            }
-          ],
-          "main_secret": {
-            "encrypted": "test-encrypted-main-secret",
+          {
+            "encrypted": "test-encrypted-secret2",
             "cipher_version": 1
+          }
+        ]
+      }
+    ],
+    "city_info__aux2_": "Aux2 with city info list",
+    "city_info__aux3_": "Aux3 with city info list",
+    "city_info": [
+      {
+        "city__aux2_": "Aux2 with 1:1 composition key inside a list",
+        "city__aux3_": "Aux3 with 1:1 composition key inside a list",
+        "id": "836b33db-fd9c-444c-85e2-78df3611a895",
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "info__aux2_": "Aux2 in info",
+        "info__aux3_": "Aux3 in info",
+        "info": "One of the most populous and most densely populated major city in USA",
+        "related_city_info__aux2_": "Aux2 in related city list",
+        "related_city_info__aux3_": "Aux3 in related city list",
+        "related_city_info": [
+          {
+            "aux2_": "Aux2 with association 1 in list",
+            "aux3_": "Aux3 with association 1 in list",
+            "path_keys": [
+              {
+                "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084"
+              }
+            ]
           },
-          "other_secrets": [
-            {
-              "unencrypted": "secret1"
-            },
-            {
-              "encrypted": "test-encrypted-secret2",
-              "cipher_version": 1
-            }
-          ]
-        }
-      ],
-      "city_info__aux2_": "Aux2 with city info list",
-      "city_info__aux3_": "Aux3 with city info list",
-      "city_info": [
-        {
-          "city__aux2_": "Aux2 with 1:1 composition key inside a list",
-          "city__aux3_": "Aux3 with 1:1 composition key inside a list",
-          "id": "836b33db-fd9c-444c-85e2-78df3611a895",
-          "name": "New York City",
-          "state": "New York",
-          "country": "United States of America",
-          "info__aux2_": "Aux2 in info",
-          "info__aux3_": "Aux3 in info",
-          "info": "One of the most populous and most densely populated major city in USA",
-          "related_city_info__aux2_": "Aux2 in related city list",
-          "related_city_info__aux3_": "Aux3 in related city list",
-          "related_city_info": [
-            {
-              "aux2_": "Aux2 with association 1 in list",
-              "aux3_": "Aux3 with association 1 in list",
-              "path_keys": [
-                {
-                  "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084"
-                }
-              ]
-            },
-            {
-              "aux3_": "Aux3 with association 2 in list",
-              "path_keys": [
-                {
-                  "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084",
-          "name": "Albany",
-          "state": "New York",
-          "country": "United States of America",
-          "info": "Capital of New York state",
-          "related_city_info": [
-            {
-              "path_keys": [
-                {
-                  "id": "836b33db-fd9c-444c-85e2-78df3611a895"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "id": "6fe252a4-4460-4064-abac-c8482215d88f",
-          "name": "San Francisco",
-          "state": "California",
-          "country": "United States of America",
-          "info": "The cultural and financial center of Northern California"
-        },
-        {
-          "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8",
-          "name": "Princeton",
-          "state": "New Jersey",
-          "country": "United States of America",
-          "info": "Home of Princeton University",
-          "related_city_info": []
-        }
-      ]
-    }
+          {
+            "aux3_": "Aux3 with association 2 in list",
+            "path_keys": [
+              {
+                "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084",
+        "name": "Albany",
+        "state": "New York",
+        "country": "United States of America",
+        "info": "Capital of New York state",
+        "related_city_info": [
+          {
+            "path_keys": [
+              {
+                "id": "836b33db-fd9c-444c-85e2-78df3611a895"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "6fe252a4-4460-4064-abac-c8482215d88f",
+        "name": "San Francisco",
+        "state": "California",
+        "country": "United States of America",
+        "info": "The cultural and financial center of Northern California"
+      },
+      {
+        "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8",
+        "name": "Princeton",
+        "state": "New Jersey",
+        "country": "United States of America",
+        "info": "Home of Princeton University",
+        "related_city_info": []
+      }
+    ]
   }
 }
