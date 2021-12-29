@@ -1,63 +1,61 @@
 {
-  "data": {
-    "meta_model": {
-      "packages": [
-        {
-          "my_sql_": {
-            "table_prefix": "city"
-          },
-          "name": "address_book.city",
-          "info": "Schema for storing city information",
-          "entities": [
-            {
-              "my_sql_": {
-                "table_name": "city_info"
+  "meta_model": {
+    "packages": [
+      {
+        "my_sql_": {
+          "table_prefix": "city"
+        },
+        "name": "address_book.city",
+        "info": "Schema for storing city information",
+        "entities": [
+          {
+            "my_sql_": {
+              "table_name": "city_info"
+            },
+            "name": "address_book_city_info",
+            "fields": [
+              {
+                "name": "id",
+                "type": "uuid",
+                "is_key": true
               },
-              "name": "address_book_city_info",
-              "fields": [
-                {
-                  "name": "id",
-                  "type": "uuid",
-                  "is_key": true
-                },
-                {
-                  "name": "name",
-                  "info": "City name",
-                  "type": "string"
-                },
-                {
-                  "name": "state",
-                  "info": "Name of the state in which the city is",
-                  "type": "string"
-                },
-                {
-                  "name": "country",
-                  "info": "Name of the country in which the city is",
-                  "type": "string"
-                },
-                {
-                  "name": "info",
-                  "info": "Information about the city",
-                  "type": "string"
-                },
-                {
-                  "name": "related_city_info",
-                  "type": "association",
-                  "association": [
-                    {
-                      "value": "address_book"
-                    },
-                    {
-                      "value": "city_info"
-                    }
-                  ],
-                  "multiplicity": "list"
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
+              {
+                "name": "name",
+                "info": "City name",
+                "type": "string"
+              },
+              {
+                "name": "state",
+                "info": "Name of the state in which the city is",
+                "type": "string"
+              },
+              {
+                "name": "country",
+                "info": "Name of the country in which the city is",
+                "type": "string"
+              },
+              {
+                "name": "info",
+                "info": "Information about the city",
+                "type": "string"
+              },
+              {
+                "name": "related_city_info",
+                "type": "association",
+                "association": [
+                  {
+                    "value": "address_book"
+                  },
+                  {
+                    "value": "city_info"
+                  }
+                ],
+                "multiplicity": "list"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 }
