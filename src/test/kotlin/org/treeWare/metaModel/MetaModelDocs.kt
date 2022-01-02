@@ -11,8 +11,8 @@ class MetaModelDocs {
     fun `Generate MySQL address-book meta-model docs`() {
         val metaModel = newMySqlAddressBookMetaModel("test", null, null)
 
-        val metaModelName = getRootMetaName(metaModel)
-        val fileName = "${metaModelName}_meta_model"
+        val mainMetaName = getMainMetaName(metaModel)
+        val fileName = "${mainMetaName}_meta_model"
         val fileWriter = File("${fileName}.dot").bufferedWriter()
         encodeDot(metaModel, fileWriter)
         fileWriter.flush()
