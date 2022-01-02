@@ -72,24 +72,6 @@ private class GenerateSetCommandsVisitor :
     private val commandStateStack = ArrayDeque<CommandState>()
     private val parentPath = ArrayDeque<String>()
 
-    override fun visitRoot(leaderRoot1: RootModel): TraversalAction {
-        val parentMainMeta = leaderRoot1.parent.meta ?: throw IllegalStateException("Main meta is missing")
-        val compositionMeta = getMetaModelResolved(parentMainMeta)?.compositionMeta
-            ?: throw IllegalStateException("Root meta-model is not resolved")
-        val mySqlMap = getMySqlMetaModelMap(compositionMeta) ?: return TraversalAction.CONTINUE
-        val validated = mySqlMap.validated ?: throw IllegalStateException("MySQL root meta-model map is not validated")
-        val commandState = CommandState(getJsonEncodedParentPath())
-        commandStateStack.addLast(commandState)
-        commandState.insertIntoTable(validated.sqlIdentifier)
-        return TraversalAction.CONTINUE
-    }
-
-    override fun leaveRoot(leaderRoot1: RootModel) {
-        val commandState = commandStateStack.removeLast()
-        commands.add(commandState.getCommand())
-    }
-
-
     override fun visitEntity(leaderEntity1: EntityModel): TraversalAction {
         val parentFieldMeta = leaderEntity1.parent.meta ?: throw IllegalStateException("No parent field for entity")
         val compositionMeta = getMetaModelResolved(parentFieldMeta)?.compositionMeta
@@ -100,13 +82,13 @@ private class GenerateSetCommandsVisitor :
         val commandState = CommandState(getJsonEncodedParentPath())
         commandStateStack.addLast(commandState)
         commandState.insertIntoTable(validated.sqlIdentifier)
-        addKeysToParentPath(leaderEntity1)
+        if (!isRootEntity(leaderEntity1)) addKeysToParentPath(leaderEntity1)
         return TraversalAction.CONTINUE
     }
 
     override fun leaveEntity(leaderEntity1: EntityModel) {
         val commandState = commandStateStack.removeLast()
-        removeKeysFromParentPath(leaderEntity1)
+        if (!isRootEntity(leaderEntity1)) removeKeysFromParentPath(leaderEntity1)
         commands.add(commandState.getCommand())
     }
 
