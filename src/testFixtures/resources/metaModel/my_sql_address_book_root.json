@@ -2,8 +2,11 @@
   "meta_model": {
     "root": {
       "name": "address_book",
-      "entity": "address_book_root",
-      "package": "address_book.main"
+      "type": "composition",
+      "composition": {
+        "name": "address_book_root",
+        "package": "address_book.main"
+      }
     }
   }
 }
