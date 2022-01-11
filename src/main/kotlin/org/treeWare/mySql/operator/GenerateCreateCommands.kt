@@ -79,20 +79,26 @@ private fun getColumnType(fieldMeta: EntityModel): String =
     if (isListFieldMeta(fieldMeta)) "JSON"
     else when (getFieldTypeMeta(fieldMeta)) {
         FieldType.BOOLEAN -> "BOOLEAN"
-        FieldType.BYTE -> "TINYINT UNSIGNED"
-        FieldType.SHORT -> "SMALLINT"
-        FieldType.INT -> "INT"
-        FieldType.LONG -> "BIGINT"
+        FieldType.UINT8 -> "TINYINT UNSIGNED"
+        FieldType.UINT16 -> "SMALLINT UNSIGNED"
+        FieldType.UINT32 -> "INT UNSIGNED"
+        FieldType.UINT64 -> "BIGINT UNSIGNED"
+        FieldType.INT8 -> "TINYINT"
+        FieldType.INT16 -> "SMALLINT"
+        FieldType.INT32 -> "INT"
+        FieldType.INT64 -> "BIGINT"
         FieldType.FLOAT -> "FLOAT"
         FieldType.DOUBLE -> "DOUBLE"
+        FieldType.BIG_INTEGER -> "DECIMAL(65, 0)" // TODO(deepak-nulu) get size from meta-model
+        FieldType.BIG_DECIMAL -> "DECIMAL" // TODO(deepak-nulu) get size from meta-model
+        FieldType.TIMESTAMP -> "DATETIME"
         FieldType.STRING -> "VARCHAR(1024)" // TODO(deepak-nulu) get size from meta-model
         FieldType.UUID -> "BINARY(16)"
         FieldType.BLOB -> "BLOB"
-        FieldType.TIMESTAMP -> "DATETIME"
-        FieldType.ALIAS -> "TODO"
         FieldType.PASSWORD1WAY -> "JSON"
         FieldType.PASSWORD2WAY -> "JSON"
-        FieldType.ENUMERATION -> "VARCHAR(1024)"
+        FieldType.ALIAS -> "TODO"
+        FieldType.ENUMERATION -> "VARCHAR(1024)"  // TODO(tree-ware-kotlin-core#82) use number instead of name
         FieldType.ASSOCIATION -> "JSON"
         FieldType.COMPOSITION -> throw IllegalStateException("Column type requested for composition field type")
         null -> throw IllegalStateException("Column type requested for null field type")

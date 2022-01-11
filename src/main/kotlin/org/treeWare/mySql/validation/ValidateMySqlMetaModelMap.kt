@@ -32,14 +32,20 @@ private fun validateKeys(entityName: String, entityMeta: EntityModel): List<Stri
     val keyFieldMeta = keyFieldsMeta.firstOrNull() ?: return emptyList()
     return when (val keyFieldType = getFieldTypeMeta(keyFieldMeta)) {
         FieldType.BOOLEAN,
-        FieldType.BYTE,
-        FieldType.SHORT,
-        FieldType.INT,
-        FieldType.LONG,
+        FieldType.UINT8,
+        FieldType.UINT16,
+        FieldType.UINT32,
+        FieldType.UINT64,
+        FieldType.INT8,
+        FieldType.INT16,
+        FieldType.INT32,
+        FieldType.INT64,
         FieldType.FLOAT,
         FieldType.DOUBLE,
-        FieldType.UUID,
-        FieldType.TIMESTAMP -> emptyList()
+        FieldType.BIG_INTEGER,
+        FieldType.BIG_DECIMAL,
+        FieldType.TIMESTAMP,
+        FieldType.UUID -> emptyList()
         else -> listOf("Entity $entityName key field type $keyFieldType is not supported for MySQL")
     }
 }

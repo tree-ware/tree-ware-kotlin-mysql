@@ -130,16 +130,22 @@ private class GenerateSetCommandsVisitor :
         val sqlValue: String = if (value == null) "NULL"
         else when (val fieldType = leaderValue1.parent.meta?.let { getFieldTypeMeta(it) }) {
             FieldType.BOOLEAN,
-            FieldType.BYTE,
-            FieldType.SHORT,
-            FieldType.INT,
-            FieldType.LONG,
+            FieldType.UINT8,
+            FieldType.UINT16,
+            FieldType.UINT32,
+            FieldType.UINT64,
+            FieldType.INT8,
+            FieldType.INT16,
+            FieldType.INT32,
+            FieldType.INT64,
             FieldType.FLOAT,
-            FieldType.DOUBLE -> "$value"
+            FieldType.DOUBLE,
+            FieldType.BIG_INTEGER,
+            FieldType.BIG_DECIMAL -> "$value"
+            FieldType.TIMESTAMP -> "'${getIso8601DateTime(value as Long)}'"
             FieldType.STRING -> "'$value'"
             FieldType.UUID -> "UUID_TO_BIN('$value')"
             FieldType.BLOB -> getHexBlob(value as ByteArray)
-            FieldType.TIMESTAMP -> "'${getIso8601DateTime(value as Long)}'"
             else -> throw IllegalStateException("Invalid primitive field type: $fieldType")
         }
         val lastState = commandStateStack.last()
