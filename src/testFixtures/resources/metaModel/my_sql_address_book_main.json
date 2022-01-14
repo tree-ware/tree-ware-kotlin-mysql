@@ -69,7 +69,8 @@
               {
                 "name": "name",
                 "info": "A name for the address book",
-                "type": "string"
+                "type": "string",
+                "max_size": 64
               },
               {
                 "name": "last_updated",
@@ -140,20 +141,24 @@
               },
               {
                 "name": "first_name",
-                "type": "string"
+                "type": "string",
+                "max_size": 64
               },
               {
                 "name": "last_name",
-                "type": "string"
+                "type": "string",
+                "max_size": 64
               },
               {
                 "name": "hero_name",
                 "type": "string",
+                "max_size": 64,
                 "multiplicity": "optional"
               },
               {
                 "name": "email",
                 "type": "string",
+                "max_size": 128,
                 "multiplicity": "list"
               },
               {
