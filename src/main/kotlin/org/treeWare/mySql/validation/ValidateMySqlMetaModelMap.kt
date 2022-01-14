@@ -45,6 +45,7 @@ private fun validateKeys(entityId: String, entityMeta: EntityModel): List<String
         FieldType.BIG_INTEGER,
         FieldType.BIG_DECIMAL,
         FieldType.TIMESTAMP,
+        FieldType.STRING,
         FieldType.UUID -> emptyList()
         else -> listOf("Entity $entityId key field type $keyFieldType is not supported for MySQL")
     }

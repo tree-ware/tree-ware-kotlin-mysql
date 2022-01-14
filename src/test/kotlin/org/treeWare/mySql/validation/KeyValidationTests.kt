@@ -76,7 +76,7 @@ class KeyValidationTests {
             FieldType.UUID
         )
         supportedKeyFieldTypes.forEach { fieldType ->
-            val metaModelJson = getMetaModelJson(fieldType.toString().lowercase())
+            val metaModelJson = getTypedKeyMetaModelJson(fieldType.toString().lowercase())
             val expectedErrors = emptyList<String>()
             assertJsonStringValidationErrors(
                 metaModelJson,
@@ -89,7 +89,6 @@ class KeyValidationTests {
     @Test
     fun `Validation must fail for unsupported key types`() {
         val unsupportedKeyFieldTypes = listOf(
-            FieldType.STRING,
             FieldType.BLOB,
             FieldType.PASSWORD1WAY,
             FieldType.PASSWORD2WAY,
@@ -101,12 +100,8 @@ class KeyValidationTests {
         unsupportedKeyFieldTypes.forEach { fieldType ->
             val mainExpectedError =
                 "Entity /root/test.main/entity1 key field type $fieldType is not supported for MySQL"
-            val metaModelJson = getMetaModelJson(fieldType.toString().lowercase())
+            val metaModelJson = getTypedKeyMetaModelJson(fieldType.toString().lowercase())
             val expectedErrors = when (fieldType) {
-                FieldType.STRING -> listOf(
-                    mainExpectedError,
-                    "String field /root/test.main/entity1/key1 must specify max_size constraint for MySQL"
-                )
                 FieldType.PASSWORD1WAY,
                 FieldType.PASSWORD2WAY -> listOf(
                     "$FIELD_ID is a password field and they cannot be keys",
@@ -128,9 +123,24 @@ class KeyValidationTests {
             )
         }
     }
+
+    @Test
+    fun `Validation must pass for string keys with max_size`() {
+        val metaModelJson = getStringKeyMetaModelJson(128)
+        val expectedErrors = emptyList<String>()
+        assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
+    }
+
+    @Test
+    fun `Validation must fail for string keys without max_size`() {
+        val metaModelJson = getStringKeyMetaModelJson(null)
+        val expectedErrors =
+            listOf("String field /root/test.main/entity1/key1 must specify max_size constraint for MySQL")
+        assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
+    }
 }
 
-private fun getMetaModelJson(fieldType: String): String {
+private fun getTypedKeyMetaModelJson(fieldType: String): String {
     val mainPackageJson = """
             |{
             |  "my_sql_": {
@@ -146,6 +156,33 @@ private fun getMetaModelJson(fieldType: String): String {
             |          "name": "key1",
             |          "type": "$fieldType",
             |          "is_key": true
+            |        }
+            |      ]
+            |    }
+            |  ]
+            |}
+        """.trimMargin()
+    return newTestMetaModelJson(testMetaModelCommonRootJson, testMetaModelCommonPackageJson, mainPackageJson)
+}
+
+private fun getStringKeyMetaModelJson(maxSize: Int?): String {
+    val maxSizeJson = maxSize?.let { ", \"max_size\": $maxSize" } ?: ""
+    val mainPackageJson = """
+            |{
+            |  "my_sql_": {
+            |    "table_prefix": "main"
+            |  },
+            |  "name": "test.main",
+            |  "entities": [
+            |    {
+            |      "my_sql_": {},
+            |      "name": "entity1",
+            |      "fields": [
+            |        {
+            |          "name": "key1",
+            |          "type": "string",
+            |          "is_key": true
+            |          $maxSizeJson
             |        }
             |      ]
             |    }
