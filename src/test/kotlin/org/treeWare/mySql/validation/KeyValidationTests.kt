@@ -51,7 +51,8 @@ class KeyValidationTests {
         val metaModelJson =
             newTestMetaModelJson(testMetaModelCommonRootJson, testMetaModelCommonPackageJson, mainPackageJson)
 
-        val expectedErrors = listOf("Entity entity_with_2_keys has more than 1 key; only 1 key is supported for MySQL")
+        val expectedErrors =
+            listOf("Entity /root/test.main/entity_with_2_keys has more than 1 key; only 1 key is supported for MySQL")
         assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
     }
 
@@ -98,9 +99,14 @@ class KeyValidationTests {
             FieldType.COMPOSITION
         )
         unsupportedKeyFieldTypes.forEach { fieldType ->
-            val mainExpectedError = "Entity entity1 key field type $fieldType is not supported for MySQL"
+            val mainExpectedError =
+                "Entity /root/test.main/entity1 key field type $fieldType is not supported for MySQL"
             val metaModelJson = getMetaModelJson(fieldType.toString().lowercase())
             val expectedErrors = when (fieldType) {
+                FieldType.STRING -> listOf(
+                    mainExpectedError,
+                    "String field /root/test.main/entity1/key1 must specify max_size constraint for MySQL"
+                )
                 FieldType.PASSWORD1WAY,
                 FieldType.PASSWORD2WAY -> listOf(
                     "$FIELD_ID is a password field and they cannot be keys",
