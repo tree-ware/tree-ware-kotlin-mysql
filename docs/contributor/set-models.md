@@ -51,6 +51,12 @@ So the tree-ware MySQL `CompositionTableSetVisitorDelegate` uses INSERT and UPDA
 
 ## DELETE
 
-TODO: delete the entity and all entities in the sub-tree.
-
-TODO: how do we delete all entities in the sub-tree?
+* TODO: delete the entity and all entities in the sub-tree, or prevent the deletion if it has children?
+    * Default is prevent deletion (for safety reasons) and allow it to be overridden in meta-model for certain entities?
+    * Implement using [foreign key constraints](https://dev.mysql.com/doc/refman/8.0/en/example-foreign-keys.html)
+    * Can the desired behavior be specified in the request?
+        * Foreign key constraints cannot be overridden by the DELETE statement. So referential integrity would have to
+          be handled by tree-ware if this per-request flexibility is needed.
+    * Do compositions and associations need different constraints?
+      * To prevent deletion, both would need RESTRICT constraint
+      * To allow deletion, composition would need CASCADE, but associations would need SET NULL
