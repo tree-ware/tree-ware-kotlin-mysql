@@ -19,7 +19,7 @@ The `createDatabase()` operator creates the database and tables in MySQL to stor
 
 When targeting MySQL, all instances of an entity type are stored in a single table.
 
-# Primary Key
+# Primary Keys
 
 If entity instances are unique only under their parent, then parent paths need to be part of the primary-keys. These
 parent paths can be long when the meta-model is deeply nested or when there are recursive entities in the parent path.
@@ -59,7 +59,6 @@ The following columns are always indexed:
 
 * The columns corresponding to key fields (as a result of being in the PRIMARY KEY).
 * The `parent_entity_path_` BLOB column.
-* The `entity_path_` TEXT column.
 
 The following columns are indexed if specified in aux data:
 
@@ -69,7 +68,21 @@ The following columns are indexed if specified in aux data:
     * This is typically for fields that will be constrained in the request models.
     * The constraints will be translated to WHERE clauses and indexing these columns improves query performance.
 
-## Roadmap
+# Validations
+
+* Identifiers/names for the following should not exceed 64 characters:
+    * Database
+    * Table
+    * Column
+    * Index
+    * [Other identifiers](https://dev.mysql.com/doc/refman/8.0/en/identifier-length.html) as they get used in tree-ware
+* Values of the following columns are indexed and should not exceed 3072:
+    * Primary key
+    * `parent_entity_path_`
+    * Any other columns that are indexed based on meta-model aux data
+* [Other limits](https://dev.mysql.com/doc/refman/8.0/en/innodb-limits.html)
+
+# Roadmap
 
 * If the `list_by_` aux data in the meta-model specifies ancestors in the parent path by which entities need to be
   listed, then those ancestors are added as columns in the table and indexed to help list all entities under that
