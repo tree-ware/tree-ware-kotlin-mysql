@@ -8,7 +8,7 @@ val mySqlConnectorVersion = "8.0.27"
 val mySqlEmbeddedVersion = "4.6.1"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.5.21")
+    id("org.jetbrains.kotlin.jvm").version("1.6.10")
     id("idea")
     id("java-library")
     id("java-test-fixtures")
