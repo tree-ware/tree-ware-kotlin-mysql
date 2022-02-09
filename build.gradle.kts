@@ -35,7 +35,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:$log4j2Version")
     implementation("org.apache.logging.log4j:log4j-core:$log4j2Version")
 
-    testImplementation(testFixtures(project(":tree-ware-kotlin-core")))
+    testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
     testImplementation("com.wix:wix-embedded-mysql:$mySqlEmbeddedVersion")
     testImplementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Version")
     testImplementation(kotlin("test"))
