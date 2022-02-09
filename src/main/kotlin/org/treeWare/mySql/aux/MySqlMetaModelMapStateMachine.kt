@@ -3,6 +3,7 @@ package org.treeWare.mySql.aux
 import org.treeWare.model.decoder.stateMachine.AbstractDecodingStateMachine
 import org.treeWare.model.decoder.stateMachine.AuxDecodingStateMachine
 import org.treeWare.model.decoder.stateMachine.DecodingStack
+import org.treeWare.util.assertInDevMode
 
 class MySqlMetaModelMapStateMachine(
     private val stack: DecodingStack
@@ -36,19 +37,19 @@ class MySqlMetaModelMapStateMachine(
 
     override fun decodeObjectEnd(): Boolean {
         // Remove self from stack
-        stack.pollFirst()
+        stack.removeFirst()
         return true
     }
 
     override fun decodeListStart(): Boolean {
         // This method should never get called
-        assert(false)
+        assertInDevMode(false)
         return false
     }
 
     override fun decodeListEnd(): Boolean {
         // This method should never get called
-        assert(false)
+        assertInDevMode(false)
         return false
     }
 }
