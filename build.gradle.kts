@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "org.tree-ware"
 version = "1.0-SNAPSHOT"
 
-val log4j2Version = "2.16.0"
 val mySqlConnectorVersion = "8.0.27"
 val mySqlEmbeddedVersion = "4.6.1"
 
@@ -32,12 +31,9 @@ dependencies {
     implementation("mysql:mysql-connector-java:$mySqlConnectorVersion") {
         exclude("com.google.protobuf", "protobuf-java") // only needed for unused X DevAPI
     }
-    implementation("org.apache.logging.log4j:log4j-api:$log4j2Version")
-    implementation("org.apache.logging.log4j:log4j-core:$log4j2Version")
 
     testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
     testImplementation("com.wix:wix-embedded-mysql:$mySqlEmbeddedVersion")
-    testImplementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Version")
     testImplementation(kotlin("test"))
 }
 
