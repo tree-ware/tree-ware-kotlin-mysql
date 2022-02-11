@@ -9,7 +9,8 @@ import kotlin.test.assertEquals
 class GenerateSetCommandsTests {
     @Test
     fun `Set-commands must be generated for the model`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
+            ?: throw IllegalStateException("Meta-model has validation errors")
         val model = getMainModelFromJsonFile(metaModel, "model/my_sql_address_book_1.json")
         val commands = generateSetCommands(model)
         val expected = readFile("operator/my_sql_address_book_1_set_commands.txt")

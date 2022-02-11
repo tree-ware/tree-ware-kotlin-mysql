@@ -18,7 +18,10 @@ import kotlin.test.*
 private const val TEST_DATABASE = "test_address_book"
 
 class SetTests {
-    private val port = getAvailableServerPort()/**/
+    private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
+        ?: throw IllegalStateException("Meta-model has validation errors")
+
+    private val port = getAvailableServerPort()
 
     private val mysqld: EmbeddedMysql
     private val connection: Connection
@@ -39,7 +42,6 @@ class SetTests {
 
     @Test
     fun `Rows must be created`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         val model = getMainModelFromJsonFile(metaModel, "model/my_sql_address_book_1.json")
@@ -66,7 +68,6 @@ class SetTests {
         assertNotEquals(jsonModel1, jsonModelUnion)
         assertNotEquals(jsonModel2, jsonModelUnion)
 
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         // Set both models in sequence.
@@ -97,7 +98,6 @@ class SetTests {
 
     @Test
     fun `Rows must be created when no fields are specified in the model root`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         val modelJson = """
@@ -124,7 +124,6 @@ class SetTests {
 
     @Test
     fun `Rows must be created when only composition fields are specified in the model root`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         val modelJson = """
@@ -162,7 +161,6 @@ class SetTests {
 
     @Test
     fun `Rows must be created when no fields are specified in a single-composition entity`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         val modelJson = """
@@ -200,7 +198,6 @@ class SetTests {
 
     @Test
     fun `Rows must be created when only key fields are specified in a composition-set entity`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
         createDatabase(metaModel, connection)
 
         val modelJson = """
