@@ -49,6 +49,7 @@ private fun getStringFieldMetaModelJson(isStoredInMySQL: Boolean, maxSize: Int?)
             |      "fields": [
             |        {
             |          "name": "field1",
+            |          "number": 1,
             |          "type": "string"
             |          $maxSizeJson
             |        }

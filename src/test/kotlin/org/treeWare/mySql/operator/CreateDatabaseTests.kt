@@ -45,7 +45,8 @@ class CreateDatabaseTests {
         val before = getDatabaseNames(connection)
         assertFalse(before.contains(expectedDatabaseName))
 
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null)
+        val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
+            ?: throw IllegalStateException("Meta-model has validation errors")
         createDatabase(metaModel, connection)
         val after = getDatabaseNames(connection)
         assertTrue(after.contains(expectedDatabaseName))

@@ -24,6 +24,7 @@ class KeyValidationTests {
             |      "fields": [
             |        {
             |          "name": "key1",
+            |          "number": 1,
             |          "type": "uuid",
             |          "is_key": true
             |        }
@@ -35,11 +36,13 @@ class KeyValidationTests {
             |      "fields": [
             |        {
             |          "name": "key1",
+            |          "number": 1,
             |          "type": "uuid",
             |          "is_key": true
             |        },
             |        {
             |          "name": "key2",
+            |          "number": 2,
             |          "type": "uint32",
             |          "is_key": true
             |        }
@@ -154,6 +157,7 @@ private fun getTypedKeyMetaModelJson(fieldType: String): String {
             |      "fields": [
             |        {
             |          "name": "key1",
+            |          "number": 1,
             |          "type": "$fieldType",
             |          "is_key": true
             |        }
@@ -180,6 +184,7 @@ private fun getStringKeyMetaModelJson(maxSize: Int?): String {
             |      "fields": [
             |        {
             |          "name": "key1",
+            |          "number": 1,
             |          "type": "string",
             |          "is_key": true
             |          $maxSizeJson

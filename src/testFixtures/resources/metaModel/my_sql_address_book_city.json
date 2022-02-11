@@ -16,35 +16,41 @@
             "fields": [
               {
                 "name": "id",
+                "number": 1,
                 "type": "uuid",
                 "is_key": true
               },
               {
                 "name": "name",
+                "number": 2,
                 "info": "City name",
                 "type": "string",
                 "max_size": 128
               },
               {
                 "name": "state",
+                "number": 3,
                 "info": "Name of the state in which the city is",
                 "type": "string",
                 "max_size": 64
               },
               {
                 "name": "country",
+                "number": 4,
                 "info": "Name of the country in which the city is",
                 "type": "string",
                 "max_size": 64
               },
               {
                 "name": "info",
+                "number": 5,
                 "info": "Information about the city",
                 "type": "string",
                 "max_size": 512
               },
               {
                 "name": "related_city_info",
+                "number": 6,
                 "type": "association",
                 "association": [
                   {

@@ -12,25 +12,36 @@
             "name": "address_book_color",
             "values": [
               {
-                "name": "violet"
+                "name": "white",
+                "number": 0
               },
               {
-                "name": "indigo"
+                "name": "violet",
+                "number": 1
               },
               {
-                "name": "blue"
+                "name": "indigo",
+                "number": 2
               },
               {
-                "name": "green"
+                "name": "blue",
+                "number": 3
               },
               {
-                "name": "yellow"
+                "name": "green",
+                "number": 4
               },
               {
-                "name": "orange"
+                "name": "yellow",
+                "number": 5
               },
               {
-                "name": "red"
+                "name": "orange",
+                "number": 6
+              },
+              {
+                "name": "red",
+                "number": 7
               }
             ]
           },
@@ -38,25 +49,36 @@
             "name": "address_book_relationship",
             "values": [
               {
-                "name": "parent"
+                "name": "unknown",
+                "number": 0
               },
               {
-                "name": "child"
+                "name": "parent",
+                "number": 1
               },
               {
-                "name": "spouse"
+                "name": "child",
+                "number": 2
               },
               {
-                "name": "sibling"
+                "name": "spouse",
+                "number": 3
               },
               {
-                "name": "family"
+                "name": "sibling",
+                "number": 4
               },
               {
-                "name": "friend"
+                "name": "family",
+                "number": 5
               },
               {
-                "name": "colleague"
+                "name": "friend",
+                "number": 6
+              },
+              {
+                "name": "colleague",
+                "number": 7
               }
             ]
           }
@@ -68,16 +90,19 @@
             "fields": [
               {
                 "name": "name",
+                "number": 1,
                 "info": "A name for the address book",
                 "type": "string",
                 "max_size": 64
               },
               {
                 "name": "last_updated",
+                "number": 2,
                 "type": "timestamp"
               },
               {
                 "name": "settings",
+                "number": 3,
                 "type": "composition",
                 "composition": {
                   "name": "address_book_settings",
@@ -87,6 +112,7 @@
               },
               {
                 "name": "person",
+                "number": 4,
                 "type": "composition",
                 "composition": {
                   "name": "address_book_person",
@@ -96,6 +122,7 @@
               },
               {
                 "name": "city_info",
+                "number": 5,
                 "type": "composition",
                 "composition": {
                   "name": "address_book_city_info",
@@ -111,16 +138,19 @@
             "fields": [
               {
                 "name": "last_name_first",
+                "number": 1,
                 "type": "boolean",
                 "multiplicity": "optional"
               },
               {
                 "name": "encrypt_hero_name",
+                "number": 2,
                 "type": "boolean",
                 "multiplicity": "optional"
               },
               {
                 "name": "card_colors",
+                "number": 3,
                 "type": "enumeration",
                 "enumeration": {
                   "name": "address_book_color",
@@ -136,38 +166,45 @@
             "fields": [
               {
                 "name": "id",
+                "number": 1,
                 "type": "uuid",
                 "is_key": true
               },
               {
                 "name": "first_name",
+                "number": 2,
                 "type": "string",
                 "max_size": 64
               },
               {
                 "name": "last_name",
+                "number": 3,
                 "type": "string",
                 "max_size": 64
               },
               {
                 "name": "hero_name",
+                "number": 4,
                 "type": "string",
                 "max_size": 64,
                 "multiplicity": "optional"
               },
               {
                 "name": "email",
+                "number": 5,
                 "type": "string",
                 "max_size": 128,
                 "multiplicity": "list"
               },
               {
                 "name": "picture",
+                "number": 6,
                 "type": "blob",
                 "multiplicity": "optional"
               },
               {
                 "name": "relation",
+                "number": 7,
                 "type": "composition",
                 "composition": {
                   "name": "address_book_relation",
@@ -177,21 +214,25 @@
               },
               {
                 "name": "password",
+                "number": 8,
                 "type": "password1way",
                 "multiplicity": "optional"
               },
               {
                 "name": "previous_passwords",
+                "number": 9,
                 "type": "password1way",
                 "multiplicity": "list"
               },
               {
                 "name": "main_secret",
+                "number": 10,
                 "type": "password2way",
                 "multiplicity": "optional"
               },
               {
                 "name": "other_secrets",
+                "number": 11,
                 "type": "password2way",
                 "multiplicity": "list"
               }
@@ -203,11 +244,13 @@
             "fields": [
               {
                 "name": "id",
+                "number": 1,
                 "type": "uuid",
                 "is_key": true
               },
               {
                 "name": "relationship",
+                "number": 2,
                 "type": "enumeration",
                 "enumeration": {
                   "name": "address_book_relationship",
@@ -216,6 +259,7 @@
               },
               {
                 "name": "person",
+                "number": 3,
                 "type": "association",
                 "association": [
                   {
