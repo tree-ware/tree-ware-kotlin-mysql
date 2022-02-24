@@ -10,12 +10,12 @@ INSERT INTO test_address_book.main__address_book_settings
 INSERT INTO test_address_book.main__address_book_relation
   (parent_id$, id, relationship, person)
   VALUES
-  ('[{"person":{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}},"relation"]', UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'), 'colleague', '{"path_keys":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}')
+  ('[{"person":{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}},"relation"]', UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'), 'colleague', '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}')
   ON DUPLICATE KEY UPDATE
   parent_id$ = '[{"person":{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}},"relation"]',
   id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'),
   relationship = 'colleague',
-  person = '{"path_keys":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}';
+  person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}';
 INSERT INTO test_address_book.main__address_book_person
   (parent_id$, id, first_name, last_name, hero_name, email, picture, previous_passwords, other_secrets)
   VALUES
@@ -33,12 +33,12 @@ INSERT INTO test_address_book.main__address_book_person
 INSERT INTO test_address_book.main__address_book_relation
   (parent_id$, id, relationship, person)
   VALUES
-  ('[{"person":{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}},"relation"]', UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b'), 'colleague', '{"path_keys":[{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}]}')
+  ('[{"person":{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}},"relation"]', UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b'), 'colleague', '{"person":[{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}]}')
   ON DUPLICATE KEY UPDATE
   parent_id$ = '[{"person":{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}},"relation"]',
   id = UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b'),
   relationship = 'colleague',
-  person = '{"path_keys":[{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}]}';
+  person = '{"person":[{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}]}';
 INSERT INTO test_address_book.main__address_book_person
   (parent_id$, first_name, last_name, id, email, picture, password, previous_passwords, main_secret, other_secrets)
   VALUES
@@ -57,7 +57,7 @@ INSERT INTO test_address_book.main__address_book_person
 INSERT INTO test_address_book.city__city_info
   (parent_id$, id, name, state, country, info, related_city_info)
   VALUES
-  ('["city_info"]', UUID_TO_BIN('836b33db-fd9c-444c-85e2-78df3611a895'), 'New York City', 'New York', 'United States of America', 'One of the most populous and most densely populated major city in USA', '[{"path_keys":[{"id":"e902ede1-1368-4c0e-b33f-5d0e508d6084"}]},{"path_keys":[{"id":"7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"}]}]')
+  ('["city_info"]', UUID_TO_BIN('836b33db-fd9c-444c-85e2-78df3611a895'), 'New York City', 'New York', 'United States of America', 'One of the most populous and most densely populated major city in USA', '[{"city_info":[{"id":"e902ede1-1368-4c0e-b33f-5d0e508d6084"}]},{"city_info":[{"id":"7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"}]}]')
   ON DUPLICATE KEY UPDATE
   parent_id$ = '["city_info"]',
   id = UUID_TO_BIN('836b33db-fd9c-444c-85e2-78df3611a895'),
@@ -65,11 +65,11 @@ INSERT INTO test_address_book.city__city_info
   state = 'New York',
   country = 'United States of America',
   info = 'One of the most populous and most densely populated major city in USA',
-  related_city_info = '[{"path_keys":[{"id":"e902ede1-1368-4c0e-b33f-5d0e508d6084"}]},{"path_keys":[{"id":"7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"}]}]';
+  related_city_info = '[{"city_info":[{"id":"e902ede1-1368-4c0e-b33f-5d0e508d6084"}]},{"city_info":[{"id":"7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"}]}]';
 INSERT INTO test_address_book.city__city_info
   (parent_id$, info, name, state, country, id, related_city_info)
   VALUES
-  ('["city_info"]', 'Capital of New York state', 'Albany', 'New York', 'United States of America', UUID_TO_BIN('e902ede1-1368-4c0e-b33f-5d0e508d6084'), '[{"path_keys":[{"id":"836b33db-fd9c-444c-85e2-78df3611a895"}]}]')
+  ('["city_info"]', 'Capital of New York state', 'Albany', 'New York', 'United States of America', UUID_TO_BIN('e902ede1-1368-4c0e-b33f-5d0e508d6084'), '[{"city_info":[{"id":"836b33db-fd9c-444c-85e2-78df3611a895"}]}]')
   ON DUPLICATE KEY UPDATE
   parent_id$ = '["city_info"]',
   info = 'Capital of New York state',
@@ -77,7 +77,7 @@ INSERT INTO test_address_book.city__city_info
   state = 'New York',
   country = 'United States of America',
   id = UUID_TO_BIN('e902ede1-1368-4c0e-b33f-5d0e508d6084'),
-  related_city_info = '[{"path_keys":[{"id":"836b33db-fd9c-444c-85e2-78df3611a895"}]}]';
+  related_city_info = '[{"city_info":[{"id":"836b33db-fd9c-444c-85e2-78df3611a895"}]}]';
 INSERT INTO test_address_book.city__city_info
   (parent_id$, info, related_city_info, id, name, state, country)
   VALUES

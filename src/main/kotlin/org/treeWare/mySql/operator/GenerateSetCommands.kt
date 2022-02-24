@@ -16,7 +16,7 @@ import java.time.Instant
 
 fun generateSetCommands(mainModel: MainModel): List<String> {
     val visitor = GenerateSetCommandsVisitor()
-    forEach(mainModel, visitor)
+    forEach(mainModel, visitor, false)
     return visitor.commands
 }
 

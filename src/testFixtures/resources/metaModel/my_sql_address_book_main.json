@@ -261,14 +261,10 @@
                 "name": "person",
                 "number": 3,
                 "type": "association",
-                "association": [
-                  {
-                    "value": "address_book"
-                  },
-                  {
-                    "value": "person"
-                  }
-                ]
+                "association": {
+                  "name": "address_book_person",
+                  "package": "address_book.main"
+                }
               }
             ]
           }
