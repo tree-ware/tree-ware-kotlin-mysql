@@ -52,14 +52,10 @@
                 "name": "related_city_info",
                 "number": 6,
                 "type": "association",
-                "association": [
-                  {
-                    "value": "address_book"
-                  },
-                  {
-                    "value": "city_info"
-                  }
-                ],
+                "association": {
+                  "name": "address_book_city_info",
+                  "package": "address_book.city"
+                },
                 "multiplicity": "list"
               }
             ]

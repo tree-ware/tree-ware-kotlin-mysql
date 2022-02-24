@@ -90,7 +90,7 @@
             "id": "16634916-8f83-4376-ad42-37038e108a0b",
             "relationship": "colleague",
             "person": {
-              "path_keys": [
+              "person": [
                 {
                   "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
                 }
@@ -132,7 +132,7 @@
         "related_city_info": [
           {
             "aux3_": "Aux3 with association 1 in list",
-            "path_keys": [
+            "city_info": [
               {
                 "id": "e902ede1-1368-4c0e-b33f-5d0e508d6084"
               }
@@ -140,7 +140,7 @@
           },
           {
             "aux3_": "Aux3 with association 2 in list",
-            "path_keys": [
+            "city_info": [
               {
                 "id": "7cc15f01-c9bb-4fd6-b27d-6ccbe58b54c8"
               }
