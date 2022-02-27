@@ -15,7 +15,7 @@ import java.sql.Connection
 import java.sql.DriverManager
 import kotlin.test.*
 
-private const val TEST_DATABASE = "test_address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 class SetTests {
     private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel

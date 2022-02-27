@@ -1,4 +1,4 @@
-+ Database test_address_book +
++ Database test__address_book +
 
 = Table city__city_info =
 
