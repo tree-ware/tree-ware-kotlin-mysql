@@ -1,18 +1,18 @@
-CREATE DATABASE IF NOT EXISTS test_address_book;
-CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_root (
+CREATE DATABASE IF NOT EXISTS test__address_book;
+CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_root (
   parent_id$ VARCHAR(700),
   name VARCHAR(64),
   last_updated DATETIME,
   PRIMARY KEY (parent_id$)
 );
-CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_settings (
+CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
   parent_id$ VARCHAR(700),
   last_name_first BOOLEAN,
   encrypt_hero_name BOOLEAN,
   card_colors JSON,
   PRIMARY KEY (parent_id$)
 );
-CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_person (
+CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   parent_id$ VARCHAR(700),
   id BINARY(16),
   first_name VARCHAR(64),
@@ -26,14 +26,14 @@ CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_person (
   other_secrets JSON,
   PRIMARY KEY (parent_id$, id)
 );
-CREATE TABLE IF NOT EXISTS test_address_book.main__address_book_relation (
+CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_relation (
   parent_id$ VARCHAR(700),
   id BINARY(16),
   relationship VARCHAR(1024),
   person JSON,
   PRIMARY KEY (parent_id$, id)
 );
-CREATE TABLE IF NOT EXISTS test_address_book.city__city_info (
+CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   parent_id$ VARCHAR(700),
   id BINARY(16),
   name VARCHAR(128),

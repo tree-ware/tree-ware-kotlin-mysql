@@ -33,7 +33,7 @@ class CreateDatabaseTests {
 
     @Test
     fun `Database and tables must be created for the specified meta-model`() {
-        val expectedDatabaseName = "test_address_book"
+        val expectedDatabaseName = "test__address_book"
         val expectedTableNames = listOf(
             "city__city_info",
             "main__address_book_person",
