@@ -91,7 +91,7 @@ private fun getColumnType(fieldMeta: EntityModel): String =
         FieldType.DOUBLE -> "DOUBLE"
         FieldType.BIG_INTEGER -> "DECIMAL(65, 0)" // TODO(deepak-nulu) get size from meta-model
         FieldType.BIG_DECIMAL -> "DECIMAL" // TODO(deepak-nulu) get size from meta-model
-        FieldType.TIMESTAMP -> "DATETIME"
+        FieldType.TIMESTAMP -> "TIMESTAMP(3)"
         FieldType.STRING -> "VARCHAR(${getMaxSizeConstraint(fieldMeta)})"
         FieldType.UUID -> "BINARY(16)"
         FieldType.BLOB -> "BLOB"

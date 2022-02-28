@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS test__address_book;
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_root (
   parent_id$ VARCHAR(700),
   name VARCHAR(64),
-  last_updated DATETIME,
+  last_updated TIMESTAMP(3),
   PRIMARY KEY (parent_id$)
 );
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
