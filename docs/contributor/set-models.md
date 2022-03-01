@@ -43,9 +43,9 @@ sub-tree, and so it is safe to create (insert) it in the sub-tree in the set-req
 in an error, irrespective of which sub-tree it is in. So INSERT works as desired.
 
 UPDATE will update an en entity only if it exists. The WHERE clause can be used to ensure that the entity being updated
-has a parent-path that matches the parent path in the request. If the entity being updated has a different parent path
-in the DB than that in the set-request, it will not get updated. This can be caught using `SELECT ROW_COUNT()` and the
-transaction can be rolled back. So UPDATE also works as desired.
+has an `entity_path_` column value that matches the entity path in the request. If they don't match, the entity in the
+DB will not get updated. This can be caught using `SELECT ROW_COUNT()` and the transaction can be rolled back. So UPDATE
+also works as desired.
 
 So the tree-ware MySQL `CompositionTableSetVisitorDelegate` uses INSERT and UPDATE instead of UPSERT to set the models.
 
@@ -54,9 +54,9 @@ So the tree-ware MySQL `CompositionTableSetVisitorDelegate` uses INSERT and UPDA
 * TODO: delete the entity and all entities in the sub-tree, or prevent the deletion if it has children?
     * Default is prevent deletion (for safety reasons) and allow it to be overridden in meta-model for certain entities?
     * Implement using [foreign key constraints](https://dev.mysql.com/doc/refman/8.0/en/example-foreign-keys.html)
-    * Can the desired behavior be specified in the request?
-        * Foreign key constraints cannot be overridden by the DELETE statement. So referential integrity would have to
-          be handled by tree-ware if this per-request flexibility is needed.
-    * Do compositions and associations need different constraints?
-      * To prevent deletion, both would need RESTRICT constraint
-      * To allow deletion, composition would need CASCADE, but associations would need SET NULL
+    * Can the desired behavior be specified in the request? * Foreign key constraints cannot be overridden by the DELETE
+      statement. So referential integrity would have to be handled by tree-ware if this per-request flexibility is
+      needed.
+        * Do compositions and associations need different constraints?
+            * To prevent deletion, both would need RESTRICT constraint
+            * To allow deletion, composition would need CASCADE, but associations would need SET NULL
