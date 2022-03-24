@@ -15,31 +15,28 @@
             "name": "address_book_city_info",
             "fields": [
               {
-                "name": "id",
-                "number": 1,
-                "type": "uuid",
-                "is_key": true
-              },
-              {
                 "name": "name",
                 "number": 2,
                 "info": "City name",
                 "type": "string",
-                "max_size": 128
+                "max_size": 128,
+                "is_key": true
               },
               {
                 "name": "state",
                 "number": 3,
                 "info": "Name of the state in which the city is",
                 "type": "string",
-                "max_size": 64
+                "max_size": 64,
+                "is_key": true
               },
               {
                 "name": "country",
                 "number": 4,
                 "info": "Name of the country in which the city is",
                 "type": "string",
-                "max_size": 64
+                "max_size": 64,
+                "is_key": true
               },
               {
                 "name": "info",
@@ -49,14 +46,76 @@
                 "max_size": 512
               },
               {
-                "name": "related_city_info",
+                "name": "latitude",
                 "number": 6,
+                "type": "double"
+              },
+              {
+                "name": "longitude",
+                "number": 7,
+                "type": "double"
+              },
+              {
+                "name": "city_center",
+                "number": 8,
+                "type": "composition",
+                "composition": {
+                  "name": "point",
+                  "package": "org.tree_ware.meta_model.geo"
+                }
+              },
+              {
+                "name": "related_city_info",
+                "number": 31,
                 "type": "association",
                 "association": {
                   "name": "address_book_city_info",
                   "package": "address_book.city"
                 },
                 "multiplicity": "list"
+              },
+              {
+                "name": "self",
+                "number": 51,
+                "info": "An association to self, for testing multi-column unique indexes",
+                "type": "association",
+                "association": {
+                  "name": "address_book_city_info",
+                  "package": "address_book.city"
+                }
+              },
+              {
+                "name": "self2",
+                "number": 52,
+                "info": "An association to self, for testing multi-column foreign key indexes",
+                "type": "association",
+                "association": {
+                  "name": "address_book_city_info",
+                  "package": "address_book.city"
+                }
+              }
+            ],
+            "uniques": [
+              {
+                "name": "coordinates",
+                "type": "global",
+                "fields": [
+                  {
+                    "value": "latitude"
+                  },
+                  {
+                    "value": "longitude"
+                  }
+                ]
+              },
+              {
+                "name": "self",
+                "type": "global",
+                "fields": [
+                  {
+                    "value": "self"
+                  }
+                ]
               }
             ]
           }

@@ -1,0 +1,335 @@
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: city_center
+COLUMN_TYPE: point
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY: PRI
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: info
+COLUMN_TYPE: varchar(512)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: latitude
+COLUMN_TYPE: double
+COLUMN_KEY: MUL
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: longitude
+COLUMN_TYPE: double
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: PRI
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: related_city_info
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self$country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self$name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self$state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self2$country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self2$name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self2$state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY: PRI
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: current
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: UNI
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: previous
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$password
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: main
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: UNI
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: other
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: crypto$secret
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: email
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: first_name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: hero_name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: PRI
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: last_name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: MUL
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: picture
+COLUMN_TYPE: blob
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: self$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: UNI
+
+TABLE_NAME: main$address_book_person
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: PRI
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: MUL
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: MUL
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: relationship
+COLUMN_TYPE: int(10) unsigned
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_root
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_root
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_root
+COLUMN_NAME: last_updated
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_root
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_root
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: card_colors
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: encrypt_hero_name
+COLUMN_TYPE: tinyint(1)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: last_name_first
+COLUMN_TYPE: tinyint(1)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: json
+COLUMN_KEY:
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: PRI
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: MUL
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: main$person_group
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:

@@ -1,0 +1,126 @@
+
+TABLE_NAME: city$city_info
+INDEX_NAME: coordinates
+COLUMN_NAME: latitude
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: coordinates
+COLUMN_NAME: longitude
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: PRIMARY
+COLUMN_NAME: name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: PRIMARY
+COLUMN_NAME: state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: PRIMARY
+COLUMN_NAME: country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self
+COLUMN_NAME: self$name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self
+COLUMN_NAME: self$state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self
+COLUMN_NAME: self$country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 0
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self2$name
+COLUMN_NAME: self2$name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self2$name
+COLUMN_NAME: self2$state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 1
+
+TABLE_NAME: city$city_info
+INDEX_NAME: self2$name
+COLUMN_NAME: self2$country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 1
+
+TABLE_NAME: crypto$password
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: crypto$secret
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$address_book_person
+INDEX_NAME: main$person_group$id
+COLUMN_NAME: main$person_group$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: main$address_book_person
+INDEX_NAME: PRIMARY
+COLUMN_NAME: id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$address_book_person
+INDEX_NAME: self
+COLUMN_NAME: self$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$address_book_relation
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: main$address_book_relation
+INDEX_NAME: person$id
+COLUMN_NAME: person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: main$address_book_relation
+INDEX_NAME: PRIMARY
+COLUMN_NAME: id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$person_group
+INDEX_NAME: main$person_group$id
+COLUMN_NAME: main$person_group$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: main$person_group
+INDEX_NAME: PRIMARY
+COLUMN_NAME: id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0

@@ -1,16 +1,16 @@
 package org.treeWare.mySql.validation
 
 import org.treeWare.metaModel.*
-import org.treeWare.mySql.aux.MySqlMetaModelAuxPlugin
+import org.treeWare.mySql.aux.MySqlMetaModelMapAuxPlugin
 import kotlin.test.Test
 
 private const val FIELD_ID = "Package 1 entity 0 field 0"
 
 class KeyValidationTests {
-    private val mySqlMetaModelAuxPlugin = MySqlMetaModelAuxPlugin("test")
+    private val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin("test")
 
     @Test
-    fun `Entities must have only 1 key`() {
+    fun `Entities may have more than 1 key`() {
         val mainPackageJson = """
             |{
             |  "my_sql_": {
@@ -54,9 +54,12 @@ class KeyValidationTests {
         val metaModelJson =
             newTestMetaModelJson(testMetaModelCommonRootJson, testMetaModelCommonPackageJson, mainPackageJson)
 
-        val expectedErrors =
-            listOf("Entity /root/test.main/entity_with_2_keys has more than 1 key; only 1 key is supported for MySQL")
-        assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
+        val expectedErrors = emptyList<String>()
+        assertJsonStringValidationErrors(
+            metaModelJson,
+            expectedErrors,
+            auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
+        )
     }
 
     @Test
@@ -84,7 +87,7 @@ class KeyValidationTests {
             assertJsonStringValidationErrors(
                 metaModelJson,
                 expectedErrors,
-                auxPlugins = arrayOf(mySqlMetaModelAuxPlugin)
+                auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
             )
         }
     }
@@ -122,7 +125,7 @@ class KeyValidationTests {
             assertJsonStringValidationErrors(
                 metaModelJson,
                 expectedErrors,
-                auxPlugins = arrayOf(mySqlMetaModelAuxPlugin)
+                auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
             )
         }
     }
@@ -131,7 +134,11 @@ class KeyValidationTests {
     fun `Validation must pass for string keys with max_size`() {
         val metaModelJson = getStringKeyMetaModelJson(128)
         val expectedErrors = emptyList<String>()
-        assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
+        assertJsonStringValidationErrors(
+            metaModelJson,
+            expectedErrors,
+            auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
+        )
     }
 
     @Test
@@ -139,7 +146,11 @@ class KeyValidationTests {
         val metaModelJson = getStringKeyMetaModelJson(null)
         val expectedErrors =
             listOf("String field /root/test.main/entity1/key1 must specify max_size constraint for MySQL")
-        assertJsonStringValidationErrors(metaModelJson, expectedErrors, auxPlugins = arrayOf(mySqlMetaModelAuxPlugin))
+        assertJsonStringValidationErrors(
+            metaModelJson,
+            expectedErrors,
+            auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
+        )
     }
 }
 

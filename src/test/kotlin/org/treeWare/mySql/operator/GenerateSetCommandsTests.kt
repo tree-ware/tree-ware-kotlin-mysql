@@ -3,9 +3,11 @@ package org.treeWare.mySql.operator
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.readFile
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@Ignore
 class GenerateSetCommandsTests {
     @Test
     fun `Set-commands must be generated for the model`() {

@@ -15,8 +15,9 @@ import java.sql.Connection
 import java.sql.DriverManager
 import kotlin.test.*
 
-private const val TEST_DATABASE = "test__address_book"
+private const val TEST_DATABASE = "test\$address_book"
 
+@Ignore
 class SetTests {
     private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
         ?: throw IllegalStateException("Meta-model has validation errors")
@@ -42,7 +43,7 @@ class SetTests {
 
     @Test
     fun `Rows must be created`() {
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         val model = getMainModelFromJsonFile(metaModel, "model/my_sql_address_book_1.json")
         set(model, connection)
@@ -68,7 +69,7 @@ class SetTests {
         assertNotEquals(jsonModel1, jsonModelUnion)
         assertNotEquals(jsonModel2, jsonModelUnion)
 
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         // Set both models in sequence.
 
@@ -98,7 +99,7 @@ class SetTests {
 
     @Test
     fun `Rows must be created when no fields are specified in the model root`() {
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         val modelJson = """
             |{
@@ -110,7 +111,7 @@ class SetTests {
         set(model, connection)
 
         val expected = """
-            |= Table main__address_book_root =
+            |= Table main${'$'}address_book_root =
             |
             |* Row 1 *
             |parent_id${'$'}: []
@@ -118,13 +119,13 @@ class SetTests {
             |last_updated: null
             |
         """.trimMargin()
-        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root")
+        val actual = getTableRows(connection, TEST_DATABASE, "main\$address_book_root")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `Rows must be created when only composition fields are specified in the model root`() {
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         val modelJson = """
             |{
@@ -139,14 +140,14 @@ class SetTests {
         set(model, connection)
 
         val expected = """
-            |= Table main__address_book_root =
+            |= Table main${'$'}address_book_root =
             |
             |* Row 1 *
             |parent_id${'$'}: []
             |name: null
             |last_updated: null
             |
-            |= Table main__address_book_settings =
+            |= Table main${'$'}address_book_settings =
             |
             |* Row 1 *
             |parent_id${'$'}: ["settings"]
@@ -155,13 +156,13 @@ class SetTests {
             |card_colors: null
             |
         """.trimMargin()
-        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+        val actual = getTableRows(connection, TEST_DATABASE, "main\$address_book_root", "main\$address_book_settings")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `Rows must be created when no fields are specified in a single-composition entity`() {
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         val modelJson = """
             |{
@@ -176,14 +177,14 @@ class SetTests {
         set(model, connection)
 
         val expected = """
-            |= Table main__address_book_root =
+            |= Table main${'$'}address_book_root =
             |
             |* Row 1 *
             |parent_id${'$'}: []
             |name: Super Heroes
             |last_updated: null
             |
-            |= Table main__address_book_settings =
+            |= Table main${'$'}address_book_settings =
             |
             |* Row 1 *
             |parent_id${'$'}: ["settings"]
@@ -192,13 +193,13 @@ class SetTests {
             |card_colors: null
             |
         """.trimMargin()
-        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+        val actual = getTableRows(connection, TEST_DATABASE, "main\$address_book_root", "main\$address_book_settings")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `Rows must be created when only key fields are specified in a composition-set entity`() {
-        createDatabase(metaModel, connection)
+        createDatabase(metaModel, null, connection)
 
         val modelJson = """
             |{
@@ -216,14 +217,14 @@ class SetTests {
         set(model, connection)
 
         val expected = """
-            |= Table main__address_book_root =
+            |= Table main${'$'}address_book_root =
             |
             |* Row 1 *
             |parent_id${'$'}: []
             |name: Super Heroes
             |last_updated: null
             |
-            |= Table main__address_book_person =
+            |= Table main${'$'}address_book_person =
             |
             |* Row 1 *
             |parent_id${'$'}: ["person"]
@@ -239,7 +240,7 @@ class SetTests {
             |other_secrets: null
             |
         """.trimMargin()
-        val actual = getTableRows(connection, TEST_DATABASE, "main__address_book_root", "main__address_book_person")
+        val actual = getTableRows(connection, TEST_DATABASE, "main\$address_book_root", "main\$address_book_person")
         assertEquals(expected, actual)
     }
 }

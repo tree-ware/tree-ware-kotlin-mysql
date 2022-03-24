@@ -20,17 +20,19 @@ fun printTable(connection: Connection, database: String, table: String, writer: 
     statement.close()
 }
 
-fun printResultSet(result: ResultSet, writer: Writer) {
+fun printResultSet(result: ResultSet, writer: Writer, withoutRowNumbers: Boolean = false) {
     val metaData = result.metaData
     val tableName = metaData.getTableName(1)
-    writer.appendLine("= Table $tableName =")
+    if (tableName.isNotEmpty()) writer.appendLine("= Table $tableName =")
     while (result.next()) {
         writer.appendLine()
-        writer.appendLine("* Row ${result.row} *")
+        if (!withoutRowNumbers) writer.appendLine("* Row ${result.row} *")
         for (i in 1..metaData.columnCount) {
             writer.append(metaData.getColumnName(i))
-            writer.append(": ")
-            writer.appendLine(getValue(result, i))
+            writer.append(":")
+            val value = getValue(result, i)
+            if (value != null && value.isNotBlank()) writer.append(" ")
+            writer.appendLine(value)
         }
     }
 }

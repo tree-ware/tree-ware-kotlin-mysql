@@ -121,8 +121,19 @@
                 "multiplicity": "set"
               },
               {
-                "name": "city_info",
+                "name": "groups",
                 "number": 5,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "name": "person_group",
+                  "package": "address_book.main"
+                },
+                "multiplicity": "set"
+              },
+              {
+                "name": "city_info",
+                "number": 6,
                 "type": "composition",
                 "composition": {
                   "name": "address_book_city_info",
@@ -157,6 +168,49 @@
                   "package": "address_book.main"
                 },
                 "multiplicity": "list"
+              }
+            ]
+          },
+          {
+            "my_sql_": {},
+            "name": "person_group",
+            "info": "",
+            "fields": [
+              {
+                "name": "id",
+                "number": 1,
+                "info": "",
+                "type": "uuid",
+                "is_key": true
+              },
+              {
+                "name": "name",
+                "number": 2,
+                "info": "",
+                "type": "string",
+                "max_size": 64
+              },
+              {
+                "name": "persons",
+                "number": 3,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "name": "address_book_person",
+                  "package": "address_book.main"
+                },
+                "multiplicity": "set"
+              },
+              {
+                "name": "sub_groups",
+                "number": 20,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "name": "person_group",
+                  "package": "address_book.main"
+                },
+                "multiplicity": "set"
               }
             ]
           },
@@ -215,26 +269,43 @@
               {
                 "name": "password",
                 "number": 8,
-                "type": "password1way",
+                "type": "composition",
+                "composition": {
+                  "name": "password",
+                  "package": "test.crypto"
+                },
                 "multiplicity": "optional"
               },
               {
-                "name": "previous_passwords",
-                "number": 9,
-                "type": "password1way",
-                "multiplicity": "list"
-              },
-              {
-                "name": "main_secret",
+                "name": "secret",
                 "number": 10,
-                "type": "password2way",
+                "type": "composition",
+                "composition": {
+                  "name": "secret",
+                  "package": "test.crypto"
+                },
                 "multiplicity": "optional"
               },
               {
-                "name": "other_secrets",
-                "number": 11,
-                "type": "password2way",
-                "multiplicity": "list"
+                "name": "self",
+                "number": 12,
+                "info": "An association to self, for testing purposes",
+                "type": "association",
+                "association": {
+                  "name": "address_book_person",
+                  "package": "address_book.main"
+                }
+              }
+            ],
+            "uniques": [
+              {
+                "name": "self",
+                "type": "global",
+                "fields": [
+                  {
+                    "value": "self"
+                  }
+                ]
               }
             ]
           },
