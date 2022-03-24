@@ -12,15 +12,15 @@ private val metaMetaModel = newMainMetaMetaModel()
 class MySqlMetaModelMapTests {
     @Test
     fun `MySQL meta-model JSON codec round trip must be lossless`() {
-        val mySqlMetaModelAuxPlugin = MySqlMetaModelAuxPlugin("test")
+        val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin("test")
         MY_SQL_ADDRESS_BOOK_META_MODEL_FILES.forEach { file ->
             testRoundTrip(
                 file,
                 multiAuxEncoder = MultiAuxEncoder(
-                    mySqlMetaModelAuxPlugin.auxName to mySqlMetaModelAuxPlugin.auxEncoder
+                    mySqlMetaModelMapAuxPlugin.auxName to mySqlMetaModelMapAuxPlugin.auxEncoder
                 ),
                 multiAuxDecodingStateMachineFactory = MultiAuxDecodingStateMachineFactory(
-                    mySqlMetaModelAuxPlugin.auxName to mySqlMetaModelAuxPlugin.auxDecodingStateMachineFactory
+                    mySqlMetaModelMapAuxPlugin.auxName to mySqlMetaModelMapAuxPlugin.auxDecodingStateMachineFactory
                 ),
                 metaModel = metaMetaModel
             )

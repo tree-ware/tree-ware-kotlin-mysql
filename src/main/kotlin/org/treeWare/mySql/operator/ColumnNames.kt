@@ -1,3 +1,3 @@
 package org.treeWare.mySql.operator
 
-const val PARENT_ID_COLUMN_NAME = "parent_id$"
+const val ENTITY_PATH_COLUMN_NAME = "entity_path$"

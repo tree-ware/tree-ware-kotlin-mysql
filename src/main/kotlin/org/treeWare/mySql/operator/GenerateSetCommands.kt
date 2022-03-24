@@ -27,9 +27,10 @@ private class CommandState(parentId: String) {
     private val columnUpdates = mutableListOf<String>()
 
     init {
-        addColumnName(PARENT_ID_COLUMN_NAME)
-        addColumnValue(parentId)
-        addColumnUpdate(PARENT_ID_COLUMN_NAME, parentId)
+        // TODO(cleanup)
+//        addColumnName(PARENT_ID_COLUMN_NAME)
+//        addColumnValue(parentId)
+//        addColumnUpdate(PARENT_ID_COLUMN_NAME, parentId)
     }
 
     fun insertIntoTable(tableName: String) {
@@ -81,7 +82,7 @@ private class GenerateSetCommandsVisitor :
             mySqlMap.validated ?: throw IllegalStateException("MySQL entity meta-model map is not validated")
         val commandState = CommandState(getJsonEncodedParentPath())
         commandStateStack.addLast(commandState)
-        commandState.insertIntoTable(validated.sqlIdentifier)
+        commandState.insertIntoTable(validated.fullName)
         if (!isRootEntity(leaderEntity1)) addKeysToParentPath(leaderEntity1)
         return TraversalAction.CONTINUE
     }

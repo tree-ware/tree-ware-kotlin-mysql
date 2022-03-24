@@ -77,7 +77,7 @@ The following model (based on the above meta-model) is used as an example in the
 
 # Database
 
-The database name is created by joining the environment name and the meta-model name, separated by two underscores.
+The database name is created by joining the environment name and the meta-model name, separated by a dollar sign.
 
 # Tables
 
@@ -85,10 +85,7 @@ When targeting MySQL, all instances of an entity type are stored in a single tab
 
 The example meta-model has 3 entity types (`organization`, `site`, `device`), so 3 tables will be created for it.
 
-The table name is created by joining the `table_prefix` and `table_name` specified in the `my_sql_` aux data in the
-meta-model. The two parts are separated by two underscores. If the `table_prefix` is not specified for a package, then
-the package name is used in its place. Similarly, if the `table_name` is not specified for an entity, then the entity
-name is used in its place.
+The table name is created as explained [here](../user/database-and-tables.md#meta-model-aux-data).
 
 # Primary Keys
 
@@ -104,6 +101,11 @@ device instance (this is for illustration purposes only and reusing UUIDs in dif
 
 # Columns
 
+Field names in the meta-model are used as column names. Sometimes column names are derived from multiple fields. In such
+cases, the field names are combined with a dollar sign. Tree-ware also adds its own columns and the names for these end
+with a dollar sign. Field names in the meta-model are not allowed to have dollar signs, so these column names will not
+collide.
+
 The following columns are stored for each entity:
 
 * All non-composition fields in the entity are stored in separate columns.
@@ -113,83 +115,84 @@ The following columns are stored for each entity:
         * the `id`, `name`, `model`, and `sw_version` fields in the `device` entity
 * The PRIMARY KEY is made up of only the key field columns.
     * For example, the `id` fields in the `organization`, `site`, and `device` entities
-* The JSON representation of the path to the entity is stored in a non-indexed `entity_path_` TEXT column.
-    * TODO: use a protobuf representation instead of a JSON representation to make it more compact.
 * Association field values are paths with keys of entities along the path. Since tree-ware requires unique-keys while
   targeting MySQL, and since the type of the target entity is fixed in the association meta-model, only the target
   entity's keys need to be stored. The target entity's keys are stored in separate columns. The names for these columns
-  are created by joining the association field name and the target entity key field names with two underscores.
+  are created by joining the association field name and the target entity key field names with a dollar sign. The types
+  for these columns is the same as the key columns in the target entity.
     * For example, there is a `parent` association in the `organization` entity, and its target entity is
       the `organization` entity (self-referential). The `id` field is the key field in the `organization` entity. So the
-      `parent` association is stored in a column called `parent__id`.
+      `parent` association is stored in a column called `parent$id`.
+* The JSON representation of the path to the entity is stored in a non-indexed `entity_path$` JSON column.
+* `created_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
+  `NOT NULL DEFAULT CURRENT_TIMESTAMP`. It is set when an entity is created.
+* `updated_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
+  `NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`. It is set when any changes are made to the entity.
 
-# Listing Entities
+# Ancestors
 
 Since the model is a tree, every entity instance in the model tree has a parent path. Tree-ware supports the ability to
-list all entities under a given ancestor in the parent path. Since the indexing required for this can be expensive, it
-is supported by default only for the immediate parent, and not by default for the other ancestors in the path. If
-listing all entities under an ancestor is desired, it must be specified in the entity's
-[`list_by_` aux data](http://www.tree-ware.org/tree-ware-kotlin-core/user/meta-model-aux-data.html#list-by) in the
-meta-model.
+list all entities under any ancestor in the parent path. To support this, the key fields of each ancestor are added as
+columns in the entity-table. These columns are named by joining the ancestor table names and their key field names with
+a dollar sign.
 
-The parent for an entity is a field in an entity instance, so the parts in the parent path are fields of entity
-instances. The entity instance is identified by its keys, and the field is identified by the meta-model numbers of the
-field, its entity, and its package. These are combined in a protobuf and stored in an indexed BLOB column.
+# Recursive Ancestors
 
-TBR: BLOBs require an index prefix size. Is it ok to use the maximum size possible? When targeting MySQL, most entities
-will have a single UUID key, so we could set the prefix size to be just large enough for that.
-
-The column for the immediate parent is called `parent_`. There are a few choices for how the `list_by_` ancestor columns
-are named:
-
-1. `ancestor0_`, `ancestor1_`, etc. based on the position in the parent path. An entity could be composed under
-   different paths, so `ancestorN_` may not be the same entity/field across the different paths. This is not an issue
-   since the columns are blobs and each blob value identifies the entity and the field.
-2. Named as `<package>__<entity>_`. The blob value would have to contain only the field and the entity keys since the
-   package and entity are known. This is more readable if the tables had to be debugged directly, but the column name
-   could exceed the maximum size.
-3. Specify a name in the `list_by_` aux data. More work for the developer. Since `list_by_` aux data is not MySQL
-   specific, the name would have to be of use in the API as well.
-
-TODO: figure out which option should be used and update this page accordingly.
-
-## Recursive Ancestors
+Note: [not yet supported](https://github.com/tree-ware/tree-ware-kotlin-mysql/issues/57)
 
 The above approach does not work if the ancestor is a recursive entity. In the case of recursive entities, there can be
 many consecutive instances of that entity in the parent path. It is not possible to create columns for each instance
-since the number of instances can vary at runtime. If the immediate parent is a recursive entity, it is still possible
-to create the single `parent_` column since only the last instance needs to be stored. So the issue is for recursive
-ancestors listed in the `list_by_` aux data.
+since the number of instances can vary at runtime.
 
 The solution is to use a join-table to store the one-to-many relationship: one entity to many instances of its recursive
-ancestors. The join-table has the following columns:
+ancestors. The join-table is named by joining the entity-table name and the ancestor table name with a dollar sign. The
+join-table has the following columns:
 
-* `ancestor_` is the indexed BLOB column that identifies the part in the parent path. The values are as described
-  earlier for non-recursive parent path parts.
 * Columns for the key fields of the entity (whose parent path parts are being stored in this join-table).
-    * These columns have the same names and types as their counterparts in the main entity table.
+    * These columns have the same names and types as their counterparts in the main entity-table.
     * Values are the key field values of the entity.
-    * There is no need to query this table using entity keys, so these columns are not indexed.
+    * These columns are indexed so that rows can be removed (via foreign-key constraints) if the corresponding entity is
+      deleted in the entity-table.
+* Columns for the key fields in the ancestor entity.
+    * These columns have the same names and types as their counterparts in the ancestor entity-table, but they are
+      suffixed with a dollar sign in order not to conflict with the columns corresponding to the entity.
+    * Values are the key field values of the ancestor.
+    * TBR: do these columns need to be indexed by default to speed up the lookup? Non-recursive ancestors are not
+      indexed by default, so maybe these should not be indexed by default either?
 
-TBR: [CTE](https://dev.mysql.com/doc/refman/8.0/en/with.html) was suggested as a solution for nested sites. Will CTE be
-more performant than using a join-table or is CTE a bunch of joins as well?
+NOTE: if the immediate parent is a recursive-entity, columns for it are also added to the entity-table as described in
+the previous section. This is required in order to restrict the parent from being deleted while it has children.
 
-TBR: should non-recursive ancestors also be in this join-table or will it be more performant if they are part of the
-main entity table?
+TODO: will [CTE](https://dev.mysql.com/doc/refman/8.0/en/with.html) be more performant than using a join-table?
+
+# Foreign Key Constraints
+
+* The columns for an association are a foreign key to the target.
+    * If the association field is a required field, the foreign key is set to `ON DELETE RESTRICT`.
+    * Else it is set to
+      `ON DELETE SET NULL` ([not yet supported](https://github.com/tree-ware/tree-ware-kotlin-mysql/issues/54)).
+* The columns for the immediate parent are a foreign key to the parent entity-table.
+    * To prevent a parent from being deleted if it has children, the foreign key is set to `ON DELETE RESTRICT`.
+    * The columns for ancestors are also foreign keys, but they are not declared as foreign keys in order to avoid
+      indexes being created automatically for all ancestors.
+* The entity columns in the join-table for recursive-entities are foreign keys to the entity in the entity-table.
+    * The rows in the join-table need to be removed if the entity in the entity-table is deleted, so the foreign key is
+      set to `ON DELETE CASCADE`.
 
 # Indexed Columns
 
 The following columns are always indexed:
 
 * The columns corresponding to key fields (as a result of being in the PRIMARY KEY).
+* The `parent$` column.
 
-The following columns are indexed if specified in aux data:
-
-* Columns corresponding to ancestors marked in `list_by_` aux data in the meta-model.
-* Columns corresponding to fields that are marked for indexing in the meta-model.
-    * The aux data is: `"my_sql_": { "index": true }`
-    * This is typically for fields that will be constrained in requests.
-        * Constraints are translated to WHERE clauses and indexing these columns improves query performance.
+* Unique indexes for the columns corresponding to the fields in the
+  [uniqueness](http://www.tree-ware.org/tree-ware-kotlin-core/user/fields.html#uniqueness) definition in the meta-model.
+* Unique indexes for the first keyed parents of an entity without key fields. Entities without keys can only be used in
+  1:1 compositions and hence their parent keys have to be unique.
+* Columns corresponding to the fields specified in the `indexes` list in `my_sql_` aux data in the meta-model
+  ([not yet supported](https://github.com/tree-ware/tree-ware-kotlin-mysql/issues/56)).
+* Foreign-key columns (MySQL creates an index automatically if tree-ware does not).
 
 # Validations
 
@@ -201,6 +204,5 @@ The following columns are indexed if specified in aux data:
     * [Other identifiers](https://dev.mysql.com/doc/refman/8.0/en/identifier-length.html) as they get used in tree-ware
 * Values of the following columns are indexed and should not exceed 3072:
     * Primary key
-    * The parent path part columns in the join-table
-    * Any other columns that are indexed based on meta-model aux data
+    * Any other columns that are indexed
 * [Other limits](https://dev.mysql.com/doc/refman/8.0/en/innodb-limits.html)

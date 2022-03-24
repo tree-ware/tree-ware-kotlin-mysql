@@ -6,7 +6,7 @@ import org.treeWare.model.decoder.stateMachine.AuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.AuxEncoder
 import org.treeWare.mySql.validation.validateMySqlMetaModelMap
 
-class MySqlMetaModelAuxPlugin(private val environment: String) : MetaModelAuxPlugin {
+class MySqlMetaModelMapAuxPlugin(private val environment: String) : MetaModelAuxPlugin {
     override val auxName: String = MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME
     override val auxDecodingStateMachineFactory: AuxDecodingStateMachineFactory = { MySqlMetaModelMapStateMachine(it) }
     override val auxEncoder: AuxEncoder = MySqlMetaModelMapEncoder()

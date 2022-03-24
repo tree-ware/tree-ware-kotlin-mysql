@@ -1,8 +1,5 @@
 ---
-title: Database and Tables
-layout: titled
-nav_order: 1
-parent: User Docs
+title: Database and Tables layout: titled nav_order: 1 parent: User Docs
 ---
 
 {% include toc.md %}
@@ -18,17 +15,12 @@ and table names are derived automatically from the package and entity names. If 
 supported by MySQL, meta-model validation will fail. Shorter names can be specified using the following fields
 in `my_sql_` aux data: `table_prefix` for packages and `table_name` for entities.
 
-# Database
+# Spatial Columns
 
-The database name is created by joining the environment name and the meta-model name, separated by two underscores.
+Spatial columns are supported via a [geo meta-model][geo meta-model] in the core tree-ware library and
+[operator delegates][operator delegates] in the mysql tree-ware library. Currently, only a latitude/longitude point
+entity is supported. Use this point entity as the field type (composition), and call `registerMySqlOperatorDelegates()`
+at startup to register the necessary operator delegates.
 
-# Tables
-
-The table name is created by joining the `table_prefix` and `table_name` specified in the `my_sql_` aux data in the
-meta-model. The two parts are separated by two underscores. If the `table_prefix` is not specified for a package, then
-the package name is used in its place. Similarly, if the `table_name` is not specified for an entity, then the entity
-name is used in its place.
-
-# Columns
-
-TODO: document the column name, and the column types for each of the tree-ware field types.
+[geo meta-model]: https://github.com/tree-ware/tree-ware-kotlin-core/blob/master/src/commonMain/resources/org/treeWare/metaModel/geo.json
+[operator delegates]: http://www.tree-ware.org/tree-ware-kotlin-core/contributor/operator-delegates.html

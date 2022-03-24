@@ -5,11 +5,17 @@ import com.wix.mysql.EmbeddedMysql.anEmbeddedMysql
 import com.wix.mysql.config.MysqldConfig.aMysqldConfig
 import com.wix.mysql.distribution.Version.v8_0_17
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.model.operator.OperatorDelegateRegistry
+import org.treeWare.model.readFile
+import org.treeWare.mySql.registerMySqlOperatorDelegates
 import org.treeWare.mySql.test.getAvailableServerPort
-import org.treeWare.mySql.test.getTableNames
+import org.treeWare.mySql.test.getColumnsSchema
+import org.treeWare.mySql.test.getIndexesSchema
 import java.sql.Connection
 import java.sql.DriverManager
-import kotlin.test.*
+import kotlin.test.AfterTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class CreateDatabaseTests {
     private val port = getAvailableServerPort()
@@ -33,36 +39,27 @@ class CreateDatabaseTests {
 
     @Test
     fun `Database and tables must be created for the specified meta-model`() {
-        val expectedDatabaseName = "test__address_book"
-        val expectedTableNames = listOf(
-            "city__city_info",
-            "main__address_book_person",
-            "main__address_book_relation",
-            "main__address_book_root",
-            "main__address_book_settings"
-        )
+        val expectedDatabaseName = "test\$address_book"
 
-        val before = getDatabaseNames(connection)
-        assertFalse(before.contains(expectedDatabaseName))
+        val columnsSchemaBefore = getColumnsSchema(connection, expectedDatabaseName)
+        assertEquals("", columnsSchemaBefore)
+        val indexesSchemaBefore = getIndexesSchema(connection, expectedDatabaseName)
+        assertEquals("", indexesSchemaBefore)
 
         val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
             ?: throw IllegalStateException("Meta-model has validation errors")
-        createDatabase(metaModel, connection)
-        val after = getDatabaseNames(connection)
-        assertTrue(after.contains(expectedDatabaseName))
+        val operatorDelegateRegistry = OperatorDelegateRegistry()
+        registerMySqlOperatorDelegates(operatorDelegateRegistry)
+        val delegates = operatorDelegateRegistry.get(GenerateCreateCommandsOperatorId)
 
-        val tableNames = getTableNames(connection, expectedDatabaseName)
-        assertEquals(expectedTableNames.joinToString("\n"), tableNames.joinToString("\n"))
+        createDatabase(metaModel, delegates, connection)
 
-        // TODO(deepak-nulu): verify details of each table.
+        val expectedColumnsSchemaAfter = readFile("operator/my_sql_address_book_db_columns_schema.txt")
+        val actualColumnsSchemaAfter = getColumnsSchema(connection, expectedDatabaseName)
+        assertEquals(expectedColumnsSchemaAfter, actualColumnsSchemaAfter)
+
+        val expectedIndexesSchemaAfter = readFile("operator/my_sql_address_book_db_indexes_schema.txt")
+        val actualIndexesSchemaAfter = getIndexesSchema(connection, expectedDatabaseName)
+        assertEquals(expectedIndexesSchemaAfter, actualIndexesSchemaAfter)
     }
-}
-
-private fun getDatabaseNames(connection: Connection): List<String> {
-    val statement = connection.createStatement()
-    val resultSet = statement.executeQuery("SHOW DATABASES")
-    val databaseNames = mutableListOf<String>()
-    while (resultSet.next()) databaseNames.add(resultSet.getString(1))
-    statement.close()
-    return databaseNames
 }
