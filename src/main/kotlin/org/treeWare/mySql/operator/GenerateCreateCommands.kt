@@ -24,13 +24,14 @@ fun generateCreateCommands(
 ): List<String> {
     val visitor = GenerateCreateCommandsVisitor(delegates)
     metaModelForEach(mainMeta, visitor)
-    return visitor.createCommands
+    return visitor.createCommands + visitor.alterCommands
 }
 
 private interface SqlClauses {
     fun getColumns(): List<Column>
     fun writeColumnsTo(writer: Writer)
     fun writeIndexesTo(writer: Writer)
+    fun hasForeignKeys(): Boolean
     fun writeForeignKeysTo(writer: Writer)
 }
 
@@ -42,7 +43,7 @@ private open class Column(val name: String, val type: String) : SqlClauses {
     }
 
     override fun writeIndexesTo(writer: Writer) {}
-
+    override fun hasForeignKeys(): Boolean = false
     override fun writeForeignKeysTo(writer: Writer) {}
 }
 
@@ -80,9 +81,10 @@ private class ForeignKey(
         writer.write(")")
     }
 
+    override fun hasForeignKeys(): Boolean = onDelete != null
     override fun writeForeignKeysTo(writer: Writer) {
         if (onDelete == null) return
-        writer.write(",\n  FOREIGN KEY (")
+        writer.write("  ADD FOREIGN KEY (")
         keys.forEachIndexed { index, column ->
             if (index != 0) writer.write(", ")
             localPrefix?.also {
@@ -144,6 +146,7 @@ private class GenerateCreateCommandsVisitor(
     private val delegates: DelegateRegistry<GenerateCreateCommandsDelegate>?
 ) : CreateCommandBuilder, AbstractLeader1MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val createCommands = mutableListOf<String>()
+    val alterCommands = mutableListOf<String>()
 
     private val ancestorClauses = mutableListOf<SqlClauses>()
     private val fieldClauses = mutableListOf<SqlClauses>()
@@ -173,9 +176,7 @@ private class GenerateCreateCommandsVisitor(
         indexes.add(index)
     }
 
-    private fun addCreateCommand(leaderEntityMeta1: EntityModel) {
-        // Skip if this entity has not been mapped to MySQL.
-        val tableName = getMySqlMetaModelMap(leaderEntityMeta1)?.validated?.fullName ?: return
+    private fun addCreateCommand(tableName: String) {
         val createTableWriter = StringWriter()
         createTableWriter
             .appendLine("CREATE TABLE IF NOT EXISTS $tableName (")
@@ -195,17 +196,27 @@ private class GenerateCreateCommandsVisitor(
             createTableWriter.appendLine(",")
             createTableWriter.write(it.toString())
         }
-        ancestorClauses.forEach {
-            it.writeIndexesTo(createTableWriter)
-            it.writeForeignKeysTo(createTableWriter)
-        }
-        fieldClauses.forEach {
-            it.writeIndexesTo(createTableWriter)
-            it.writeForeignKeysTo(createTableWriter)
-        }
+        ancestorClauses.forEach { it.writeIndexesTo(createTableWriter) }
+        fieldClauses.forEach { it.writeIndexesTo(createTableWriter) }
         createTableWriter.appendLine().append(");")
         val command = createTableWriter.toString()
         createCommands.add(command)
+    }
+
+    private fun addAlterCommand(tableName: String) {
+        val foreignKeyClauses =
+            ancestorClauses.filter { it.hasForeignKeys() } + fieldClauses.filter { it.hasForeignKeys() }
+        if (foreignKeyClauses.isEmpty()) return
+        val alterTableWriter = StringWriter()
+        alterTableWriter.append("ALTER TABLE $tableName")
+        foreignKeyClauses.forEachIndexed { index, clause ->
+            val separator = if (index == 0) "\n" else ",\n"
+            alterTableWriter.append(separator)
+            clause.writeForeignKeysTo(alterTableWriter)
+        }
+        alterTableWriter.append(";")
+        val command = alterTableWriter.toString()
+        alterCommands.add(command)
     }
 
     override fun visitMainMeta(leaderMainMeta1: MainModel): TraversalAction {
@@ -226,7 +237,10 @@ private class GenerateCreateCommandsVisitor(
     }
 
     override fun leaveEntityMeta(leaderEntityMeta1: EntityModel) {
-        addCreateCommand(leaderEntityMeta1)
+        // Skip if this entity has not been mapped to MySQL.
+        val tableName = getMySqlMetaModelMap(leaderEntityMeta1)?.validated?.fullName ?: return
+        addCreateCommand(tableName)
+        addAlterCommand(tableName)
     }
 
     override fun visitFieldMeta(leaderFieldMeta1: EntityModel): TraversalAction {
