@@ -3,7 +3,7 @@ package org.treeWare.mySql.operator
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorDelegateRegistry
 import org.treeWare.model.readFile
-import org.treeWare.mySql.registerMySqlOperatorDelegates
+import org.treeWare.mySql.operator.delegate.registerMySqlOperatorDelegates
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

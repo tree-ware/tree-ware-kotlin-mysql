@@ -172,7 +172,7 @@ private class GenerateSetCommandsVisitor :
 
     override fun visitEnumeration(leaderValue1: EnumerationModel): TraversalAction {
         val fieldName = getFieldName(leaderValue1.parent)
-        val sqlValue = leaderValue1.value?.let { "'$it'" } ?: "NULL"
+        val sqlValue = leaderValue1.value.let { "'$it'" }
         val lastState = commandStateStack.last()
         lastState.addColumnName(fieldName)
         lastState.addColumnValue(sqlValue)

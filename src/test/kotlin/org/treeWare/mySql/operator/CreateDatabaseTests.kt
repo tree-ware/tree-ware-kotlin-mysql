@@ -7,7 +7,7 @@ import com.wix.mysql.distribution.Version.v8_0_17
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorDelegateRegistry
 import org.treeWare.model.readFile
-import org.treeWare.mySql.registerMySqlOperatorDelegates
+import org.treeWare.mySql.operator.delegate.registerMySqlOperatorDelegates
 import org.treeWare.mySql.test.getAvailableServerPort
 import org.treeWare.mySql.test.getColumnsSchema
 import org.treeWare.mySql.test.getIndexesSchema

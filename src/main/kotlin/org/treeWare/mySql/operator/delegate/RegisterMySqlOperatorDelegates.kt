@@ -1,4 +1,4 @@
-package org.treeWare.mySql
+package org.treeWare.mySql.operator.delegate
 
 import org.treeWare.model.operator.OperatorDelegateRegistry
 import org.treeWare.mySql.operator.GenerateCreateCommandsOperatorId
