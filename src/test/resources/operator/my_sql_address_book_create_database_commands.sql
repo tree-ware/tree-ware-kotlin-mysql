@@ -2,14 +2,14 @@ CREATE DATABASE IF NOT EXISTS test$address_book;
 CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_root (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   name VARCHAR(64),
   last_updated TIMESTAMP(3)
 );
 CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_settings (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   last_name_first BOOLEAN,
   encrypt_hero_name BOOLEAN,
   card_colors JSON
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_settings (
 CREATE TABLE IF NOT EXISTS test$address_book.main$person_group (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   main$person_group$id BINARY(16),
   id BINARY(16),
   name VARCHAR(64),
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$person_group (
 CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_person (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   main$person_group$id BINARY(16),
   id BINARY(16),
   first_name VARCHAR(64),
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_person (
 CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_relation (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   main$person_group$id BINARY(16),
   main$address_book_person$id BINARY(16),
   id BINARY(16),
@@ -52,14 +52,14 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_relation (
 CREATE TABLE IF NOT EXISTS test$address_book.city$city_info (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   name VARCHAR(128),
   state VARCHAR(64),
   country VARCHAR(64),
   info VARCHAR(512),
   latitude DOUBLE,
   longitude DOUBLE,
-  city_center POINT,
+  city_center POINT SRID 4326,
   related_city_info JSON,
   self$name VARCHAR(128),
   self$state VARCHAR(64),
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.city$city_info (
 CREATE TABLE IF NOT EXISTS test$address_book.crypto$password (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   main$person_group$id BINARY(16),
   main$address_book_person$id BINARY(16),
   current JSON,
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.crypto$password (
 CREATE TABLE IF NOT EXISTS test$address_book.crypto$secret (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
-  entity_path$ JSON,
+  entity_path$ TEXT,
   main$person_group$id BINARY(16),
   main$address_book_person$id BINARY(16),
   main JSON,

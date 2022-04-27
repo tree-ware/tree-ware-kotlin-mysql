@@ -82,7 +82,7 @@ class KeyValidationTests {
             FieldType.UUID
         )
         supportedKeyFieldTypes.forEach { fieldType ->
-            val metaModelJson = getTypedKeyMetaModelJson(fieldType.toString().lowercase())
+            val metaModelJson = getTypedKeyMetaModelJson(fieldType)
             val expectedErrors = emptyList<String>()
             assertJsonStringValidationErrors(
                 metaModelJson,
@@ -104,23 +104,15 @@ class KeyValidationTests {
             FieldType.COMPOSITION
         )
         unsupportedKeyFieldTypes.forEach { fieldType ->
-            val mainExpectedError =
-                "Entity /root/test.main/entity1 key field type $fieldType is not supported for MySQL"
-            val metaModelJson = getTypedKeyMetaModelJson(fieldType.toString().lowercase())
+            val metaModelJson = getTypedKeyMetaModelJson(fieldType)
+            // NOTE: tree-ware-kotlin-core does not support some types as keys,
+            // and tree-ware-kotlin-mysql does not support some more types. The
+            // error messages are different in these two libraries.
             val expectedErrors = when (fieldType) {
                 FieldType.PASSWORD1WAY,
-                FieldType.PASSWORD2WAY -> listOf(
-                    "$FIELD_ID is a password field and they cannot be keys",
-                    mainExpectedError
-                )
-                FieldType.ENUMERATION -> listOf("$FIELD_ID enumeration info is missing", mainExpectedError)
-                FieldType.ASSOCIATION -> listOf(
-                    "$FIELD_ID association info is missing",
-                    "$FIELD_ID is an association field and they cannot be keys",
-                    mainExpectedError
-                )
-                FieldType.COMPOSITION -> listOf("$FIELD_ID composition info is missing", mainExpectedError)
-                else -> listOf(mainExpectedError)
+                FieldType.PASSWORD2WAY -> listOf("$FIELD_ID is a password field and they cannot be keys")
+                FieldType.ASSOCIATION -> listOf("$FIELD_ID is an association field and they cannot be keys")
+                else -> listOf("Entity /root/test.main/entity1 key field type $fieldType is not supported for MySQL")
             }
             assertJsonStringValidationErrors(
                 metaModelJson,
@@ -154,7 +146,14 @@ class KeyValidationTests {
     }
 }
 
-private fun getTypedKeyMetaModelJson(fieldType: String): String {
+private fun getTypedKeyMetaModelJson(fieldType: FieldType): String {
+    val fieldTypeJson = fieldType.toString().lowercase()
+    val typeInfoJson = when (fieldType) {
+        FieldType.ENUMERATION -> """"enumeration": {"name": "enumeration1", "package": "test.common"},"""
+        FieldType.ASSOCIATION -> """"association": {"name": "entity2", "package": "test.common"},"""
+        FieldType.COMPOSITION -> """"composition": {"name": "entity3", "package": "test.common"},"""
+        else -> ""
+    }
     val mainPackageJson = """
             |{
             |  "my_sql_": {
@@ -169,7 +168,8 @@ private fun getTypedKeyMetaModelJson(fieldType: String): String {
             |        {
             |          "name": "key1",
             |          "number": 1,
-            |          "type": "$fieldType",
+            |          "type": "$fieldTypeJson",
+            |          $typeInfoJson
             |          "is_key": true
             |        }
             |      ]

@@ -1,11 +1,22 @@
 package org.treeWare.mySql.operator.delegate
 
-import org.treeWare.model.operator.OperatorDelegateRegistry
-import org.treeWare.mySql.operator.GenerateCreateCommandsOperatorId
-import org.treeWare.mySql.operator.delegate.geoPoint.GeoPointGenerateCreateCommandsDelegate
+import org.treeWare.model.operator.OperatorEntityDelegateRegistry
+import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.mySql.operator.GenerateCreateDatabaseCommandsOperatorId
+import org.treeWare.mySql.operator.delegate.geoPoint.GeoPointGenerateCreateDatabaseCommandsEntityDelegate
+import org.treeWare.mySql.operator.delegate.geoPoint.GeoPointSetEntityDelegate
 
 private const val GEO_POINT_ENTITY_NAME = "/org.tree_ware.meta_model.geo/point"
 
-fun registerMySqlOperatorDelegates(registry: OperatorDelegateRegistry) {
-    registry.add(GEO_POINT_ENTITY_NAME, GenerateCreateCommandsOperatorId, GeoPointGenerateCreateCommandsDelegate())
+fun registerMySqlOperatorEntityDelegates(registry: OperatorEntityDelegateRegistry) {
+    registry.add(
+        GEO_POINT_ENTITY_NAME,
+        GenerateCreateDatabaseCommandsOperatorId,
+        GeoPointGenerateCreateDatabaseCommandsEntityDelegate()
+    )
+    registry.add(
+        GEO_POINT_ENTITY_NAME,
+        SetOperatorId,
+        GeoPointSetEntityDelegate()
+    )
 }

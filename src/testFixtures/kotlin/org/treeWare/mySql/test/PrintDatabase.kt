@@ -1,6 +1,7 @@
 package org.treeWare.mySql.test
 
 import java.io.Writer
+import java.nio.ByteBuffer
 import java.sql.Connection
 import java.sql.ResultSet
 
@@ -31,19 +32,20 @@ fun printResultSet(result: ResultSet, writer: Writer, withoutRowNumbers: Boolean
             writer.append(metaData.getColumnName(i))
             writer.append(":")
             val value = getValue(result, i)
-            if (value != null && value.isNotBlank()) writer.append(" ")
+            if (value.isNotBlank()) writer.append(" ")
             writer.appendLine(value)
         }
     }
 }
 
-fun getValue(result: ResultSet, column: Int): String? = when (result.metaData.getColumnTypeName(column)) {
+fun getValue(result: ResultSet, column: Int): String = when (result.metaData.getColumnTypeName(column)) {
     "BINARY" -> getUuidValue(result, column)
-    else -> result.getString(column)
+    "GEOMETRY" -> getPointValue(result, column)
+    else -> result.getString(column) ?: "null"
 }
 
 fun getUuidValue(result: ResultSet, column: Int): String {
-    val bytes = result.getBytes(column)
+    val bytes = result.getBytes(column) ?: return "null"
     if (bytes.size != 16) return "Invalid UUID: ${bytes.size} bytes instead of 16 bytes"
     val uuid = StringBuffer()
     bytes.forEachIndexed { index, byte ->
@@ -54,4 +56,20 @@ fun getUuidValue(result: ResultSet, column: Int): String {
         uuid.append(hex)
     }
     return uuid.toString()
+}
+
+fun getPointValue(result: ResultSet, column: Int): String {
+    val bytes = result.getBytes(column) ?: return "null"
+    // MySQL uses little-endian order for the bytes. Reverse them to get big-endian.
+    // Note that reversing also reverse the order of the fields.
+    bytes.reverse()
+    val buffer = ByteBuffer.wrap(bytes)
+    val latitude = buffer.double
+    val longitude = buffer.double
+    val wkbType = buffer.int
+    if (wkbType != 1) throw IllegalStateException("Geometry is not a point")
+    val byteOrder = buffer.get()
+    if (byteOrder != 1.toByte()) throw IllegalStateException("Geometry value is not little-endian")
+    val srid = buffer.int
+    return "Point(latitude: $latitude, longitude: $longitude, SRID: $srid)"
 }

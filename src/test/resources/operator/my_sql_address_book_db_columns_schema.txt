@@ -16,7 +16,7 @@ COLUMN_KEY:
 
 TABLE_NAME: city$city_info
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: city$city_info
@@ -96,7 +96,7 @@ COLUMN_KEY:
 
 TABLE_NAME: crypto$password
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: crypto$password
@@ -126,7 +126,7 @@ COLUMN_KEY:
 
 TABLE_NAME: crypto$secret
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: crypto$secret
@@ -166,7 +166,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_person
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_person
@@ -216,7 +216,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_relation
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_relation
@@ -256,7 +256,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_root
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_root
@@ -291,7 +291,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_settings
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_settings
@@ -311,7 +311,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$person_group
 COLUMN_NAME: entity_path$
-COLUMN_TYPE: json
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$person_group
