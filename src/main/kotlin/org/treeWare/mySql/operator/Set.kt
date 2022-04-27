@@ -1,6 +1,7 @@
 package org.treeWare.mySql.operator
 
 import org.treeWare.model.core.MainModel
+import org.treeWare.model.operator.ElementModelError
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.mySql.operator.delegate.MySqlSetDelegate
@@ -13,7 +14,7 @@ fun set(
     connection: Connection,
     logCommands: Boolean = false,
     clock: Clock = Clock.systemUTC()
-): List<String> {
+): List<ElementModelError> {
     val setDelegate = MySqlSetDelegate(entityDelegates, connection, logCommands, clock)
     return org.treeWare.model.operator.set(main, setDelegate, entityDelegates)
 }

@@ -381,7 +381,7 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val mixedErrorsExpected =
-            listOf("Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: no parent or target entity")
+            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity")
         val mixed =
             getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
@@ -483,7 +483,7 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val mixedErrorsExpected =
-            listOf("Unable to create association in /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: no parent or target entity")
+            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create association in entity: no parent or target entity")
         val mixed =
             getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
@@ -590,9 +590,9 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val mixedErrorsExpected = listOf(
-            "Unable to delete /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: has children or source entity",
-            "Unable to create association in /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]: no parent or target entity",
-            "Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: no parent or target entity",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to delete: has children or source entity",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]: unable to create association in entity: no parent or target entity",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity",
         )
         val mixed =
             getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
