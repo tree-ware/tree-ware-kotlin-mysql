@@ -77,25 +77,25 @@ class SetUpdateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedErrors = listOf(
-            "Unable to update /address_book",
-            "Unable to update /address_book/settings",
-            "Unable to update /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
-            "Unable to update /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]",
-            "Unable to update /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password",
-            "Unable to update /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret",
-            "Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
-            "Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
-            "Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password",
-            "Unable to update /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret",
-            "Unable to update /address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]",
-            "Unable to update /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]",
-            "Unable to update /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]",
-            "Unable to update /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]",
-            "Unable to update /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]",
-            "Unable to update /address_book/city_info[Albany,New York,United States of America]",
-            "Unable to update /address_book/city_info[New York City,New York,United States of America]",
-            "Unable to update /address_book/city_info[San Francisco,California,United States of America]",
-            "Unable to update /address_book/city_info[Princeton,New Jersey,United States of America]",
+            "/address_book: unable to update",
+            "/address_book/settings: unable to update",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to update",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: unable to update",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: unable to update",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret: unable to update",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to update",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: unable to update",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret: unable to update",
+            "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]: unable to update",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]: unable to update",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]: unable to update",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]: unable to update",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]: unable to update",
+            "/address_book/city_info[Albany,New York,United States of America]: unable to update",
+            "/address_book/city_info[New York City,New York,United States of America]: unable to update",
+            "/address_book/city_info[San Francisco,California,United States of America]: unable to update",
+            "/address_book/city_info[Princeton,New Jersey,United States of America]: unable to update",
         )
         val actualErrors = set(update, setEntityDelegates, connection, clock = updateClock)
         assertEquals(expectedErrors.joinToString("\n"), actualErrors.joinToString("\n"))
@@ -184,7 +184,7 @@ class SetUpdateTests {
             |}
         """.trimMargin()
         val updateErrorsExpected =
-            listOf("Unable to update /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]")
+            listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update")
         val update =
             getMainModelFromJsonString(metaModel, updateJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
         val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)

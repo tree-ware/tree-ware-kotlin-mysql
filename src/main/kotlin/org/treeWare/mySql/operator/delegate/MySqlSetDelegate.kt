@@ -5,6 +5,7 @@ import org.treeWare.metaModel.*
 import org.treeWare.model.core.*
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.encoder.encodeJson
+import org.treeWare.model.operator.ElementModelError
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.getAssociationTargetEntity
@@ -62,7 +63,7 @@ internal class MySqlSetDelegate(
         }
     }
 
-    override fun begin(): List<String> {
+    override fun begin(): List<ElementModelError> {
         // Use the same value of now for all entities in the model.
         now = nowAsIso8601(clock)
         return emptyList()
@@ -76,7 +77,7 @@ internal class MySqlSetDelegate(
         keys: List<SingleFieldModel>,
         associations: List<FieldModel>,
         other: List<FieldModel>
-    ): List<String> {
+    ): List<ElementModelError> {
         val tableName = getEntityTableFullName(entity)
         when (setAux) {
             SetAux.CREATE -> addCreateCommands(tableName, entityPath, ancestorKeys, keys, associations, other)
@@ -86,9 +87,7 @@ internal class MySqlSetDelegate(
         return emptyList()
     }
 
-    override fun end(): List<String> {
-        return issueCommands()
-    }
+    override fun end(): List<ElementModelError> = issueCommands()
 
     private fun addCreateCommands(
         tableName: String,
@@ -115,7 +114,9 @@ internal class MySqlSetDelegate(
             // so `isKey` is set to `true` for it.
             updateBuilder.addColumn(true, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
             associations.forEach { addField(false, null, it, updateBuilder) }
-            createAssociationCommands.add(EntitySqlCommand("create association in", entityPath, updateBuilder.build()))
+            createAssociationCommands.add(
+                EntitySqlCommand("create association in entity", entityPath, updateBuilder.build())
+            )
         }
     }
 
@@ -214,19 +215,20 @@ internal class MySqlSetDelegate(
         } else throw IllegalStateException("Adding composition as a single column")
     }
 
-    private fun issueCommands(): List<String> {
+    private fun issueCommands(): List<ElementModelError> {
         if (connection == null) return emptyList()
-        val errors = mutableListOf<String>()
+        val errors = mutableListOf<ElementModelError>()
         val statement = connection.createStatement()
         commands.forEach { command ->
             if (logCommands) logger.info { command }
             try {
                 val rowCount = statement.executeUpdate(command.sql)
                 if (command.rowCount != null && rowCount != command.rowCount) {
-                    errors.add("Unable to ${command.action} ${command.entityPath}")
+                    errors.add(ElementModelError(command.entityPath, "unable to ${command.action}"))
                 }
             } catch (e: SQLException) {
-                errors.add("Unable to ${command.action} ${command.entityPath}: ${getMySqlErrorMessage(e)}")
+                val reason = getReadableReason(e)
+                errors.add(ElementModelError(command.entityPath, "unable to ${command.action}: $reason"))
             }
         }
         statement.close()
@@ -362,7 +364,7 @@ private fun instantAsIso8601(instant: Instant): String =
         // drop it until the test upgrades to MySQL 8.0.19 or later.
         .let { if (it.endsWith('Z')) it.dropLast(1) else it }
 
-private fun getMySqlErrorMessage(e: SQLException): String = when (e.errorCode) {
+private fun getReadableReason(e: SQLException): String = when (e.errorCode) {
     1062 -> "duplicate"
     1451 -> "has children or source entity"
     1452 -> "no parent or target entity"

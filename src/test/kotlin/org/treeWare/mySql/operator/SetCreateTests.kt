@@ -343,23 +343,23 @@ class SetCreateTests {
         // Try to create the same model again. It should fail.
         val setErrors2 = set(create, setEntityDelegates, connection, clock = clock)
         val expectedErrors2 = listOf(
-            "Unable to create /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: duplicate",
-            "Unable to create /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: duplicate",
-            "Unable to create /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: duplicate",
-            "Unable to create /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret: duplicate",
-            "Unable to create /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: duplicate",
-            "Unable to create /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: duplicate",
-            "Unable to create /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: duplicate",
-            "Unable to create /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret: duplicate",
-            "Unable to create /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]: duplicate",
-            "Unable to create /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]: duplicate",
-            "Unable to create /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]: duplicate",
-            "Unable to create /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]: duplicate",
-            "Unable to create /address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]: duplicate",
-            "Unable to create /address_book/city_info[New York City,New York,United States of America]: duplicate",
-            "Unable to create /address_book/city_info[Albany,New York,United States of America]: duplicate",
-            "Unable to create /address_book/city_info[Princeton,New Jersey,United States of America]: duplicate",
-            "Unable to create /address_book/city_info[San Francisco,California,United States of America]: duplicate",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to create: duplicate",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: unable to create: duplicate",
+            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret: unable to create: duplicate",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to create: duplicate",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: unable to create: duplicate",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: unable to create: duplicate",
+            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret: unable to create: duplicate",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]: unable to create: duplicate",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]: unable to create: duplicate",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]: unable to create: duplicate",
+            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]: unable to create: duplicate",
+            "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]: unable to create: duplicate",
+            "/address_book/city_info[New York City,New York,United States of America]: unable to create: duplicate",
+            "/address_book/city_info[Albany,New York,United States of America]: unable to create: duplicate",
+            "/address_book/city_info[Princeton,New Jersey,United States of America]: unable to create: duplicate",
+            "/address_book/city_info[San Francisco,California,United States of America]: unable to create: duplicate",
         )
         assertEquals(expectedErrors2.joinToString("\n"), setErrors2.joinToString("\n"))
         val actualRows2 = getDatabaseRows(connection, TEST_DATABASE)
@@ -390,7 +390,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val expectedErrors =
-            listOf("Unable to create /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: no parent or target entity")
+            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: no parent or target entity")
         val create =
             getMainModelFromJsonString(metaModel, modelJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
         val setErrors = set(create, setEntityDelegates, connection, clock = clock)
@@ -451,7 +451,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create2ErrorsExpected =
-            listOf("Unable to create /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: duplicate")
+            listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate")
         val create2 =
             getMainModelFromJsonString(metaModel, create2Json, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
         val create2Errors = set(create2, setEntityDelegates, connection, clock = clock)
