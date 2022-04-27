@@ -1,0 +1,267 @@
+{
+  "address_book__set_": "update",
+  "address_book": {
+    "name": "Super Heroes 2",
+    "last_updated": "1650390777222",
+    "settings": {
+      "last_name_first": false,
+      "encrypt_hero_name": true,
+      "card_colors": [
+        {
+          "value": "blue"
+        },
+        {
+          "value": "red"
+        }
+      ]
+    },
+    "person": [
+      {
+        "first_name": "Lois 2",
+        "last_name": "Lane 2",
+        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+        "self": {
+          "person": [
+            {
+              "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            }
+          ]
+        },
+        "email": [
+          {
+            "value": "lois.lane.2@dailyplanet.com"
+          }
+        ],
+        "picture": "UGljdHVyZSBvZiBMb2lzIExhbmUgMg==",
+        "relation": [
+          {
+            "id": "16634916-8f83-4376-ad42-37038e108a0b",
+            "relationship": "friend",
+            "person": {
+              "person": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
+          }
+        ],
+        "password": {
+          "current": {
+            "hashed": "test-hashed-lois-2",
+            "hash_version": 1
+          },
+          "previous": [
+            {
+              "unhashed": "password1-2"
+            },
+            {
+              "hashed": "test-hashed-password2-2",
+              "hash_version": 1
+            }
+          ]
+        },
+        "secret": {
+          "main": {
+            "encrypted": "test-encrypted-main-secret-2",
+            "cipher_version": 1
+          },
+          "other": [
+            {
+              "unencrypted": "secret1-2"
+            },
+            {
+              "encrypted": "test-encrypted-secret2-2",
+              "cipher_version": 1
+            }
+          ]
+        }
+      },
+      {
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "first_name": "Clark 2",
+        "last_name": "Kent 2",
+        "hero_name": "Superman 2",
+        "email": [
+          {
+            "value": "clark.kent.2@dailyplanet.com"
+          }
+        ],
+        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50IDI=",
+        "relation": [
+          {
+            "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            "relationship": "friend",
+            "person": {
+              "person": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
+          }
+        ],
+        "password": {
+          "current": {
+            "unhashed": "kryptonite-2"
+          },
+          "previous": [
+            {
+              "unhashed": "hello123-2"
+            },
+            {
+              "hashed": "test-hashed-superman-2",
+              "hash_version": 1
+            }
+          ]
+        },
+        "secret": {
+          "main": {
+            "unencrypted": "Alien from Krypton 2"
+          },
+          "other": [
+            {
+              "unencrypted": "secret1-2"
+            },
+            {
+              "encrypted": "test-encrypted-secret2-2",
+              "cipher_version": 1
+            }
+          ]
+        }
+      }
+    ],
+    "groups": [
+      {
+        "id": "ad9aaea8-30fe-45ed-93ef-bd368da0c756",
+        "name": "Marvel 2"
+      },
+      {
+        "id": "ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
+        "name": "DC 2",
+        "sub_groups": [
+          {
+            "id": "fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
+            "name": "Superman 2",
+            "persons": [
+              {
+                "id": "546a4982-b39a-4d01-aeb3-22d60c6963c0",
+                "first_name": "Clark 3",
+                "last_name": "Kent 3",
+                "hero_name": "Superman 3"
+              },
+              {
+                "first_name": "Lois 3",
+                "last_name": "Lane 3",
+                "hero_name": "n/a",
+                "id": "e391c509-67d6-4846-bfea-0f7cd9c91bf7"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "city_info": [
+      {
+        "info": "Capital of New York state 2",
+        "name": "Albany",
+        "state": "New York",
+        "country": "United States of America",
+        "related_city_info": [
+          {
+            "city_info": [
+              {
+                "name": "Princeton",
+                "state": "New Jersey",
+                "country": "United States of America"
+              }
+            ]
+          }
+        ],
+        "latitude": 42.651935,
+        "longitude": -73.75478,
+        "city_center": {
+          "latitude": 42.651935,
+          "longitude": -73.75478
+        }
+      },
+      {
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "info": "One of the most populous and most densely populated major city in USA 2",
+        "related_city_info": [
+          {
+            "city_info": [
+              {
+                "name": "San Francisco",
+                "state": "California",
+                "country": "United States of America"
+              }
+            ]
+          },
+          {
+            "city_info": [
+              {
+                "name": "Albany",
+                "state": "New York",
+                "country": "United States of America"
+              }
+            ]
+          }
+        ],
+        "latitude": 40.712983,
+        "longitude": -74.007206,
+        "city_center": {
+          "latitude": 40.712983,
+          "longitude": -74.007206
+        }
+      },
+      {
+        "info": "The cultural and financial center of Northern California 2",
+        "country": "United States of America",
+        "state": "California",
+        "name": "San Francisco",
+        "latitude": 37.77938,
+        "longitude": -122.418434,
+        "city_center": {
+          "latitude": 37.779380,
+          "longitude": -122.418434
+        },
+        "related_city_info": [
+          {
+            "city_info": [
+              {
+                "name": "Princeton",
+                "state": "New Jersey",
+                "country": "United States of America"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "info": "Home of Princeton University 2",
+        "related_city_info": [],
+        "name": "Princeton",
+        "state": "New Jersey",
+        "country": "United States of America",
+        "latitude": 40.360595,
+        "longitude": -74.664442,
+        "city_center": {
+          "latitude": 40.360595,
+          "longitude": -74.664442
+        },
+        "self2": {
+          "city_info": [
+            {
+              "country": "United States of America",
+              "state": "New Jersey",
+              "name": "Princeton"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

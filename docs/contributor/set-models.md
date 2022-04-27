@@ -7,11 +7,11 @@ parent: "Contributor Docs"
 
 {% include toc.md %}
 
-# SetVisitorDelegate
+# MySqlSetDelegate
 
-The `set()` operator in the tree-ware core library uses a DB-specific delegate to set models in the DB. The tree-ware
-MySQL library provides a delegate to set models in MySQL. The delegate programmatically issues SQL commands in a
-transaction to set the model in the DB.
+The [`set()` operator](http://www.tree-ware.org/tree-ware-kotlin-core/contributor/set-models.html) in the tree-ware core
+library uses a DB-specific delegate to set models in the DB. `MySqlSetDelegate` is a delegate for setting a model in
+MySQL. The delegate programmatically issues SQL commands in a transaction to set the model in the DB.
 
 ## UPSERT
 
@@ -24,17 +24,17 @@ will help clarify this:
 Consider the following paths where the alphabets are entity names and the numbers are (system-wide-unique) key values.
 Assume that the following paths already exist.
 
-1. `/a/1/b/1`
-2. `/a/2/b/2`
+1. `/a[1]/b[1]`
+2. `/a[2]/b[2]`
 
-Assume the user only has access to `/a/2` and its sub-tree, and they attempt to set `/a/2/b/1`. But `b/1` already exists
-and belongs to `/a/1` which the user does not have access to. So this attempt by the user must fail.
+Assume the user only has access to `/a[2]` and its sub-tree, and they attempt to set `/a[2]/b[1]`. But `b[1]` already
+exists and belongs to `/a[1]` which the user does not have access to. So this attempt by the user must fail.
 
-The RBAC layer does not reject the set request since the user has access to `/a/2` and the RBAC layer does not check
+The RBAC layer does not reject the set request since the user has access to `/a[2]` and the RBAC layer does not check
 beyond that for performance reasons. So the DB layer must catch/prevent this issue.
 
-If the set-request is implemented as an UPSERT, then it will update `b/1` since it exists. But this is not desirable
-since the user is not supposed to have access to `b/1`. So UPSERT must not be used.
+If the set-request is implemented as an UPSERT, then it will update `b[1]` since it exists. But this is not desirable
+since the user is not supposed to have access to `b[1]`. So UPSERT must not be used.
 
 ## INSERT & UPDATE
 
@@ -47,16 +47,17 @@ has an `entity_path_` column value that matches the entity path in the request. 
 DB will not get updated. This can be caught using `SELECT ROW_COUNT()` and the transaction can be rolled back. So UPDATE
 also works as desired.
 
-So the tree-ware MySQL `CompositionTableSetVisitorDelegate` uses INSERT and UPDATE instead of UPSERT to set the models.
+Therefore `MySqlSetDelegate` uses INSERT and UPDATE instead of UPSERT to set the models.
 
 ## DELETE
 
-* TODO: delete the entity and all entities in the sub-tree, or prevent the deletion if it has children?
-    * Default is prevent deletion (for safety reasons) and allow it to be overridden in meta-model for certain entities?
-    * Implement using [foreign key constraints](https://dev.mysql.com/doc/refman/8.0/en/example-foreign-keys.html)
-    * Can the desired behavior be specified in the request? * Foreign key constraints cannot be overridden by the DELETE
-      statement. So referential integrity would have to be handled by tree-ware if this per-request flexibility is
-      needed.
-        * Do compositions and associations need different constraints?
-            * To prevent deletion, both would need RESTRICT constraint
-            * To allow deletion, composition would need CASCADE, but associations would need SET NULL
+Entities are deleted using `DELETE` commands. Like in the case of updates, a `WHERE` clause on the `entity_path_` is
+used for ensuring that the entity being deleted matches the entity path in the request. Tree-ware creates foreign-key
+restrictions for compositions and associations, so deletes will fail if the entity being deleted has a sub-tree or if it
+is the target of an association.
+
+# Roadmap
+
+* Support recursive deletion using `"set_": "delete_recursive"` aux value, and a corresponding permission.
+    * Should handle compositions as well as associations.
+    * Might need long-running-operation (LRO) support in tree-ware.

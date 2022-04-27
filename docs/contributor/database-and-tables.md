@@ -123,7 +123,7 @@ The following columns are stored for each entity:
     * For example, there is a `parent` association in the `organization` entity, and its target entity is
       the `organization` entity (self-referential). The `id` field is the key field in the `organization` entity. So the
       `parent` association is stored in a column called `parent$id`.
-* The JSON representation of the path to the entity is stored in a non-indexed `entity_path$` JSON column.
+* A text representation of the path to the entity is stored in a non-indexed `entity_path$` TEXT column.
 * `created_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
   `NOT NULL DEFAULT CURRENT_TIMESTAMP`. It is set when an entity is created.
 * `updated_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as

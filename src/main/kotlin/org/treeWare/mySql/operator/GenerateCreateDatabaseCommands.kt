@@ -4,25 +4,26 @@ import org.treeWare.metaModel.*
 import org.treeWare.metaModel.traversal.AbstractLeader1MetaModelVisitor
 import org.treeWare.metaModel.traversal.metaModelForEach
 import org.treeWare.model.core.*
-import org.treeWare.model.operator.DelegateRegistry
+import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.OperatorId
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
+import org.treeWare.mySql.util.getEntityMetaTableName
 import java.io.StringWriter
 import java.io.Writer
 
-interface GenerateCreateCommandsDelegate {
+interface GenerateCreateDatabaseCommandsEntityDelegate {
     fun isSingleColumn(): Boolean
     fun getSingleColumnType(): String
 }
 
-object GenerateCreateCommandsOperatorId : OperatorId<GenerateCreateCommandsDelegate>
+object GenerateCreateDatabaseCommandsOperatorId : OperatorId<GenerateCreateDatabaseCommandsEntityDelegate>
 
-fun generateCreateCommands(
+fun generateCreateDatabaseCommands(
     mainMeta: MainModel,
-    delegates: DelegateRegistry<GenerateCreateCommandsDelegate>?
+    entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?
 ): List<String> {
-    val visitor = GenerateCreateCommandsVisitor(delegates)
+    val visitor = GenerateCreateDatabaseCommandsVisitor(entityDelegates)
     metaModelForEach(mainMeta, visitor)
     return visitor.createCommands + visitor.alterCommands
 }
@@ -135,16 +136,16 @@ private enum class OnDelete(val sql: String) {
     SET_NULL("SET NULL")
 }
 
-private interface CreateCommandBuilder {
+private interface CreateDatabaseCommandBuilder {
     fun addAncestorClauses(clauses: SqlClauses?)
     fun addFieldClauses(clauses: SqlClauses?)
     fun addPrimaryKey(name: String)
     fun addIndex(index: Index)
 }
 
-private class GenerateCreateCommandsVisitor(
-    private val delegates: DelegateRegistry<GenerateCreateCommandsDelegate>?
-) : CreateCommandBuilder, AbstractLeader1MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
+private class GenerateCreateDatabaseCommandsVisitor(
+    private val entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?
+) : CreateDatabaseCommandBuilder, AbstractLeader1MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val createCommands = mutableListOf<String>()
     val alterCommands = mutableListOf<String>()
 
@@ -180,9 +181,11 @@ private class GenerateCreateCommandsVisitor(
         val createTableWriter = StringWriter()
         createTableWriter
             .appendLine("CREATE TABLE IF NOT EXISTS $tableName (")
-            .appendLine("  created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),")
-            .appendLine("  updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),")
-            .append("  $ENTITY_PATH_COLUMN_NAME JSON")
+            .append("  ").append(CREATED_ON_COLUMN_NAME)
+            .appendLine(" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),")
+            .append("  ").append(UPDATED_ON_COLUMN_NAME)
+            .appendLine(" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),")
+            .append("  $ENTITY_PATH_COLUMN_NAME TEXT")
         ancestorClauses.forEach { it.writeColumnsTo(createTableWriter) }
         fieldClauses.forEach { it.writeColumnsTo(createTableWriter) }
         if (keys.isNotEmpty()) {
@@ -279,8 +282,7 @@ private class GenerateCreateCommandsVisitor(
     }
 
     private fun addAncestorKeyClauses(entityMeta: EntityModel, constrain: Boolean, isUnique: Boolean) {
-        val tableName = getMySqlMetaModelMap(entityMeta)?.validated?.tableName
-            ?: throw IllegalStateException("Ancestor entity is not mapped to MySQL")
+        val tableName = getEntityMetaTableName(entityMeta)
         val onDelete = if (constrain) OnDelete.RESTRICT else null
         val keyFieldsMeta = getKeyFieldsMeta(entityMeta)
         keyFieldsMeta.forEach { fieldMeta ->
@@ -312,9 +314,9 @@ private class GenerateCreateCommandsVisitor(
             FieldType.COMPOSITION -> {
                 val compositionMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
                 val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
-                val delegate = delegates?.get(entityFullName)
-                if (delegate?.isSingleColumn() != true) null
-                else getSingleFieldClauses(fieldMeta, delegate.getSingleColumnType())
+                val entityDelegate = entityDelegates?.get(entityFullName)
+                if (entityDelegate?.isSingleColumn() != true) null
+                else getSingleFieldClauses(fieldMeta, entityDelegate.getSingleColumnType())
             }
             FieldType.ASSOCIATION -> getAssociationFieldClauses(fieldMeta)
             else -> getSingleFieldClauses(fieldMeta)

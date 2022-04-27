@@ -5,9 +5,9 @@ import com.wix.mysql.EmbeddedMysql.anEmbeddedMysql
 import com.wix.mysql.config.MysqldConfig.aMysqldConfig
 import com.wix.mysql.distribution.Version.v8_0_17
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
-import org.treeWare.model.operator.OperatorDelegateRegistry
+import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.model.readFile
-import org.treeWare.mySql.operator.delegate.registerMySqlOperatorDelegates
+import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.getAvailableServerPort
 import org.treeWare.mySql.test.getColumnsSchema
 import org.treeWare.mySql.test.getIndexesSchema
@@ -48,9 +48,9 @@ class CreateDatabaseTests {
 
         val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
             ?: throw IllegalStateException("Meta-model has validation errors")
-        val operatorDelegateRegistry = OperatorDelegateRegistry()
-        registerMySqlOperatorDelegates(operatorDelegateRegistry)
-        val delegates = operatorDelegateRegistry.get(GenerateCreateCommandsOperatorId)
+        val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
+        registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
+        val delegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
 
         createDatabase(metaModel, delegates, connection)
 
