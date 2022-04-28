@@ -201,7 +201,7 @@ private class GenerateCreateDatabaseCommandsVisitor(
         }
         ancestorClauses.forEach { it.writeIndexesTo(createTableWriter) }
         fieldClauses.forEach { it.writeIndexesTo(createTableWriter) }
-        createTableWriter.appendLine().append(");")
+        createTableWriter.appendLine().append(") ENGINE = InnoDB;")
         val command = createTableWriter.toString()
         createCommands.add(command)
     }
