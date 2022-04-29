@@ -4,6 +4,9 @@ import com.wix.mysql.EmbeddedMysql
 import com.wix.mysql.EmbeddedMysql.anEmbeddedMysql
 import com.wix.mysql.config.MysqldConfig.aMysqldConfig
 import com.wix.mysql.distribution.Version.v8_0_17
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.model.readFile
@@ -13,10 +16,9 @@ import org.treeWare.mySql.test.getColumnsSchema
 import org.treeWare.mySql.test.getIndexesSchema
 import java.sql.Connection
 import java.sql.DriverManager
-import kotlin.test.AfterTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreateDatabaseTests {
     private val port = getAvailableServerPort()
 
@@ -32,8 +34,8 @@ class CreateDatabaseTests {
         connection = DriverManager.getConnection("jdbc:mysql://localhost:$port/", "root", "")
     }
 
-    @AfterTest
-    fun afterTest() {
+    @AfterAll
+    fun afterAll() {
         mysqld.stop()
     }
 

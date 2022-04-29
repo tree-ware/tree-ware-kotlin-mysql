@@ -3,6 +3,10 @@ package org.treeWare.mySql.operator
 import com.wix.mysql.EmbeddedMysql
 import com.wix.mysql.config.MysqldConfig
 import com.wix.mysql.distribution.Version
+import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.newMySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
@@ -15,6 +19,7 @@ import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
+import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getAvailableServerPort
 import org.treeWare.mySql.test.getDatabaseRows
 import java.sql.Connection
@@ -22,8 +27,6 @@ import java.sql.DriverManager
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import kotlin.test.AfterTest
-import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -39,6 +42,7 @@ private val createClock = Clock.fixed(Instant.parse(CREATE_TIME), ZoneOffset.UTC
 private const val UPDATE_TIME = "2022-04-04T00:40:41.440Z"
 private val updateClock = Clock.fixed(Instant.parse(UPDATE_TIME), ZoneOffset.UTC)
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SetUpdateTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
@@ -63,8 +67,13 @@ class SetUpdateTests {
         createDatabase(metaModel, createDbEntityDelegates, connection)
     }
 
-    @AfterTest
-    fun afterTest() {
+    @AfterEach()
+    fun afterEach() {
+        clearDatabase(connection, TEST_DATABASE)
+    }
+
+    @AfterAll
+    fun afterAll() {
         mysqld.stop()
     }
 
