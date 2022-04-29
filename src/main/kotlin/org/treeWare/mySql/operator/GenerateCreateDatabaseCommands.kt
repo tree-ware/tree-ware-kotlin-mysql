@@ -49,8 +49,9 @@ private open class Column(val name: String, val type: String) : SqlClauses {
 }
 
 private class ForeignKey(
-    private val localPrefix: String?,
+    private val localKeyPrefix: String?,
     private val foreignTable: String,
+    private val foreignKeyPrefix: String?,
     private val onDelete: OnDelete?,
     private val isUnique: Boolean = false
 ) : SqlClauses {
@@ -61,11 +62,11 @@ private class ForeignKey(
     }
 
     override fun getColumns(): List<Column> =
-        if (localPrefix == null) keys
-        else keys.map { Column("$localPrefix\$${it.name}", it.type) }
+        if (localKeyPrefix == null) keys
+        else keys.map { Column("$localKeyPrefix\$${it.name}", it.type) }
 
     override fun writeColumnsTo(writer: Writer) {
-        keys.forEach { writeColumnTo(writer, it.name, it.type, localPrefix) }
+        keys.forEach { writeColumnTo(writer, it.name, it.type, localKeyPrefix) }
     }
 
     override fun writeIndexesTo(writer: Writer) {
@@ -88,7 +89,7 @@ private class ForeignKey(
         writer.write("  ADD FOREIGN KEY (")
         keys.forEachIndexed { index, column ->
             if (index != 0) writer.write(", ")
-            localPrefix?.also {
+            localKeyPrefix?.also {
                 writer.write(it)
                 writer.write("$")
             }
@@ -99,6 +100,10 @@ private class ForeignKey(
         writer.write("(")
         keys.forEachIndexed { index, column ->
             if (index != 0) writer.write(", ")
+            foreignKeyPrefix?.also {
+                writer.write(it)
+                writer.write("$")
+            }
             writer.write(column.name)
         }
         writer.write(") ON DELETE ")
@@ -254,17 +259,22 @@ private class GenerateCreateDatabaseCommandsVisitor(
         return TraversalAction.CONTINUE
     }
 
+    private class Parent(val immediateParentMeta: EntityModel, val firstKeyedAncestorMeta: EntityModel)
+
     private fun addKeyedAncestors(entityMeta: EntityModel) {
+        val parents = LinkedHashSet<Parent>()
         val keyedParents = LinkedHashSet<EntityModel>()
         val keyedAncestors = LinkedHashSet<EntityModel>()
-        collectKeyedAncestors(entityMeta, false, keyedParents, keyedAncestors)
-        keyedAncestors.forEach { addAncestorKeyClauses(it, false, false) }
-        keyedParents.forEach { addAncestorKeyClauses(it, true, !hasKeyFields(entityMeta)) }
+        collectKeyedAncestors(entityMeta, null, false, parents, keyedParents, keyedAncestors)
+        keyedAncestors.forEach { addAncestorKeyClauses(it) }
+        parents.forEach { addParentKeyClauses(it, !hasKeyFields(entityMeta)) }
     }
 
     private fun collectKeyedAncestors(
         entityMeta: BaseEntityModel,
-        isKeyedParentFound: Boolean,
+        immediateParentMeta: EntityModel?,
+        isFirstKeyedAncestorMetaFound: Boolean,
+        parents: LinkedHashSet<Parent>,
         keyedParents: LinkedHashSet<EntityModel>,
         keyedAncestors: LinkedHashSet<EntityModel>
     ) {
@@ -274,23 +284,47 @@ private class GenerateCreateDatabaseCommandsVisitor(
             val parentEntityMeta = getParentEntityMeta(parentFieldMeta) as? EntityModel ?: return@forEach
             if (!isEntityMeta(parentEntityMeta)) return@forEach
             if (keyedParents.contains(parentEntityMeta) || keyedAncestors.contains(parentEntityMeta)) return@forEach
-            if (!hasKeyFields(parentEntityMeta)) return@forEach
-            if (!isKeyedParentFound) keyedParents.add(parentEntityMeta)
-            else keyedAncestors.add(parentEntityMeta)
-            collectKeyedAncestors(parentEntityMeta, true, keyedParents, keyedAncestors)
+            val nonNullImmediateParentMeta = immediateParentMeta ?: parentEntityMeta
+            val parentHasKeys = hasKeyFields(parentEntityMeta)
+            if (parentHasKeys) {
+                if (!isFirstKeyedAncestorMetaFound) {
+                    parents.add(Parent(nonNullImmediateParentMeta, parentEntityMeta))
+                    keyedParents.add(parentEntityMeta)
+                } else keyedAncestors.add(parentEntityMeta)
+            }
+            collectKeyedAncestors(
+                parentEntityMeta,
+                nonNullImmediateParentMeta,
+                isFirstKeyedAncestorMetaFound || parentHasKeys,
+                parents,
+                keyedParents,
+                keyedAncestors
+            )
         }
     }
 
-    private fun addAncestorKeyClauses(entityMeta: EntityModel, constrain: Boolean, isUnique: Boolean) {
-        val tableName = getEntityMetaTableName(entityMeta)
-        val onDelete = if (constrain) OnDelete.RESTRICT else null
-        val keyFieldsMeta = getKeyFieldsMeta(entityMeta)
+    private fun addAncestorKeyClauses(ancestorEntityMeta: EntityModel) {
+        val ancestorTableName = getEntityMetaTableName(ancestorEntityMeta)
+        val keyFieldsMeta = getKeyFieldsMeta(ancestorEntityMeta)
+        val foreignKey = ForeignKey(ancestorTableName, ancestorTableName, null, null, false)
         keyFieldsMeta.forEach { fieldMeta ->
-            val foreignKey = ForeignKey(tableName, tableName, onDelete, isUnique)
             val clauses = getFieldClauses(fieldMeta)
             clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
-            addAncestorClauses(foreignKey)
         }
+        addAncestorClauses(foreignKey)
+    }
+
+    private fun addParentKeyClauses(parent: Parent, isUnique: Boolean) {
+        val parentTableName = getEntityMetaTableName(parent.immediateParentMeta)
+        val ancestorTableName = getEntityMetaTableName(parent.firstKeyedAncestorMeta)
+        val foreignKeyPrefix = if (parentTableName == ancestorTableName) null else ancestorTableName
+        val keyFieldsMeta = getKeyFieldsMeta(parent.firstKeyedAncestorMeta)
+        val foreignKey = ForeignKey(ancestorTableName, parentTableName, foreignKeyPrefix, OnDelete.RESTRICT, isUnique)
+        keyFieldsMeta.forEach { fieldMeta ->
+            val clauses = getFieldClauses(fieldMeta)
+            clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
+        }
+        addAncestorClauses(foreignKey)
     }
 
     private fun addUniques(entityMeta: EntityModel) {
@@ -332,7 +366,7 @@ private fun getAssociationFieldClauses(fieldMeta: EntityModel): SqlClauses {
     val targetTableName = targetAux?.validated?.tableName
         ?: throw IllegalStateException("Association target entity my_sql_ aux is not validated")
 
-    val foreignKey = ForeignKey(fieldName, targetTableName, OnDelete.RESTRICT)
+    val foreignKey = ForeignKey(fieldName, targetTableName, null, OnDelete.RESTRICT)
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
     targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
         val targetFieldClauses = getSingleFieldClauses(targetKeyFieldMeta)

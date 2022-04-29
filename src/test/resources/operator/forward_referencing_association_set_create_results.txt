@@ -6,6 +6,12 @@
 
 = Table crypto$secret =
 
+= Table keyless$keyed_child =
+
+= Table keyless$keyless =
+
+= Table keyless$keyless_child =
+
 = Table main$address_book_person =
 
 * Row 1 *

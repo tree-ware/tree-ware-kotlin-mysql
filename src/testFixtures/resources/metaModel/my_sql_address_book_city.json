@@ -75,6 +75,16 @@
                 "multiplicity": "list"
               },
               {
+                "name": "keyless",
+                "number": 41,
+                "info": "For testing keyless compositions",
+                "type": "composition",
+                "composition": {
+                  "name": "keyless",
+                  "package": "test.keyless"
+                }
+              },
+              {
                 "name": "self",
                 "number": 51,
                 "info": "An association to self, for testing multi-column unique indexes",

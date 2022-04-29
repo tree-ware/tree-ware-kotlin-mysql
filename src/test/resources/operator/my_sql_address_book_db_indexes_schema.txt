@@ -77,6 +77,84 @@ COLUMN_NAME: main$address_book_person$id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
+TABLE_NAME: keyless$keyed_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: keyless$keyed_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 1
+
+TABLE_NAME: keyless$keyed_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 1
+
+TABLE_NAME: keyless$keyed_child
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: keyless$keyed_child
+INDEX_NAME: PRIMARY
+COLUMN_NAME: name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$name
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$state
+SEQ_IN_INDEX: 2
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless_child
+INDEX_NAME: city$city_info$name
+COLUMN_NAME: city$city_info$country
+SEQ_IN_INDEX: 3
+NON_UNIQUE: 0
+
+TABLE_NAME: keyless$keyless_child
+INDEX_NAME: main$address_book_person$id
+COLUMN_NAME: main$address_book_person$id
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
 TABLE_NAME: main$address_book_person
 INDEX_NAME: main$person_group$id
 COLUMN_NAME: main$person_group$id

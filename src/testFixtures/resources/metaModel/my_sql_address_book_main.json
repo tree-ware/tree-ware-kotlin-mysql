@@ -295,6 +295,16 @@
                   "name": "address_book_person",
                   "package": "address_book.main"
                 }
+              },
+              {
+                "name": "keyless",
+                "number": 41,
+                "info": "For testing keyless compositions",
+                "type": "composition",
+                "composition": {
+                  "name": "keyless",
+                  "package": "test.keyless"
+                }
               }
             ],
             "uniques": [

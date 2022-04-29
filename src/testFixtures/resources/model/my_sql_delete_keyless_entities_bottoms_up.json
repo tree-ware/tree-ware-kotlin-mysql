@@ -1,0 +1,39 @@
+{
+  "address_book": {
+    "set_": "delete",
+    "person": [
+      {
+        "set_": "delete",
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "keyless": {
+          "set_": "delete",
+          "keyless_child": {
+            "set_": "delete"
+          },
+          "keyed_child": {
+            "set_": "delete",
+            "name": "Clark keyed child"
+          }
+        }
+      }
+    ],
+    "city_info": [
+      {
+        "set_": "delete",
+        "name": "Fremont",
+        "state": "California",
+        "country": "USA",
+        "keyless": {
+          "set_": "delete",
+          "keyless_child": {
+            "set_": "delete"
+          },
+          "keyed_child": {
+            "set_": "delete",
+            "name": "Fremont keyed child"
+          }
+        }
+      }
+    ]
+  }
+}

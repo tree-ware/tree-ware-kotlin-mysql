@@ -118,6 +118,12 @@ main$address_book_person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 main: {"encrypted": "test-encrypted-main-secret-2", "cipher_version": 1}
 other: [{"encrypted": "test-encrypted-secret2-2", "cipher_version": 1}]
 
+= Table keyless$keyed_child =
+
+= Table keyless$keyless =
+
+= Table keyless$keyless_child =
+
 = Table main$address_book_person =
 
 * Row 1 *

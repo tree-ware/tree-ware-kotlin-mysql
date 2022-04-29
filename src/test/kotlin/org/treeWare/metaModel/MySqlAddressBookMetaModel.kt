@@ -9,6 +9,7 @@ val MY_SQL_ADDRESS_BOOK_META_MODEL_FILES = listOf(
     "metaModel/my_sql_address_book_main.json",
     "metaModel/my_sql_address_book_city.json",
     "metaModel/my_sql_test_crypto.json",
+    "metaModel/my_sql_test_keyless.json",
     "org/treeWare/metaModel/geo.json"
 )
 
