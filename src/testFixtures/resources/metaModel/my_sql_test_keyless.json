@@ -1,0 +1,76 @@
+{
+  "meta_model": {
+    "packages": [
+      {
+        "my_sql_": {
+          "table_prefix": "keyless"
+        },
+        "name": "test.keyless",
+        "info": "For testing keyless entities",
+        "entities": [
+          {
+            "my_sql_": {},
+            "name": "keyless",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "type": "string",
+                "max_size": 64
+              },
+              {
+                "name": "keyless_child",
+                "number": 2,
+                "type": "composition",
+                "composition": {
+                  "name": "keyless_child",
+                  "package": "test.keyless"
+                }
+              },
+              {
+                "name": "keyed_child",
+                "number": 3,
+                "type": "composition",
+                "composition": {
+                  "name": "keyed_child",
+                  "package": "test.keyless"
+                }
+              }
+            ]
+          },
+          {
+            "my_sql_": {},
+            "name": "keyless_child",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "type": "string",
+                "max_size": 64
+              }
+            ]
+          },
+          {
+            "my_sql_": {},
+            "name": "keyed_child",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "type": "string",
+                "max_size": 64,
+                "is_key": true
+              },
+              {
+                "name": "other",
+                "number": 2,
+                "info": "A non-key field for update tests since keys cannot be updated",
+                "type": "int32"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

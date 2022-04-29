@@ -91,6 +91,45 @@ CREATE TABLE IF NOT EXISTS test$address_book.crypto$secret (
   other JSON,
   UNIQUE INDEX main$address_book_person$id (main$address_book_person$id)
 ) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS test$address_book.keyless$keyless (
+  created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  entity_path$ TEXT,
+  main$person_group$id BINARY(16),
+  main$address_book_person$id BINARY(16),
+  city$city_info$name VARCHAR(128),
+  city$city_info$state VARCHAR(64),
+  city$city_info$country VARCHAR(64),
+  name VARCHAR(64),
+  UNIQUE INDEX main$address_book_person$id (main$address_book_person$id),
+  UNIQUE INDEX city$city_info$name (city$city_info$name, city$city_info$state, city$city_info$country)
+) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS test$address_book.keyless$keyless_child (
+  created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  entity_path$ TEXT,
+  main$person_group$id BINARY(16),
+  main$address_book_person$id BINARY(16),
+  city$city_info$name VARCHAR(128),
+  city$city_info$state VARCHAR(64),
+  city$city_info$country VARCHAR(64),
+  name VARCHAR(64),
+  UNIQUE INDEX main$address_book_person$id (main$address_book_person$id),
+  UNIQUE INDEX city$city_info$name (city$city_info$name, city$city_info$state, city$city_info$country)
+) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS test$address_book.keyless$keyed_child (
+  created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  entity_path$ TEXT,
+  main$person_group$id BINARY(16),
+  main$address_book_person$id BINARY(16),
+  city$city_info$name VARCHAR(128),
+  city$city_info$state VARCHAR(64),
+  city$city_info$country VARCHAR(64),
+  name VARCHAR(64),
+  other INT,
+  PRIMARY KEY (name)
+) ENGINE = InnoDB;
 ALTER TABLE test$address_book.main$person_group
   ADD FOREIGN KEY (main$person_group$id) REFERENCES main$person_group(id) ON DELETE RESTRICT;
 ALTER TABLE test$address_book.main$address_book_person
@@ -106,3 +145,12 @@ ALTER TABLE test$address_book.crypto$password
   ADD FOREIGN KEY (main$address_book_person$id) REFERENCES main$address_book_person(id) ON DELETE RESTRICT;
 ALTER TABLE test$address_book.crypto$secret
   ADD FOREIGN KEY (main$address_book_person$id) REFERENCES main$address_book_person(id) ON DELETE RESTRICT;
+ALTER TABLE test$address_book.keyless$keyless
+  ADD FOREIGN KEY (main$address_book_person$id) REFERENCES main$address_book_person(id) ON DELETE RESTRICT,
+  ADD FOREIGN KEY (city$city_info$name, city$city_info$state, city$city_info$country) REFERENCES city$city_info(name, state, country) ON DELETE RESTRICT;
+ALTER TABLE test$address_book.keyless$keyless_child
+  ADD FOREIGN KEY (main$address_book_person$id) REFERENCES keyless$keyless(main$address_book_person$id) ON DELETE RESTRICT,
+  ADD FOREIGN KEY (city$city_info$name, city$city_info$state, city$city_info$country) REFERENCES keyless$keyless(city$city_info$name, city$city_info$state, city$city_info$country) ON DELETE RESTRICT;
+ALTER TABLE test$address_book.keyless$keyed_child
+  ADD FOREIGN KEY (main$address_book_person$id) REFERENCES keyless$keyless(main$address_book_person$id) ON DELETE RESTRICT,
+  ADD FOREIGN KEY (city$city_info$name, city$city_info$state, city$city_info$country) REFERENCES keyless$keyless(city$city_info$name, city$city_info$state, city$city_info$country) ON DELETE RESTRICT;

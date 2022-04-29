@@ -154,6 +154,146 @@ COLUMN_NAME: updated_on$
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: city$city_info$country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: city$city_info$name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: city$city_info$state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: MUL
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY: PRI
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: other
+COLUMN_TYPE: int(11)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyed_child
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: city$city_info$country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: city$city_info$name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: city$city_info$state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: UNI
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: city$city_info$country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: city$city_info$name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: city$city_info$state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: main$address_book_person$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY: UNI
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: main$person_group$id
+COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: name
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: keyless$keyless_child
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
 TABLE_NAME: main$address_book_person
 COLUMN_NAME: created_on$
 COLUMN_TYPE: timestamp(3)
