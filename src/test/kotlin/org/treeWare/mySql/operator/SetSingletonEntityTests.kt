@@ -45,7 +45,7 @@ private const val UPDATE_TIME = "2022-04-04T00:40:41.440Z"
 private val updateClock = Clock.fixed(Instant.parse(UPDATE_TIME), ZoneOffset.UTC)
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SetKeylessEntityTests {
+class SetSingletonEntityTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
 
@@ -81,28 +81,34 @@ class SetKeylessEntityTests {
         mysqld.stop()
     }
 
-    private fun getKeylessTableRows(): String =
-        getTableRows(connection, TEST_DATABASE, "keyless\$keyless", "keyless\$keyless_child", "keyless\$keyed_child")
+    private fun getSingletonTableRows(): String =
+        getTableRows(
+            connection,
+            TEST_DATABASE,
+            "main\$address_book_root",
+            "main\$address_book_settings",
+            "main\$advanced_settings"
+        )
 
     @Test
-    fun `set() must succeed when creating new keyless entities`() {
+    fun `set() must succeed when creating new singleton entities`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities.json",
+            "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
-        val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
-        val afterCreateRows = getKeylessTableRows()
+        val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
+        val afterCreateRows = getSingletonTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
     }
 
     @Test
-    fun `set() must fail when recreating existing keyless entities`() {
+    fun `set() must fail when recreating existing singleton entities`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities.json",
+            "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
@@ -110,16 +116,10 @@ class SetKeylessEntityTests {
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val recreateErrorsExpected = listOf(
+        val recreateErrorsExpected = listOf<String>(
             "/address_book: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to create: duplicate",
+            "/address_book/settings: unable to create: duplicate",
+            "/address_book/settings/advanced: unable to create: duplicate",
         )
         val recreateErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals(recreateErrorsExpected.joinToString("\n"), recreateErrors.joinToString("\n"))
@@ -128,47 +128,41 @@ class SetKeylessEntityTests {
     }
 
     @Test
-    fun `set() must succeed when updating existing keyless entities`() {
+    fun `set() must succeed when updating existing singleton entities`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities.json",
+            "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
-        val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
-        val afterCreateRows = getKeylessTableRows()
+        val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
+        val afterCreateRows = getSingletonTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val update = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_update_keyless_entities.json",
+            "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
         assertEquals("", updateErrors.joinToString("\n"))
-        val afterUpdateRowsExpected = readFile("operator/my_sql_update_keyless_entities_results.txt")
-        val afterUpdateRows = getKeylessTableRows()
+        val afterUpdateRowsExpected = readFile("operator/my_sql_update_singleton_entities_results.txt")
+        val afterUpdateRows = getSingletonTableRows()
         assertEquals(afterUpdateRowsExpected, afterUpdateRows)
     }
 
     @Test
-    fun `set() must fail when updating non-existing keyless entities`() {
+    fun `set() must fail when updating non-existing singleton entities`() {
         val update = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_update_keyless_entities.json",
+            "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateErrors = listOf(
             "/address_book: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to update",
-            "/address_book/city_info[Fremont,California,USA]: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to update",
+            "/address_book/settings: unable to update",
+            "/address_book/settings/advanced: unable to update",
         )
         val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
         assertEquals(expectedUpdateErrors.joinToString("\n"), updateErrors.joinToString("\n"))
@@ -177,10 +171,10 @@ class SetKeylessEntityTests {
     }
 
     @Test
-    fun `set() must succeed when deleting existing keyless entities`() {
+    fun `set() must succeed when deleting existing singleton entities`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities.json",
+            "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
@@ -190,7 +184,7 @@ class SetKeylessEntityTests {
 
         val delete = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_delete_keyless_entities_bottoms_up.json",
+            "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
@@ -200,10 +194,10 @@ class SetKeylessEntityTests {
     }
 
     @Test
-    fun `set() must succeed when deleting non-existing keyless entities`() {
+    fun `set() must succeed when deleting non-existing singleton entities`() {
         val delete = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_delete_keyless_entities_bottoms_up.json",
+            "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
@@ -213,19 +207,15 @@ class SetKeylessEntityTests {
     }
 
     @Test
-    fun `set() must fail when creating a keyless entity without a parent`() {
+    fun `set() must fail when creating a singleton entity without a parent`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities_no_parent.json",
+            "model/my_sql_create_singleton_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrorsExpected = listOf(
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to create: no parent or target entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to create: no parent or target entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to create: no parent or target entity",
+            "/address_book/settings: unable to create: no parent or target entity",
+            "/address_book/settings/advanced: unable to create: no parent or target entity",
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals(createErrorsExpected.joinToString("\n"), createErrors.joinToString("\n"))
@@ -234,10 +224,10 @@ class SetKeylessEntityTests {
     }
 
     @Test
-    fun `set() must fail when deleting a keyless entity that has children in the database`() {
+    fun `set() must fail when deleting a singleton entity that has children in the database`() {
         val create = getMainModelFromJsonFile(
             metaModel,
-            "model/my_sql_create_keyless_entities.json",
+            "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
@@ -248,36 +238,109 @@ class SetKeylessEntityTests {
         val deleteJson = """
             |{
             |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "keyless": {
-            |          "set_": "delete"
-            |        }
-            |      }
-            |    ],
-            |    "city_info": [
-            |      {
-            |        "name": "Fremont",
-            |        "state": "California",
-            |        "country": "USA",
-            |        "keyless": {
-            |          "set_": "delete"
-            |        }
-            |      }
-            |    ]
+            |    "set_": "delete"
             |  }
             |}
         """.trimMargin()
         val delete =
             getMainModelFromJsonString(metaModel, deleteJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
-        val deleteErrorsExpected = listOf(
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to delete: has children or source entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to delete: has children or source entity",
-        )
+        val deleteErrorsExpected = listOf("/address_book: unable to delete: has children or source entity")
         val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
         assertEquals(deleteErrorsExpected.joinToString("\n"), deleteErrors.joinToString("\n"))
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
+    }
+
+    @Test
+    fun `set() must succeed when creating children of existing singleton entities`() {
+        val createRootJson = """
+            |{
+            |  "address_book": {
+            |    "set_": "create",
+            |    "name": "Super Heroes"
+            |  }
+            |}
+        """.trimMargin()
+        val createRoot = getMainModelFromJsonString(
+            metaModel,
+            createRootJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+        )
+        val createRootErrors = set(createRoot, setEntityDelegates, connection, clock = createClock)
+        assertEquals("", createRootErrors.joinToString("\n"))
+        val afterCreateRootRowsExpected = """
+            |= Table main${'$'}address_book_root =
+            |
+            |* Row 1 *
+            |created_on${'$'}: 2022-03-03 00:30:31.330
+            |updated_on${'$'}: 2022-03-03 00:30:31.330
+            |entity_path${'$'}: /address_book
+            |singleton_key${'$'}: 0
+            |name: Super Heroes
+            |last_updated: null
+            |
+            |= Table main${'$'}address_book_settings =
+            |
+            |= Table main${'$'}advanced_settings =
+            |
+        """.trimMargin()
+        val afterCreateRootRows = getSingletonTableRows()
+        assertEquals(afterCreateRootRowsExpected, afterCreateRootRows)
+
+        val createChildrenJson = """
+            |{
+            |  "address_book": {
+            |    "settings": {
+            |      "set_": "create",
+            |      "last_name_first": true,
+            |      "advanced": {
+            |        "set_": "create",
+            |        "background_color": "blue"
+            |      }
+            |    }
+            |  }
+            |}
+        """.trimMargin()
+        val createChildren = getMainModelFromJsonString(
+            metaModel,
+            createChildrenJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+        )
+        val createChildrenErrors = set(createChildren, setEntityDelegates, connection, clock = updateClock)
+        assertEquals("", createChildrenErrors.joinToString("\n"))
+        val afterCreateChildrenRowsExpected = """
+            |= Table main${'$'}address_book_root =
+            |
+            |* Row 1 *
+            |created_on${'$'}: 2022-03-03 00:30:31.330
+            |updated_on${'$'}: 2022-03-03 00:30:31.330
+            |entity_path${'$'}: /address_book
+            |singleton_key${'$'}: 0
+            |name: Super Heroes
+            |last_updated: null
+            |
+            |= Table main${'$'}address_book_settings =
+            |
+            |* Row 1 *
+            |created_on${'$'}: 2022-04-04 00:40:41.440
+            |updated_on${'$'}: 2022-04-04 00:40:41.440
+            |entity_path${'$'}: /address_book/settings
+            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |last_name_first: 1
+            |encrypt_hero_name: null
+            |card_colors: null
+            |
+            |= Table main${'$'}advanced_settings =
+            |
+            |* Row 1 *
+            |created_on${'$'}: 2022-04-04 00:40:41.440
+            |updated_on${'$'}: 2022-04-04 00:40:41.440
+            |entity_path${'$'}: /address_book/settings/advanced
+            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |background_color: 3
+            |
+        """.trimMargin()
+        val afterCreateChildrenRows = getSingletonTableRows()
+        assertEquals(afterCreateChildrenRowsExpected, afterCreateChildrenRows)
     }
 }

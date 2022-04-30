@@ -259,40 +259,65 @@ private class GenerateCreateDatabaseCommandsVisitor(
         return TraversalAction.CONTINUE
     }
 
-    private class Parent(val immediateParentMeta: EntityModel, val firstKeyedAncestorMeta: EntityModel)
+    private class Parent(
+        val immediateParentMeta: EntityModel,
+        val firstKeyedAncestorMeta: EntityModel,
+        val isAncestorRoot: Boolean
+    )
 
     private fun addKeyedAncestors(entityMeta: EntityModel) {
         val parents = LinkedHashSet<Parent>()
         val keyedParents = LinkedHashSet<EntityModel>()
         val keyedAncestors = LinkedHashSet<EntityModel>()
-        collectKeyedAncestors(entityMeta, null, false, parents, keyedParents, keyedAncestors)
-        keyedAncestors.forEach { addAncestorKeyClauses(it) }
-        parents.forEach { addParentKeyClauses(it, !hasKeyFields(entityMeta)) }
+        val isRoot = !collectKeyedAncestors(entityMeta, entityMeta, null, false, parents, keyedParents, keyedAncestors)
+        if (isRoot) addRootClauses()
+        else {
+            keyedAncestors.forEach { addAncestorKeyClauses(it) }
+            parents.forEach { addParentKeyClauses(it, !hasKeyFields(entityMeta)) }
+        }
     }
 
+    /** Collects keyed parents and keyed ancestors.
+     *
+     * @return `true` if the entity has parents (keyed or non-keyed), else `false` (indicator for the root entity).
+     */
     private fun collectKeyedAncestors(
-        entityMeta: BaseEntityModel,
+        leafEntityMeta: EntityModel,
+        entityMeta: EntityModel,
         immediateParentMeta: EntityModel?,
         isFirstKeyedAncestorMetaFound: Boolean,
         parents: LinkedHashSet<Parent>,
         keyedParents: LinkedHashSet<EntityModel>,
         keyedAncestors: LinkedHashSet<EntityModel>
-    ) {
+    ): Boolean {
         val resolved = getMetaModelResolved(entityMeta)
             ?: throw IllegalStateException("Resolved aux is missing for entity")
-        resolved.parentFieldsMeta.forEach { parentFieldMeta ->
-            val parentEntityMeta = getParentEntityMeta(parentFieldMeta) as? EntityModel ?: return@forEach
-            if (!isEntityMeta(parentEntityMeta)) return@forEach
+        val parentEntitiesMeta = resolved.parentFieldsMeta.mapNotNull { parentFieldMeta ->
+            val parentEntityMeta = getParentEntityMeta(parentFieldMeta) as? EntityModel ?: return@mapNotNull null
+            if (isEntityMeta(parentEntityMeta)) parentEntityMeta else null
+        }
+        if (parentEntitiesMeta.isEmpty()) {
+            // This means entityMeta is the root. And if there are no parents, it means leafEntityMeta does not have
+            // any keyed parents or ancestors. The only option is to use the root as the (auto-created singleton-)keyed
+            // parent. Leaf entities that have their own keys have to be excluded. The root entity also has to be
+            // excluded (immediateParentMeta is null when leafEntityMeta is the root entity).
+            if (parents.isEmpty() && immediateParentMeta != null && !hasKeyFields(leafEntityMeta)) parents.add(
+                Parent(immediateParentMeta, entityMeta, true)
+            )
+            return false
+        }
+        parentEntitiesMeta.forEach { parentEntityMeta ->
             if (keyedParents.contains(parentEntityMeta) || keyedAncestors.contains(parentEntityMeta)) return@forEach
             val nonNullImmediateParentMeta = immediateParentMeta ?: parentEntityMeta
             val parentHasKeys = hasKeyFields(parentEntityMeta)
             if (parentHasKeys) {
                 if (!isFirstKeyedAncestorMetaFound) {
-                    parents.add(Parent(nonNullImmediateParentMeta, parentEntityMeta))
+                    parents.add(Parent(nonNullImmediateParentMeta, parentEntityMeta, false))
                     keyedParents.add(parentEntityMeta)
                 } else keyedAncestors.add(parentEntityMeta)
             }
             collectKeyedAncestors(
+                leafEntityMeta,
                 parentEntityMeta,
                 nonNullImmediateParentMeta,
                 isFirstKeyedAncestorMetaFound || parentHasKeys,
@@ -301,6 +326,7 @@ private class GenerateCreateDatabaseCommandsVisitor(
                 keyedAncestors
             )
         }
+        return true
     }
 
     private fun addAncestorKeyClauses(ancestorEntityMeta: EntityModel) {
@@ -318,13 +344,22 @@ private class GenerateCreateDatabaseCommandsVisitor(
         val parentTableName = getEntityMetaTableName(parent.immediateParentMeta)
         val ancestorTableName = getEntityMetaTableName(parent.firstKeyedAncestorMeta)
         val foreignKeyPrefix = if (parentTableName == ancestorTableName) null else ancestorTableName
-        val keyFieldsMeta = getKeyFieldsMeta(parent.firstKeyedAncestorMeta)
         val foreignKey = ForeignKey(ancestorTableName, parentTableName, foreignKeyPrefix, OnDelete.RESTRICT, isUnique)
-        keyFieldsMeta.forEach { fieldMeta ->
-            val clauses = getFieldClauses(fieldMeta)
-            clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
+        if (parent.isAncestorRoot) {
+            foreignKey.addKey(SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_TYPE)
+        } else {
+            val keyFieldsMeta = getKeyFieldsMeta(parent.firstKeyedAncestorMeta)
+            keyFieldsMeta.forEach { fieldMeta ->
+                val clauses = getFieldClauses(fieldMeta)
+                clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
+            }
         }
         addAncestorClauses(foreignKey)
+    }
+
+    private fun addRootClauses() {
+        addFieldClauses(Column(SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_TYPE))
+        addPrimaryKey(SINGLETON_KEY_COLUMN_NAME)
     }
 
     private fun addUniques(entityMeta: EntityModel) {

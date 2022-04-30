@@ -195,6 +195,7 @@ class SetCreateTests {
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
             |entity_path${'$'}: /address_book
+            |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
             |
@@ -229,6 +230,7 @@ class SetCreateTests {
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
             |entity_path${'$'}: /address_book
+            |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
             |
@@ -238,6 +240,7 @@ class SetCreateTests {
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
             |entity_path${'$'}: /address_book/settings
+            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |last_name_first: 1
             |encrypt_hero_name: null
             |card_colors: null
@@ -273,6 +276,7 @@ class SetCreateTests {
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
             |entity_path${'$'}: /address_book
+            |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
             |
@@ -282,6 +286,7 @@ class SetCreateTests {
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
             |entity_path${'$'}: /address_book/settings
+            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |last_name_first: null
             |encrypt_hero_name: null
             |card_colors: null
@@ -352,6 +357,9 @@ class SetCreateTests {
         // Try to create the same model again. It should fail.
         val setErrors2 = set(create, setEntityDelegates, connection, clock = clock)
         val expectedErrors2 = listOf(
+            "/address_book: unable to create: duplicate",
+            "/address_book/settings: unable to create: duplicate",
+            "/address_book/settings/advanced: unable to create: duplicate",
             "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to create: duplicate",
             "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate",
             "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: unable to create: duplicate",

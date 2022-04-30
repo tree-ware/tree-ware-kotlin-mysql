@@ -15,6 +15,7 @@ fun set(
     logCommands: Boolean = false,
     clock: Clock = Clock.systemUTC()
 ): List<ElementModelError> {
-    val setDelegate = MySqlSetDelegate(entityDelegates, connection, logCommands, clock)
+    val mainMeta = main.mainMeta ?: throw IllegalStateException("No mainMeta for main model being set")
+    val setDelegate = MySqlSetDelegate(mainMeta, entityDelegates, connection, logCommands, clock)
     return org.treeWare.model.operator.set(main, setDelegate, entityDelegates)
 }

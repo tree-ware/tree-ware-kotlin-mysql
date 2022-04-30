@@ -4,6 +4,9 @@ UPDATE test$address_book.main$address_book_root
 UPDATE test$address_book.main$address_book_settings
   SET updated_on$ = '2022-04-14T00:40:41.450', last_name_first = false, encrypt_hero_name = true, card_colors = '[{"value":"blue"},{"value":"red"}]'
   WHERE entity_path$ = '/address_book/settings';
+UPDATE test$address_book.main$advanced_settings
+  SET updated_on$ = '2022-04-14T00:40:41.450', background_color = 4
+  WHERE entity_path$ = '/address_book/settings/advanced';
 UPDATE test$address_book.main$address_book_person
   SET updated_on$ = '2022-04-14T00:40:41.450', self$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), first_name = 'Lois 2', last_name = 'Lane 2', email = '[{"value":"lois.lane.2@dailyplanet.com"}]', picture = 0x50696374757265206f66204c6f6973204c616e652032
   WHERE id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd') AND entity_path$ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]';

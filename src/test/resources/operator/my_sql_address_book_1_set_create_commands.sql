@@ -1,11 +1,15 @@
 INSERT INTO test$address_book.main$address_book_root
-  (created_on$, updated_on$, entity_path$, name, last_updated)
+  (created_on$, updated_on$, entity_path$, singleton_key$, name, last_updated)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book', 'Super Heroes', '2022-04-19T17:52:57');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book', 0, 'Super Heroes', '2022-04-19T17:52:57');
 INSERT INTO test$address_book.main$address_book_settings
-  (created_on$, updated_on$, entity_path$, last_name_first, encrypt_hero_name, card_colors)
+  (created_on$, updated_on$, entity_path$, main$address_book_root$singleton_key$, last_name_first, encrypt_hero_name, card_colors)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings', true, false, '[{"value":"orange"},{"value":"green"},{"value":"blue"}]');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings', 0, true, false, '[{"value":"orange"},{"value":"green"},{"value":"blue"}]');
+INSERT INTO test$address_book.main$advanced_settings
+  (created_on$, updated_on$, entity_path$, main$address_book_root$singleton_key$, background_color)
+  VALUES
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings/advanced', 0, 3);
 INSERT INTO test$address_book.main$address_book_person
   (created_on$, updated_on$, entity_path$, id, first_name, last_name, hero_name, email, picture)
   VALUES

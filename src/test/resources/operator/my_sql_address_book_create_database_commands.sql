@@ -3,16 +3,28 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_root (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   entity_path$ TEXT,
+  singleton_key$ INT UNSIGNED,
   name VARCHAR(64),
-  last_updated TIMESTAMP(3)
+  last_updated TIMESTAMP(3),
+  PRIMARY KEY (singleton_key$)
 ) ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_settings (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   entity_path$ TEXT,
+  main$address_book_root$singleton_key$ INT UNSIGNED,
   last_name_first BOOLEAN,
   encrypt_hero_name BOOLEAN,
-  card_colors JSON
+  card_colors JSON,
+  UNIQUE INDEX main$address_book_root$singleton_key$ (main$address_book_root$singleton_key$)
+) ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS test$address_book.main$advanced_settings (
+  created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  updated_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+  entity_path$ TEXT,
+  main$address_book_root$singleton_key$ INT UNSIGNED,
+  background_color INT UNSIGNED,
+  UNIQUE INDEX main$address_book_root$singleton_key$ (main$address_book_root$singleton_key$)
 ) ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS test$address_book.main$person_group (
   created_on$ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -130,6 +142,10 @@ CREATE TABLE IF NOT EXISTS test$address_book.keyless$keyed_child (
   other INT,
   PRIMARY KEY (name)
 ) ENGINE = InnoDB;
+ALTER TABLE test$address_book.main$address_book_settings
+  ADD FOREIGN KEY (main$address_book_root$singleton_key$) REFERENCES main$address_book_root(singleton_key$) ON DELETE RESTRICT;
+ALTER TABLE test$address_book.main$advanced_settings
+  ADD FOREIGN KEY (main$address_book_root$singleton_key$) REFERENCES main$address_book_settings(main$address_book_root$singleton_key$) ON DELETE RESTRICT;
 ALTER TABLE test$address_book.main$person_group
   ADD FOREIGN KEY (main$person_group$id) REFERENCES main$person_group(id) ON DELETE RESTRICT;
 ALTER TABLE test$address_book.main$address_book_person

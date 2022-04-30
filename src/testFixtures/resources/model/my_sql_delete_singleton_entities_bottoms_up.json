@@ -1,0 +1,11 @@
+{
+  "address_book": {
+    "set_": "delete",
+    "settings": {
+      "set_": "delete",
+      "advanced": {
+        "set_": "delete"
+      }
+    }
+  }
+}

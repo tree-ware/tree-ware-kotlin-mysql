@@ -410,6 +410,11 @@ COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_root
+COLUMN_NAME: singleton_key$
+COLUMN_TYPE: int(10) unsigned
+COLUMN_KEY: PRI
+
+TABLE_NAME: main$address_book_root
 COLUMN_NAME: updated_on$
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
@@ -440,6 +445,36 @@ COLUMN_TYPE: tinyint(1)
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_settings
+COLUMN_NAME: main$address_book_root$singleton_key$
+COLUMN_TYPE: int(10) unsigned
+COLUMN_KEY: UNI
+
+TABLE_NAME: main$address_book_settings
+COLUMN_NAME: updated_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$advanced_settings
+COLUMN_NAME: background_color
+COLUMN_TYPE: int(10) unsigned
+COLUMN_KEY:
+
+TABLE_NAME: main$advanced_settings
+COLUMN_NAME: created_on$
+COLUMN_TYPE: timestamp(3)
+COLUMN_KEY:
+
+TABLE_NAME: main$advanced_settings
+COLUMN_NAME: entity_path$
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: main$advanced_settings
+COLUMN_NAME: main$address_book_root$singleton_key$
+COLUMN_TYPE: int(10) unsigned
+COLUMN_KEY: UNI
+
+TABLE_NAME: main$advanced_settings
 COLUMN_NAME: updated_on$
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
