@@ -191,6 +191,24 @@ COLUMN_NAME: id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
+TABLE_NAME: main$address_book_root
+INDEX_NAME: PRIMARY
+COLUMN_NAME: singleton_key$
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$address_book_settings
+INDEX_NAME: main$address_book_root$singleton_key$
+COLUMN_NAME: main$address_book_root$singleton_key$
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
+TABLE_NAME: main$advanced_settings
+INDEX_NAME: main$address_book_root$singleton_key$
+COLUMN_NAME: main$address_book_root$singleton_key$
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 0
+
 TABLE_NAME: main$person_group
 INDEX_NAME: main$person_group$id
 COLUMN_NAME: main$person_group$id

@@ -58,9 +58,12 @@ person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 created_on$: 2022-04-14 00:40:41.450
 updated_on$: 2022-04-14 00:40:41.450
 entity_path$: /address_book
+singleton_key$: 0
 name: Super Heroes
 last_updated: null
 
 = Table main$address_book_settings =
+
+= Table main$advanced_settings =
 
 = Table main$person_group =

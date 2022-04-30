@@ -62,6 +62,8 @@ DELETE FROM test$address_book.main$address_book_relation
   WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND entity_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]';
 DELETE FROM test$address_book.main$address_book_person
   WHERE id = UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f') AND entity_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]';
+DELETE FROM test$address_book.main$advanced_settings
+  WHERE entity_path$ = '/address_book/settings/advanced';
 DELETE FROM test$address_book.main$address_book_settings
   WHERE entity_path$ = '/address_book/settings';
 DELETE FROM test$address_book.main$address_book_root

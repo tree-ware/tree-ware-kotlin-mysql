@@ -13,7 +13,10 @@
         {
           "value": "red"
         }
-      ]
+      ],
+      "advanced": {
+        "background_color": "green"
+      }
     },
     "person": [
       {

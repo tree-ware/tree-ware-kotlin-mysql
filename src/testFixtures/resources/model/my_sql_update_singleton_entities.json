@@ -1,0 +1,19 @@
+{
+  "address_book": {
+    "set_": "update",
+    "name": "Super Heroes 2",
+    "last_updated": "1651280859123",
+    "settings": {
+      "last_name_first": false,
+      "encrypt_hero_name": true,
+      "card_colors": [
+        {
+          "value": "red"
+        }
+      ],
+      "advanced": {
+        "background_color": "green"
+      }
+    }
+  }
+}

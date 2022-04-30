@@ -11,9 +11,8 @@ import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.getAssociationTargetEntity
 import org.treeWare.model.operator.set.SetDelegate
 import org.treeWare.model.operator.set.aux.SetAux
-import org.treeWare.mySql.operator.CREATED_ON_COLUMN_NAME
-import org.treeWare.mySql.operator.ENTITY_PATH_COLUMN_NAME
-import org.treeWare.mySql.operator.UPDATED_ON_COLUMN_NAME
+import org.treeWare.mySql.operator.*
+import org.treeWare.mySql.util.getEntityMetaTableName
 import org.treeWare.mySql.util.getEntityTableFullName
 import org.treeWare.mySql.util.getEntityTableName
 import org.treeWare.util.assertInDevMode
@@ -35,6 +34,7 @@ internal data class EntitySqlCommand(
  * The commands are issued only if a connection is specified.
  */
 internal class MySqlSetDelegate(
+    mainMeta: MainModel,
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val connection: Connection?,
     private val logCommands: Boolean = false,
@@ -57,10 +57,16 @@ internal class MySqlSetDelegate(
                 createAssociationCommands +
                 updateCompositionCommands
 
+    private val rootTableName: String
+
     init {
         if (connection != null && connection.autoCommit) {
             throw IllegalStateException("SQL connection should not be in auto-commit mode")
         }
+        val rootMeta = getRootMeta(mainMeta)
+        val rootEntityMeta = getMetaModelResolved(rootMeta)?.compositionMeta
+            ?: throw IllegalStateException("Root is not resolved")
+        rootTableName = getEntityMetaTableName(rootEntityMeta)
     }
 
     override fun begin(): List<ElementModelError> {
@@ -102,7 +108,12 @@ internal class MySqlSetDelegate(
         insertBuilder.addColumn(false, null, CREATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
         insertBuilder.addColumn(false, null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
         insertBuilder.addColumn(false, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
-        addAncestorKeys(ancestorKeys, insertBuilder)
+        val ancestorKeyCount = addAncestorKeys(ancestorKeys, insertBuilder)
+        if (ancestorKeyCount == 0 && keys.isEmpty()) {
+            val isRoot = ancestorKeys.size == 1
+            val namePrefix = if (isRoot) null else rootTableName
+            insertBuilder.addColumn(isRoot, namePrefix, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE)
+        }
         keys.forEach { addField(true, null, it, insertBuilder) }
         other.forEach { addField(false, null, it, insertBuilder) }
         createCompositionCommands.add(EntitySqlCommand("create", entityPath, insertBuilder.build()))
@@ -172,7 +183,9 @@ internal class MySqlSetDelegate(
         deleteCompositionCommands.addFirst(EntitySqlCommand("delete", entityPath, deleteBuilder.build(), null))
     }
 
-    private fun addAncestorKeys(ancestorKeys: List<Keys>, builder: SetCommandBuilder) {
+    /** Adds ancestor keys and returns the number of ancestor keys added. */
+    private fun addAncestorKeys(ancestorKeys: List<Keys>, builder: SetCommandBuilder): Int {
+        var ancestorKeyCount = 0
         // When there are recursive entities, record only the first and skip the remaining.
         // Recursive entities will be next to each other and have the same table name.
         // The following variable helps identify recursive entities that should be skipped.
@@ -185,9 +198,13 @@ internal class MySqlSetDelegate(
                 ?: throw IllegalStateException("Ancestor key does not have parent entity")
             val ancestorTableName = getEntityTableName(ancestorEntity)
             if (ancestorTableName == previousAncestorTableName) return@forEachIndexed
-            ancestor.available.forEach { addField(false, ancestorTableName, it, builder) }
+            ancestor.available.forEach {
+                addField(false, ancestorTableName, it, builder)
+                ++ancestorKeyCount
+            }
             previousAncestorTableName = ancestorTableName
         }
+        return ancestorKeyCount
     }
 
     private fun addField(

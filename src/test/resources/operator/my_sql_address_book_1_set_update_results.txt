@@ -206,6 +206,7 @@ person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 created_on$: 2022-03-03 00:30:31.330
 updated_on$: 2022-04-04 00:40:41.440
 entity_path$: /address_book
+singleton_key$: 0
 name: Super Heroes 2
 last_updated: 2022-04-19 17:52:57.222
 
@@ -215,9 +216,19 @@ last_updated: 2022-04-19 17:52:57.222
 created_on$: 2022-03-03 00:30:31.330
 updated_on$: 2022-04-04 00:40:41.440
 entity_path$: /address_book/settings
+main$address_book_root$singleton_key$: 0
 last_name_first: 0
 encrypt_hero_name: 1
 card_colors: [{"value": "blue"}, {"value": "red"}]
+
+= Table main$advanced_settings =
+
+* Row 1 *
+created_on$: 2022-03-03 00:30:31.330
+updated_on$: 2022-04-04 00:40:41.440
+entity_path$: /address_book/settings/advanced
+main$address_book_root$singleton_key$: 0
+background_color: 4
 
 = Table main$person_group =
 

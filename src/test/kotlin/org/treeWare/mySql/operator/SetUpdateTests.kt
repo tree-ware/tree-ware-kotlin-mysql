@@ -88,6 +88,7 @@ class SetUpdateTests {
         val expectedErrors = listOf(
             "/address_book: unable to update",
             "/address_book/settings: unable to update",
+            "/address_book/settings/advanced: unable to update",
             "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to update",
             "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: unable to update",
             "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: unable to update",

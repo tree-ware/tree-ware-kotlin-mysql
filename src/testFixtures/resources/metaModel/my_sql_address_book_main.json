@@ -168,6 +168,31 @@
                   "package": "address_book.main"
                 },
                 "multiplicity": "list"
+              },
+              {
+                "name": "advanced",
+                "number": 4,
+                "type": "composition",
+                "composition": {
+                  "name": "advanced_settings",
+                  "package": "address_book.main"
+                }
+              }
+            ]
+          },
+          {
+            "my_sql_": {},
+            "name": "advanced_settings",
+            "fields": [
+              {
+                "name": "background_color",
+                "number": 1,
+                "type": "enumeration",
+                "enumeration": {
+                  "name": "address_book_color",
+                  "package": "address_book.main"
+                },
+                "multiplicity": "optional"
               }
             ]
           },
