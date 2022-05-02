@@ -1,4 +1,5 @@
 {
+  "address_book__set_": "create",
   "address_book": {
     "name": "Super Heroes",
     "last_updated": "1650390777000",
