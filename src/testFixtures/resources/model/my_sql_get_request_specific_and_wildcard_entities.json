@@ -1,0 +1,58 @@
+{
+  "address_book": {
+    "name": null,
+    "last_updated": null,
+    "settings": {
+      "last_name_first": null,
+      "encrypt_hero_name": null,
+      "card_colors": [],
+      "advanced": {
+        "background_color": null
+      }
+    },
+    "person": [
+      {
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "first_name": null,
+        "hero_name": null,
+        "relation": [
+          {
+            "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            "relationship": null
+          },
+          {
+            "id": null
+          }
+        ]
+      },
+      {
+        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+        "first_name": null
+      },
+      {
+        "id": null,
+        "last_name": null
+      }
+    ],
+    "city_info": [
+      {
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "info": null,
+        "related_city_info": []
+      },
+      {
+        "name": "Albany",
+        "state": "New York",
+        "country": "United States of America",
+        "info": null
+      },
+      {
+        "name": null,
+        "state": null,
+        "country": null
+      }
+    ]
+  }
+}

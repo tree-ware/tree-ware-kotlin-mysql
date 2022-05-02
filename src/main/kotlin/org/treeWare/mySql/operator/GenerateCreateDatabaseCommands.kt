@@ -36,7 +36,7 @@ private interface SqlClauses {
     fun writeForeignKeysTo(writer: Writer)
 }
 
-private open class Column(val name: String, val type: String) : SqlClauses {
+private class Column(val name: String, val type: String) : SqlClauses {
     override fun getColumns(): List<Column> = listOf(this)
 
     override fun writeColumnsTo(writer: Writer) {
@@ -393,7 +393,6 @@ private class GenerateCreateDatabaseCommandsVisitor(
 }
 
 private fun getAssociationFieldClauses(fieldMeta: EntityModel): SqlClauses {
-    val fieldName = getMetaName(fieldMeta)
     if (isListFieldMeta(fieldMeta)) return getSingleFieldClauses(fieldMeta)
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")
@@ -401,6 +400,7 @@ private fun getAssociationFieldClauses(fieldMeta: EntityModel): SqlClauses {
     val targetTableName = targetAux?.validated?.tableName
         ?: throw IllegalStateException("Association target entity my_sql_ aux is not validated")
 
+    val fieldName = getMetaName(fieldMeta)
     val foreignKey = ForeignKey(fieldName, targetTableName, null, OnDelete.RESTRICT)
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
     targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
