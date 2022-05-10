@@ -15,6 +15,10 @@
           {
             "set_": "delete",
             "id": "05ade278-4b44-43da-a0cc-14463854e397"
+          },
+          {
+            "set_": "delete",
+            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce"
           }
         ],
         "password": {
@@ -39,6 +43,10 @@
         "secret": {
           "set_": "delete"
         }
+      },
+      {
+        "set_": "delete",
+        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
       }
     ],
     "groups": [

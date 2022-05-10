@@ -39,7 +39,25 @@
         "relation": [
           {
             "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": "colleague"
+            "relationship": "colleague",
+            "person": {
+              "person": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
+          },
+          {
+            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+            "relationship": "colleague",
+            "person": {
+              "person": [
+                {
+                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+                }
+              ]
+            }
           }
         ],
         "password": {
@@ -131,6 +149,11 @@
             }
           ]
         }
+      },
+      {
+        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+        "first_name": "Jimmy",
+        "last_name": "Olsen"
       }
     ],
     "groups": [

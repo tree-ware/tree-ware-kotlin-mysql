@@ -18,6 +18,10 @@ INSERT INTO test$address_book.main$address_book_relation
   (created_on$, updated_on$, entity_path$, main$address_book_person$id, id, relationship)
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'), 7);
+INSERT INTO test$address_book.main$address_book_relation
+  (created_on$, updated_on$, entity_path$, main$address_book_person$id, id, relationship)
+  VALUES
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce'), 7);
 INSERT INTO test$address_book.crypto$password
   (created_on$, updated_on$, entity_path$, main$address_book_person$id, previous)
   VALUES
@@ -42,6 +46,10 @@ INSERT INTO test$address_book.crypto$secret
   (created_on$, updated_on$, entity_path$, main$address_book_person$id, main, other)
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret', UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), '{"encrypted":"test-encrypted-main-secret","cipher_version":1}', '[{"encrypted":"test-encrypted-secret2","cipher_version":1}]');
+INSERT INTO test$address_book.main$address_book_person
+  (created_on$, updated_on$, entity_path$, id, first_name, last_name)
+  VALUES
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]', UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), 'Jimmy', 'Olsen');
 INSERT INTO test$address_book.main$person_group
   (created_on$, updated_on$, entity_path$, id, name)
   VALUES
@@ -78,6 +86,12 @@ INSERT INTO test$address_book.city$city_info
   (created_on$, updated_on$, entity_path$, name, state, country, info, latitude, longitude, city_center)
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info[San Francisco,California,United States of America]', 'San Francisco', 'California', 'United States of America', 'The cultural and financial center of Northern California', 37.779379, -122.418433, ST_SRID(Point(-122.418433, 37.779379), 4326));
+UPDATE test$address_book.main$address_book_relation
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd')
+  WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND entity_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]';
+UPDATE test$address_book.main$address_book_relation
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807')
+  WHERE id = UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce') AND entity_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]';
 UPDATE test$address_book.main$address_book_person
   SET updated_on$ = '2022-04-14T00:40:41.450', self$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd')
   WHERE id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd') AND entity_path$ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]';
