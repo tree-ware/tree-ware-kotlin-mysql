@@ -1,34 +1,20 @@
 package org.treeWare.mySql.operator.delegate
 
-import org.treeWare.util.assertInDevMode
+internal class InsertCommandBuilder(private val tableName: String) {
+    fun addColumns(columns: List<SqlColumn>) {
+        columns.forEach { addColumn(it) }
+    }
 
-internal enum class Preprocess { QUOTE, ESCAPE, UUID_TO_BIN, TO_HEX }
-
-internal interface SetCommandBuilder {
-    fun addColumn(isKey: Boolean, namePrefix: String?, name: String, value: Any?, preprocess: Preprocess? = null)
-    fun build(): String
-}
-
-private const val BEGIN = "  ("
-private const val BEGIN_LENGTH = BEGIN.length
-private const val COMMA = ", "
-private const val AND = " AND "
-
-// TODO(#63) use prepared statements instead of this escape function (which currently does not even escape the value).
-private fun escape(value: Any): Any = value
-
-internal class InsertCommandBuilder(private val tableName: String) : SetCommandBuilder {
-    override fun addColumn(isKey: Boolean, namePrefix: String?, name: String, value: Any?, preprocess: Preprocess?) {
+    fun addColumn(column: SqlColumn) {
         if (nameBuilder.length > BEGIN_LENGTH) {
             nameBuilder.append(COMMA)
             valueBuilder.append(COMMA)
         }
-        if (namePrefix != null) nameBuilder.append(namePrefix).append("$")
-        nameBuilder.append(name)
-        addColumnValue(valueBuilder, value, preprocess)
+        addSqlColumnName(column, nameBuilder)
+        addSqlColumnValue(column, valueBuilder)
     }
 
-    override fun build(): String {
+    fun build(): String {
         nameBuilder.append(")")
         valueBuilder.append(")")
         return StringBuilder("INSERT INTO ")
@@ -44,67 +30,54 @@ internal class InsertCommandBuilder(private val tableName: String) : SetCommandB
     private val valueBuilder = StringBuilder(BEGIN)
 }
 
-internal class UpdateCommandBuilder(private val tableName: String) : SetCommandBuilder {
-    override fun addColumn(isKey: Boolean, namePrefix: String?, name: String, value: Any?, preprocess: Preprocess?) {
-        val builder = if (isKey) keysBuilder else nonKeysBuilder
-        val separator = if (isKey) AND else COMMA
-        if (builder.isNotEmpty()) builder.append(separator)
-        if (namePrefix != null) builder.append(namePrefix).append("$")
-        builder.append(name)
-        builder.append(" = ")
-        addColumnValue(builder, value, preprocess)
+internal class UpdateCommandBuilder(private val tableName: String) {
+    fun addUpdateColumns(columns: List<SqlColumn>) {
+        columns.forEach { addUpdateColumn(it) }
     }
 
-    override fun build(): String {
-        return StringBuilder("UPDATE ")
-            .appendLine(tableName)
-            .append("  SET ")
-            .appendLine(nonKeysBuilder)
-            .append("  WHERE ")
-            .append(keysBuilder)
-            .append(";")
-            .toString()
+    fun addUpdateColumn(column: SqlColumn) {
+        if (updateBuilder.isNotEmpty()) updateBuilder.append(COMMA)
+        addSqlColumn(column, EQUALS, updateBuilder)
     }
 
-    private val keysBuilder = StringBuilder()
-    private val nonKeysBuilder = StringBuilder()
+    fun addWhereColumns(columns: List<SqlColumn>) {
+        columns.forEach { addWhereColumn(it) }
+    }
+
+    fun addWhereColumn(column: SqlColumn) {
+        if (whereBuilder.isNotEmpty()) whereBuilder.append(AND)
+        addSqlColumn(column, EQUALS, whereBuilder)
+    }
+
+    fun build(): String = StringBuilder("UPDATE ")
+        .appendLine(tableName)
+        .append("  SET ")
+        .appendLine(updateBuilder)
+        .append("  WHERE ")
+        .append(whereBuilder)
+        .append(";")
+        .toString()
+
+    private val updateBuilder = StringBuilder()
+    private val whereBuilder = StringBuilder()
 }
 
-internal class DeleteCommandBuilder(private val tableName: String) : SetCommandBuilder {
-    override fun addColumn(isKey: Boolean, namePrefix: String?, name: String, value: Any?, preprocess: Preprocess?) {
-        assertInDevMode(isKey)
-        if (keysBuilder.isNotEmpty()) keysBuilder.append(AND)
-        if (namePrefix != null) keysBuilder.append(namePrefix).append("$")
-        keysBuilder.append(name)
-        keysBuilder.append(" = ")
-        addColumnValue(keysBuilder, value, preprocess)
+internal class DeleteCommandBuilder(private val tableName: String) {
+    fun addWhereColumns(columns: List<SqlColumn>) {
+        columns.forEach { addWhereColumn(it) }
     }
 
-    override fun build(): String {
-        return StringBuilder("DELETE FROM ")
-            .appendLine(tableName)
-            .append("  WHERE ")
-            .append(keysBuilder)
-            .append(";")
-            .toString()
+    fun addWhereColumn(column: SqlColumn) {
+        if (whereBuilder.isNotEmpty()) whereBuilder.append(AND)
+        addSqlColumn(column, EQUALS, whereBuilder)
     }
 
-    private val keysBuilder = StringBuilder()
-}
+    fun build(): String = StringBuilder("DELETE FROM ")
+        .appendLine(tableName)
+        .append("  WHERE ")
+        .append(whereBuilder)
+        .append(";")
+        .toString()
 
-private fun addColumnValue(builder: StringBuilder, value: Any?, preprocess: Preprocess?) {
-    if (value == null) {
-        builder.append("NULL")
-        return
-    }
-    when (preprocess) {
-        Preprocess.QUOTE -> builder.append("'").append(value).append("'")
-        Preprocess.ESCAPE -> builder.append("'").append(escape(value)).append("'")
-        Preprocess.UUID_TO_BIN -> builder.append("UUID_TO_BIN(").append("'").append(escape(value)).append("')")
-        Preprocess.TO_HEX -> {
-            builder.append("0x")
-            (value as ByteArray).forEach { builder.append("%02x".format(it)) }
-        }
-        null -> builder.append(value)
-    }
+    private val whereBuilder = StringBuilder()
 }

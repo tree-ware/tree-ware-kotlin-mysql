@@ -3,20 +3,15 @@ package org.treeWare.mySql.operator.delegate
 import org.lighthousegames.logging.logging
 import org.treeWare.metaModel.*
 import org.treeWare.model.core.*
-import org.treeWare.model.encoder.EncodePasswords
-import org.treeWare.model.encoder.encodeJson
 import org.treeWare.model.operator.ElementModelError
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.getAssociationTargetEntity
 import org.treeWare.model.operator.set.SetDelegate
 import org.treeWare.model.operator.set.aux.SetAux
 import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableName
 import org.treeWare.mySql.util.getEntityTableFullName
 import org.treeWare.mySql.util.getEntityTableName
-import org.treeWare.util.assertInDevMode
-import java.io.StringWriter
 import java.sql.Connection
 import java.sql.SQLException
 import java.time.Clock
@@ -105,26 +100,24 @@ internal class MySqlSetDelegate(
     ) {
         val insertBuilder = InsertCommandBuilder(tableName)
         val updateBuilder = UpdateCommandBuilder(tableName)
-        insertBuilder.addColumn(false, null, CREATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
-        insertBuilder.addColumn(false, null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
-        insertBuilder.addColumn(false, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
+        insertBuilder.addColumn(SqlColumn(null, CREATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+        insertBuilder.addColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+        insertBuilder.addColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
         val ancestorKeyCount = addAncestorKeys(ancestorKeys, insertBuilder)
         if (ancestorKeyCount == 0 && keys.isEmpty()) {
             val isRoot = ancestorKeys.size == 1
             val namePrefix = if (isRoot) null else rootTableName
-            insertBuilder.addColumn(isRoot, namePrefix, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE)
+            insertBuilder.addColumn(SqlColumn(namePrefix, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE))
         }
-        keys.forEach { addField(true, null, it, insertBuilder) }
-        other.forEach { addField(false, null, it, insertBuilder) }
+        keys.forEach { insertBuilder.addColumns(getSqlColumns(null, it, entityDelegates)) }
+        other.forEach { insertBuilder.addColumns(getSqlColumns(null, it, entityDelegates)) }
         createCompositionCommands.add(EntitySqlCommand("create", entityPath, insertBuilder.build()))
         if (associations.isNotEmpty()) {
             // TODO(performance): set updated-on & keys in updateBuilder at the same time as insertBuilder.
-            updateBuilder.addColumn(false, null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
-            keys.forEach { addField(true, null, it, updateBuilder) }
-            // `UpdateCommandBuilder` adds only keys to the WHERE clause. The `entityPath` needs to be in the WHERE clause,
-            // so `isKey` is set to `true` for it.
-            updateBuilder.addColumn(true, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
-            associations.forEach { addField(false, null, it, updateBuilder) }
+            updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+            keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
+            updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+            associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
             createAssociationCommands.add(
                 EntitySqlCommand("create association in entity", entityPath, updateBuilder.build())
             )
@@ -139,13 +132,11 @@ internal class MySqlSetDelegate(
         other: List<FieldModel>
     ) {
         val updateBuilder = UpdateCommandBuilder(tableName)
-        updateBuilder.addColumn(false, null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE)
-        keys.forEach { addField(true, null, it, updateBuilder) }
-        // `UpdateCommandBuilder` adds only keys to the WHERE clause. The `entityPath` needs to be in the WHERE clause,
-        // so `isKey` is set to `true` for it.
-        updateBuilder.addColumn(true, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
-        associations.forEach { addField(false, null, it, updateBuilder) }
-        other.forEach { addField(false, null, it, updateBuilder) }
+        updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+        keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
+        updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+        associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
+        other.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
         updateCompositionCommands.add(EntitySqlCommand("update", entityPath, updateBuilder.build()))
     }
 
@@ -161,10 +152,8 @@ internal class MySqlSetDelegate(
             getFieldsMeta(entityMeta).values.filter { isAssociationFieldMeta(it as EntityModel) }
         if (associationFieldsMeta.isNotEmpty()) {
             val updateBuilder = UpdateCommandBuilder(tableName)
-            keys.forEach { addField(true, null, it, updateBuilder) }
-            // `UpdateCommandBuilder` adds only keys to the WHERE clause. The `entityPath` needs to be in the WHERE clause,
-            // so `isKey` is set to `true` for it.
-            updateBuilder.addColumn(true, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
+            keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
+            updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
             associationFieldsMeta.forEach { clearAssociationColumns(it as EntityModel, updateBuilder) }
             // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.
             deleteAssociationCommands.add(
@@ -173,10 +162,10 @@ internal class MySqlSetDelegate(
         }
 
         val deleteBuilder = DeleteCommandBuilder(tableName)
-        keys.forEach { addField(true, null, it, deleteBuilder) }
+        keys.forEach { deleteBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
         // Keys are used in the WHERE clause in a delete command. The entityPath needs to be in the WHERE clause,
         // so isKey is set to true for it.
-        deleteBuilder.addColumn(true, null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE)
+        deleteBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
         // Issue delete commands in reverse order (by using addFirst() to add new delete commands) so that leaf entities
         // get deleted before their ancestors. i.e. bottoms-up. Top-down will not work due to foreign-key constraints.
         // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.
@@ -184,7 +173,7 @@ internal class MySqlSetDelegate(
     }
 
     /** Adds ancestor keys and returns the number of ancestor keys added. */
-    private fun addAncestorKeys(ancestorKeys: List<Keys>, builder: SetCommandBuilder): Int {
+    private fun addAncestorKeys(ancestorKeys: List<Keys>, builder: InsertCommandBuilder): Int {
         var ancestorKeyCount = 0
         // When there are recursive entities, record only the first and skip the remaining.
         // Recursive entities will be next to each other and have the same table name.
@@ -199,37 +188,12 @@ internal class MySqlSetDelegate(
             val ancestorTableName = getEntityTableName(ancestorEntity)
             if (ancestorTableName == previousAncestorTableName) return@forEachIndexed
             ancestor.available.forEach {
-                addField(false, ancestorTableName, it, builder)
+                builder.addColumns(getSqlColumns(ancestorTableName, it, entityDelegates))
                 ++ancestorKeyCount
             }
             previousAncestorTableName = ancestorTableName
         }
         return ancestorKeyCount
-    }
-
-    private fun addField(
-        isKey: Boolean,
-        namePrefix: String?,
-        field: FieldModel,
-        builder: SetCommandBuilder
-    ) {
-        if (isListField(field)) addSqlJsonValue(isKey, field as ListFieldModel, builder)
-        else when (val fieldType = getFieldType(field)) {
-            FieldType.ASSOCIATION -> addAssociationColumns(isKey, field as SingleFieldModel, builder)
-            FieldType.COMPOSITION -> addCompositionColumn(isKey, field as SingleFieldModel, builder)
-            else -> addSqlValue(isKey, namePrefix, fieldType, field as SingleFieldModel, builder)
-        }
-    }
-
-    private fun addCompositionColumn(isKey: Boolean, field: SingleFieldModel, builder: SetCommandBuilder) {
-        val compositionMeta = getMetaModelResolved(field.meta)?.compositionMeta
-        val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
-        val entityDelegate = entityDelegates?.get(entityFullName)
-        if (entityDelegate?.isSingleValue() == true) {
-            entityDelegate.getSingleValue(field.value as EntityModel)?.also {
-                builder.addColumn(isKey, null, getFieldName(field), it)
-            }
-        } else throw IllegalStateException("Adding composition as a single column")
     }
 
     private fun issueCommands(): List<ElementModelError> {
@@ -261,101 +225,10 @@ internal class MySqlSetDelegate(
     private val updateCompositionCommands = mutableListOf<EntitySqlCommand>()
 }
 
-private enum class EmptyJsonPolicy { USE_NULL, EXCLUDE }
-
-private fun addSqlJsonValue(
-    isKey: Boolean,
-    field: FieldModel,
-    builder: SetCommandBuilder,
-    emptyJsonPolicy: EmptyJsonPolicy = EmptyJsonPolicy.USE_NULL
-) {
-    val writer = StringWriter()
-    encodeJson(field, writer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
-    val jsonValue = writer.toString()
-    if (jsonValue.isNotEmpty() || emptyJsonPolicy != EmptyJsonPolicy.EXCLUDE) {
-        builder.addColumn(isKey, null, getFieldName(field), jsonValue, Preprocess.QUOTE)
-    }
-}
-
-private fun addSqlValue(
-    isKey: Boolean,
-    namePrefix: String?,
-    fieldType: FieldType,
-    field: SingleFieldModel,
-    builder: SetCommandBuilder,
-) {
-    val columnName = getFieldName(field)
-    when (fieldType) {
-        FieldType.BOOLEAN,
-        FieldType.UINT8,
-        FieldType.UINT16,
-        FieldType.UINT32,
-        FieldType.UINT64,
-        FieldType.INT8,
-        FieldType.INT16,
-        FieldType.INT32,
-        FieldType.INT64,
-        FieldType.FLOAT,
-        FieldType.DOUBLE,
-        FieldType.BIG_INTEGER,
-        FieldType.BIG_DECIMAL -> builder.addColumn(isKey, namePrefix, columnName, (field.value as PrimitiveModel).value)
-        FieldType.TIMESTAMP -> builder.addColumn(
-            isKey,
-            namePrefix,
-            columnName,
-            timestampMillisecondsAsIso8601((field.value as PrimitiveModel).value as Long),
-            Preprocess.QUOTE
-        )
-        FieldType.STRING -> builder.addColumn(
-            isKey,
-            namePrefix,
-            columnName,
-            (field.value as PrimitiveModel).value as String,
-            Preprocess.ESCAPE
-        )
-        FieldType.UUID -> builder.addColumn(
-            isKey,
-            namePrefix,
-            columnName,
-            (field.value as PrimitiveModel).value as String,
-            Preprocess.UUID_TO_BIN
-        )
-        FieldType.BLOB -> builder.addColumn(
-            isKey,
-            namePrefix,
-            columnName,
-            (field.value as PrimitiveModel).value as ByteArray,
-            Preprocess.TO_HEX
-        )
-        FieldType.PASSWORD1WAY,
-        FieldType.PASSWORD2WAY -> addSqlJsonValue(isKey, field, builder, EmptyJsonPolicy.EXCLUDE)
-        FieldType.ALIAS -> return
-        FieldType.ENUMERATION -> builder.addColumn(
-            isKey,
-            namePrefix,
-            columnName,
-            (field.value as EnumerationModel).number
-        )
-        FieldType.ASSOCIATION -> throw IllegalStateException("Adding association as a single SQL value")
-        FieldType.COMPOSITION -> throw IllegalStateException("Adding composition as a single SQL value")
-    }
-}
-
-private fun addAssociationColumns(isKey: Boolean, field: SingleFieldModel, builder: SetCommandBuilder) {
-    if (isKey) throw IllegalStateException("Associations are not yet supported as keys")
-    val target = getAssociationTargetEntity(field.value as AssociationModel)
-    val keys = target.getKeyFields(true)
-    assertInDevMode(keys.missing.isEmpty())
-    val fieldName = getFieldName(field)
-    keys.available.forEach { key ->
-        addSqlValue(false, fieldName, getFieldType(key), key, builder)
-    }
-}
-
-private fun clearAssociationColumns(fieldMeta: EntityModel, builder: SetCommandBuilder) {
+private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateCommandBuilder) {
     val fieldName = getMetaName(fieldMeta)
     if (isListFieldMeta(fieldMeta)) {
-        builder.addColumn(false, null, fieldName, null)
+        builder.addUpdateColumn(SqlColumn(null, fieldName, null))
         return
     }
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
@@ -363,23 +236,13 @@ private fun clearAssociationColumns(fieldMeta: EntityModel, builder: SetCommandB
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
     targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
         val targetKeyName = getMetaName(targetKeyFieldMeta)
-        builder.addColumn(false, fieldName, targetKeyName, null)
+        builder.addUpdateColumn(SqlColumn(fieldName, targetKeyName, null))
     }
 }
 
 private fun nowAsIso8601(clock: Clock): String =
     // Convert to milliseconds first so that microseconds are not in the resulting string.
     timestampMillisecondsAsIso8601(Instant.now(clock).toEpochMilli())
-
-private fun timestampMillisecondsAsIso8601(timestampMilliseconds: Long): String =
-    instantAsIso8601(Instant.ofEpochMilli(timestampMilliseconds))
-
-private fun instantAsIso8601(instant: Instant): String =
-    // TODO(deepak-nulu): Timezone offsets are supported only in MySQL 8.0.19
-    instant.toString()
-        // Instant.ofEpochMilli() returns UTC timezone as the character 'Z' at the end.
-        // drop it until the test upgrades to MySQL 8.0.19 or later.
-        .let { if (it.endsWith('Z')) it.dropLast(1) else it }
 
 private fun getReadableReason(e: SQLException): String = when (e.errorCode) {
     1062 -> "duplicate"
