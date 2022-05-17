@@ -6,9 +6,12 @@ import org.treeWare.metaModel.hasKeyFields
 import org.treeWare.metaModel.isEntityMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
+import org.treeWare.model.operator.ElementModelError
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.GetEntityDelegate
 import org.treeWare.model.operator.copy
+import org.treeWare.model.operator.get.FetchCompositionResult
+import org.treeWare.model.operator.get.FetchCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
 import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_NAME
 import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_VALUE
@@ -35,7 +38,7 @@ class MySqlGetDelegate(
         ancestorKeys: List<Keys>,
         requestFields: List<FieldModel>,
         responseParentField: MutableSingleFieldModel
-    ): MutableEntityModel {
+    ): FetchCompositionResult {
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
@@ -45,17 +48,25 @@ class MySqlGetDelegate(
         val query = select.build()
         println("#### fetchComposition() query: $query")
         val statement = connection.createStatement()
-        // TODO #### catch exceptions for executeQuery() and return an error message.
-        val result = statement.executeQuery(query)
-        val responseEntity = responseParentField.getOrNewValue() as MutableEntityModel
-        while (result.next()) {
-            requestFields.forEachIndexed { index, requestField ->
-                val responseField = responseEntity.getOrNewField(getFieldName(requestField))
-                setResponseField(result, index + 1, responseField)
+        return try {
+            val result = statement.executeQuery(query)
+            val responseEntity = responseParentField.getOrNewValue() as MutableEntityModel
+            val errors = mutableListOf<String>()
+            while (result.next()) {
+                requestFields.forEachIndexed { index, requestField ->
+                    val responseField = responseEntity.getOrNewField(getFieldName(requestField))
+                    errors.addAll(setResponseField(result, index + 1, responseField))
+                }
             }
+            if (errors.isEmpty()) FetchCompositionResult.Entity(responseEntity)
+            else FetchCompositionResult.ErrorList(errors.map { ElementModelError(parentEntityPath, it) })
+        } catch (e: Exception) {
+            FetchCompositionResult.ErrorList(
+                listOf(ElementModelError(parentEntityPath, e.message ?: "Exception while getting entity"))
+            )
+        } finally {
+            statement.close()
         }
-        statement.close()
-        return responseEntity
     }
 
     override fun fetchCompositionSet(
@@ -64,7 +75,7 @@ class MySqlGetDelegate(
         requestKeys: List<SingleFieldModel>,
         requestFields: List<FieldModel>,
         responseParentField: MutableSetFieldModel
-    ): List<MutableEntityModel> {
+    ): FetchCompositionSetResult {
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
@@ -78,25 +89,34 @@ class MySqlGetDelegate(
         val query = select.build()
         println("#### fetchCompositionSet() query: $query")
         val statement = connection.createStatement()
-        // TODO #### catch exceptions for executeQuery() and return an error message.
-        val result = statement.executeQuery(query)
-        val responseEntities = mutableListOf<MutableEntityModel>()
-        while (result.next()) {
-            val responseEntity = getNewMutableSetEntity(responseParentField)
-            var columnIndex = 1
-            // Non-null key fields are in the WHERE clause and not part of the result, so they are added differently.
-            requestKeys.forEach { requestKey ->
-                val responseKey = responseEntity.getOrNewField(getFieldName(requestKey))
-                if (requestKey.value == null) setResponseField(result, columnIndex++, responseKey)
-                else copy(requestKey, responseKey)
+        return try {
+            val result = statement.executeQuery(query)
+            val responseEntities = mutableListOf<MutableEntityModel>()
+            val errors = mutableListOf<String>()
+            while (result.next()) {
+                val responseEntity = getNewMutableSetEntity(responseParentField)
+                var columnIndex = 1
+                // Non-null key fields are in the WHERE clause and not part of the result, so they are added differently.
+                requestKeys.forEach { requestKey ->
+                    val responseKey = responseEntity.getOrNewField(getFieldName(requestKey))
+                    if (requestKey.value == null) errors.addAll(setResponseField(result, columnIndex++, responseKey))
+                    else copy(requestKey, responseKey)
+                }
+                requestFields.forEach { requestField ->
+                    val responseField = responseEntity.getOrNewField(getFieldName(requestField))
+                    errors.addAll(setResponseField(result, columnIndex++, responseField))
+                }
+                responseEntities.add(responseEntity)
             }
-            requestFields.forEach { requestField ->
-                val responseField = responseEntity.getOrNewField(getFieldName(requestField))
-                setResponseField(result, columnIndex++, responseField)
-            }
-            responseEntities.add(responseEntity)
+            if (errors.isEmpty()) FetchCompositionSetResult.Entities(responseEntities)
+            else FetchCompositionSetResult.ErrorList(errors.map { ElementModelError(parentEntityPath, it) })
+        } catch (e: Exception) {
+            FetchCompositionSetResult.ErrorList(
+                listOf(ElementModelError(parentEntityPath, e.message ?: "Exception while getting entities"))
+            )
+        } finally {
+            statement.close()
         }
-        return responseEntities
     }
 }
 
@@ -125,29 +145,34 @@ private fun getParentKeyColumns(entityMeta: EntityModel, parentKeys: Keys): List
     }
 }
 
-private fun setResponseField(result: ResultSet, columnIndex: Int, responseField: FieldModel) {
-    if (isListField(responseField)) setResponseListField(result, columnIndex, responseField as MutableListFieldModel)
-    else if (isAssociationField(responseField)) {
+private fun setResponseField(result: ResultSet, columnIndex: Int, responseField: FieldModel): List<String> {
+    if (isListField(responseField)) {
+        return setResponseListField(result, columnIndex, responseField as MutableListFieldModel)
+    } else if (isAssociationField(responseField)) {
         setResponseAssociationField(result, columnIndex, responseField as MutableSingleFieldModel)
     } else setResponseSingleField(result, columnIndex, responseField as MutableSingleFieldModel)
+    return emptyList()
 }
 
-fun setResponseListField(result: ResultSet, columnIndex: Int, responseListField: MutableListFieldModel) {
+private fun setResponseListField(
+    result: ResultSet,
+    columnIndex: Int,
+    responseListField: MutableListFieldModel
+): List<String> {
     val json = result.getString(columnIndex)
     val reader = StringReader(json)
-    val errors = decodeJsonField(reader, responseListField)
-    // TODO #### return the errors list
+    return decodeJsonField(reader, responseListField)
 }
 
 // TODO #### an association might have multiple columns (keys of target), so it should return a count of the columns used from the resultSet.
-fun setResponseAssociationField(
+private fun setResponseAssociationField(
     result: ResultSet,
     columnIndex: Int,
     responseAssociationField: MutableSingleFieldModel
 ) {
 }
 
-fun setResponseSingleField(result: ResultSet, columnIndex: Int, responseSingleField: MutableSingleFieldModel) {
+private fun setResponseSingleField(result: ResultSet, columnIndex: Int, responseSingleField: MutableSingleFieldModel) {
     val responseValue = newMutableValueModel(responseSingleField.meta, responseSingleField)
     setValueFromResult(getFieldType(responseSingleField), responseValue, result, columnIndex)
     responseSingleField.setValue(responseValue)
