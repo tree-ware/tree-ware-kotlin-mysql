@@ -34,7 +34,7 @@ class MySqlGetDelegate(
     private val logCommands: Boolean
 ) : GetDelegate {
     override fun fetchComposition(
-        parentEntityPath: String,
+        fieldPath: String,
         ancestorKeys: List<Keys>,
         requestFields: List<FieldModel>,
         responseParentField: MutableSingleFieldModel
@@ -46,6 +46,7 @@ class MySqlGetDelegate(
         else getParentKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
         val query = select.build()
+        println("#### fieldPath: $fieldPath")
         println("#### fetchComposition() query: $query")
         val statement = connection.createStatement()
         return try {
@@ -59,10 +60,10 @@ class MySqlGetDelegate(
                 }
             }
             if (errors.isEmpty()) FetchCompositionResult.Entity(responseEntity)
-            else FetchCompositionResult.ErrorList(errors.map { ElementModelError(parentEntityPath, it) })
+            else FetchCompositionResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
             FetchCompositionResult.ErrorList(
-                listOf(ElementModelError(parentEntityPath, e.message ?: "Exception while getting entity"))
+                listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entity"))
             )
         } finally {
             statement.close()
@@ -70,7 +71,7 @@ class MySqlGetDelegate(
     }
 
     override fun fetchCompositionSet(
-        parentEntityPath: String,
+        fieldPath: String,
         ancestorKeys: List<Keys>,
         requestKeys: List<SingleFieldModel>,
         requestFields: List<FieldModel>,
@@ -87,6 +88,7 @@ class MySqlGetDelegate(
         getParentKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
         val query = select.build()
+        println("#### fieldPath: $fieldPath")
         println("#### fetchCompositionSet() query: $query")
         val statement = connection.createStatement()
         return try {
@@ -109,10 +111,10 @@ class MySqlGetDelegate(
                 responseEntities.add(responseEntity)
             }
             if (errors.isEmpty()) FetchCompositionSetResult.Entities(responseEntities)
-            else FetchCompositionSetResult.ErrorList(errors.map { ElementModelError(parentEntityPath, it) })
+            else FetchCompositionSetResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
             FetchCompositionSetResult.ErrorList(
-                listOf(ElementModelError(parentEntityPath, e.message ?: "Exception while getting entities"))
+                listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entities"))
             )
         } finally {
             statement.close()

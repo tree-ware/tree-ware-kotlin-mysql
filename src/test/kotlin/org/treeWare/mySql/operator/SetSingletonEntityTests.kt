@@ -274,7 +274,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book
+            |field_path${'$'}: /address_book
             |singleton_key${'$'}: 0
             |name: Super Heroes
             |last_updated: null
@@ -314,7 +314,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book
+            |field_path${'$'}: /address_book
             |singleton_key${'$'}: 0
             |name: Super Heroes
             |last_updated: null
@@ -324,7 +324,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-04 00:40:41.440
             |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |entity_path${'$'}: /address_book/settings
+            |field_path${'$'}: /address_book/settings
             |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |last_name_first: 1
             |encrypt_hero_name: null
@@ -335,7 +335,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-04 00:40:41.440
             |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |entity_path${'$'}: /address_book/settings/advanced
+            |field_path${'$'}: /address_book/settings/advanced
             |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |background_color: 3
             |

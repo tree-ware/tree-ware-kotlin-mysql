@@ -73,6 +73,7 @@ internal class MySqlSetDelegate(
     override fun setEntity(
         setAux: SetAux,
         entity: EntityModel,
+        fieldPath: String,
         entityPath: String,
         ancestorKeys: List<Keys>,
         keys: List<SingleFieldModel>,
@@ -81,9 +82,17 @@ internal class MySqlSetDelegate(
     ): List<ElementModelError> {
         val tableName = getEntityTableFullName(entity)
         when (setAux) {
-            SetAux.CREATE -> addCreateCommands(tableName, entityPath, ancestorKeys, keys, associations, other)
-            SetAux.UPDATE -> addUpdateCommands(tableName, entityPath, keys, associations, other)
-            SetAux.DELETE -> addDeleteCommands(tableName, entityPath, keys, entity)
+            SetAux.CREATE -> addCreateCommands(
+                tableName,
+                fieldPath,
+                entityPath,
+                ancestorKeys,
+                keys,
+                associations,
+                other
+            )
+            SetAux.UPDATE -> addUpdateCommands(tableName, fieldPath, entityPath, keys, associations, other)
+            SetAux.DELETE -> addDeleteCommands(tableName, fieldPath, entityPath, keys, entity)
         }
         return emptyList()
     }
@@ -92,6 +101,7 @@ internal class MySqlSetDelegate(
 
     private fun addCreateCommands(
         tableName: String,
+        fieldPath: String,
         entityPath: String,
         ancestorKeys: List<Keys>,
         keys: List<SingleFieldModel>,
@@ -102,7 +112,7 @@ internal class MySqlSetDelegate(
         val updateBuilder = UpdateCommandBuilder(tableName)
         insertBuilder.addColumn(SqlColumn(null, CREATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
         insertBuilder.addColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
-        insertBuilder.addColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+        insertBuilder.addColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
         val ancestorKeyCount = addAncestorKeys(ancestorKeys, insertBuilder)
         if (ancestorKeyCount == 0 && keys.isEmpty()) {
             val isRoot = ancestorKeys.size == 1
@@ -116,7 +126,7 @@ internal class MySqlSetDelegate(
             // TODO(performance): set updated-on & keys in updateBuilder at the same time as insertBuilder.
             updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
             keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-            updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+            updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
             associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
             createAssociationCommands.add(
                 EntitySqlCommand("create association in entity", entityPath, updateBuilder.build())
@@ -126,6 +136,7 @@ internal class MySqlSetDelegate(
 
     private fun addUpdateCommands(
         tableName: String,
+        fieldPath: String,
         entityPath: String,
         keys: List<SingleFieldModel>,
         associations: List<FieldModel>,
@@ -134,7 +145,7 @@ internal class MySqlSetDelegate(
         val updateBuilder = UpdateCommandBuilder(tableName)
         updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
         keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-        updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+        updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
         associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
         other.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
         updateCompositionCommands.add(EntitySqlCommand("update", entityPath, updateBuilder.build()))
@@ -142,18 +153,19 @@ internal class MySqlSetDelegate(
 
     private fun addDeleteCommands(
         tableName: String,
+        fieldPath: String,
         entityPath: String,
         keys: List<SingleFieldModel>,
         entity: EntityModel
     ) {
         // Associations can prevent deletion, so they need to be cleared first.
-        val entityMeta = entity.meta ?: throw IllegalStateException("Meta is missing for entity $entityPath")
+        val entityMeta = entity.meta ?: throw IllegalStateException("Meta is missing for entity $fieldPath")
         val associationFieldsMeta =
             getFieldsMeta(entityMeta).values.filter { isAssociationFieldMeta(it as EntityModel) }
         if (associationFieldsMeta.isNotEmpty()) {
             val updateBuilder = UpdateCommandBuilder(tableName)
             keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-            updateBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+            updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
             associationFieldsMeta.forEach { clearAssociationColumns(it as EntityModel, updateBuilder) }
             // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.
             deleteAssociationCommands.add(
@@ -163,9 +175,7 @@ internal class MySqlSetDelegate(
 
         val deleteBuilder = DeleteCommandBuilder(tableName)
         keys.forEach { deleteBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-        // Keys are used in the WHERE clause in a delete command. The entityPath needs to be in the WHERE clause,
-        // so isKey is set to true for it.
-        deleteBuilder.addWhereColumn(SqlColumn(null, ENTITY_PATH_COLUMN_NAME, entityPath, Preprocess.ESCAPE))
+        deleteBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
         // Issue delete commands in reverse order (by using addFirst() to add new delete commands) so that leaf entities
         // get deleted before their ancestors. i.e. bottoms-up. Top-down will not work due to foreign-key constraints.
         // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.

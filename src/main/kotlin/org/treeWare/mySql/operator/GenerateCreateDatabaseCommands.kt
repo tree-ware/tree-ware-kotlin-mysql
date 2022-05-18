@@ -190,7 +190,7 @@ private class GenerateCreateDatabaseCommandsVisitor(
             .appendLine(" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),")
             .append("  ").append(UPDATED_ON_COLUMN_NAME)
             .appendLine(" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),")
-            .append("  $ENTITY_PATH_COLUMN_NAME TEXT")
+            .append("  $FIELD_PATH_COLUMN_NAME TEXT")
         ancestorClauses.forEach { it.writeColumnsTo(createTableWriter) }
         fieldClauses.forEach { it.writeColumnsTo(createTableWriter) }
         if (keys.isNotEmpty()) {

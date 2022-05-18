@@ -151,7 +151,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book/city_info[Princeton,New Jersey,United States of America]
+            |field_path${'$'}: /address_book/city_info
             |name: Princeton
             |state: New Jersey
             |country: United States of America
@@ -194,7 +194,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book
+            |field_path${'$'}: /address_book
             |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
@@ -229,7 +229,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book
+            |field_path${'$'}: /address_book
             |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
@@ -239,7 +239,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book/settings
+            |field_path${'$'}: /address_book/settings
             |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |last_name_first: 1
             |encrypt_hero_name: null
@@ -275,7 +275,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book
+            |field_path${'$'}: /address_book
             |singleton_key${'$'}: 0
             |name: null
             |last_updated: null
@@ -285,7 +285,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book/settings
+            |field_path${'$'}: /address_book/settings
             |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
             |last_name_first: null
             |encrypt_hero_name: null
@@ -324,7 +324,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on${'$'}: 2022-04-14 00:40:41.450
             |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |entity_path${'$'}: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: null
