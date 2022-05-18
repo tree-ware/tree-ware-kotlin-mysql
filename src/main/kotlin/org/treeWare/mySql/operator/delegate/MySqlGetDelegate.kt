@@ -2,8 +2,6 @@ package org.treeWare.mySql.operator.delegate
 
 import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getParentEntityMeta
-import org.treeWare.metaModel.hasKeyFields
-import org.treeWare.metaModel.isEntityMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
 import org.treeWare.model.operator.ElementModelError
@@ -13,6 +11,7 @@ import org.treeWare.model.operator.copy
 import org.treeWare.model.operator.get.FetchCompositionResult
 import org.treeWare.model.operator.get.FetchCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
+import org.treeWare.mySql.operator.FIELD_PATH_COLUMN_NAME
 import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_NAME
 import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_VALUE
 import org.treeWare.mySql.util.getEntityMetaTableFullName
@@ -43,10 +42,10 @@ class MySqlGetDelegate(
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
         if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
-        else getParentKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
+        else getAncestorKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
+        select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
         val query = select.build()
-        println("#### fieldPath: $fieldPath")
         println("#### fetchComposition() query: $query")
         val statement = connection.createStatement()
         return try {
@@ -85,10 +84,10 @@ class MySqlGetDelegate(
             if (requestKey.value == null) select.addSelectColumns(columns)
             else select.addWhereColumns(columns)
         }
-        getParentKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
+        getAncestorKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
+        select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
         val query = select.build()
-        println("#### fieldPath: $fieldPath")
         println("#### fetchCompositionSet() query: $query")
         val statement = connection.createStatement()
         return try {
@@ -98,9 +97,9 @@ class MySqlGetDelegate(
             while (result.next()) {
                 val responseEntity = getNewMutableSetEntity(responseParentField)
                 var columnIndex = 1
-                // Non-null key fields are in the WHERE clause and not part of the result, so they are added differently.
                 requestKeys.forEach { requestKey ->
                     val responseKey = responseEntity.getOrNewField(getFieldName(requestKey))
+                    // Non-null key fields are in the WHERE clause and therefore not part of the result.
                     if (requestKey.value == null) errors.addAll(setResponseField(result, columnIndex++, responseKey))
                     else copy(requestKey, responseKey)
                 }
@@ -122,29 +121,13 @@ class MySqlGetDelegate(
     }
 }
 
-private fun getParentKeyColumns(entityMeta: EntityModel, parentKeys: Keys): List<SqlColumn> {
-    val entityResolved = requireNotNull(getMetaModelResolved(entityMeta)) { "Resolved aux is missing for entity" }
-    val keyedParentEntitiesMeta = entityResolved.parentFieldsMeta.mapNotNull { parentFieldMeta ->
-        val parentEntityMeta = getParentEntityMeta(parentFieldMeta) as? EntityModel ?: return@mapNotNull null
-        if (isEntityMeta(parentEntityMeta) && hasKeyFields(parentEntityMeta)) parentEntityMeta else null
-    }
-    // TODO #### handle the case where keyedParentEntitiesMeta is empty
-    return keyedParentEntitiesMeta.flatMap { parentEntityMeta ->
-        val parentTableName = getEntityMetaTableName(parentEntityMeta)
-        val parentEntityResolved =
-            requireNotNull(getMetaModelResolved(parentEntityMeta)) { "Resolved aux is missing for parent entity" }
-        val parentKeyColumns = parentEntityResolved.sortedKeyFieldsMeta.flatMapIndexed { index, parentKeyFieldMeta ->
-            val parentKey = parentKeys.available.getOrNull(index)
-            if (parentKey == null || parentKey.meta != parentKeyFieldMeta) getSqlColumnsForMeta(
-                parentTableName,
-                parentKeyFieldMeta,
-                null,
-                null
-            )
-            else getSqlColumns(parentTableName, parentKey, null)
-        }
-        parentKeyColumns
-    }
+private fun getAncestorKeyColumns(entityMeta: EntityModel, ancestorKeys: Keys): List<SqlColumn> {
+    val ancestorFirstKey = ancestorKeys.available.firstOrNull() ?: return emptyList()
+    val ancestorFirstKeyMeta = requireNotNull(ancestorFirstKey.meta) { "Ancestor key field meta is missing" }
+    val ancestorEntityMeta =
+        requireNotNull(getParentEntityMeta(ancestorFirstKeyMeta)) { "Ancestor key parent entity is missing" }
+    val ancestorTableName = getEntityMetaTableName(ancestorEntityMeta)
+    return ancestorKeys.available.flatMap { getSqlColumns(ancestorTableName, it, null) }
 }
 
 private fun setResponseField(result: ResultSet, columnIndex: Int, responseField: FieldModel): List<String> {
