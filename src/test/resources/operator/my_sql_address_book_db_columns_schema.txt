@@ -15,7 +15,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: city$city_info
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -95,7 +95,7 @@ COLUMN_TYPE: json
 COLUMN_KEY:
 
 TABLE_NAME: crypto$password
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -125,7 +125,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: crypto$secret
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -175,7 +175,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -225,7 +225,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: keyless$keyless
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -270,7 +270,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -305,7 +305,7 @@ COLUMN_TYPE: json
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_person
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -355,7 +355,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_relation
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -395,7 +395,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_root
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -435,7 +435,7 @@ COLUMN_TYPE: tinyint(1)
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_settings
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -465,7 +465,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: main$advanced_settings
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 
@@ -485,7 +485,7 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: main$person_group
-COLUMN_NAME: entity_path$
+COLUMN_NAME: field_path$
 COLUMN_TYPE: text
 COLUMN_KEY:
 

@@ -124,7 +124,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
@@ -137,7 +137,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
@@ -152,7 +152,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]
+            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
             |main${'$'}person_group${'$'}id: null
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
@@ -204,7 +204,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
@@ -217,7 +217,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
@@ -230,7 +230,7 @@ class SetMixedTests {
             |* Row 3 *
             |created_on${'$'}: 2022-04-04 00:40:41.440
             |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |entity_path${'$'}: /address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
@@ -245,7 +245,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]
+            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
             |main${'$'}person_group${'$'}id: null
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
@@ -308,7 +308,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
@@ -321,7 +321,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
@@ -334,7 +334,7 @@ class SetMixedTests {
             |* Row 3 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
@@ -349,7 +349,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]
+            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
             |main${'$'}person_group${'$'}id: null
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
@@ -432,7 +432,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
@@ -445,7 +445,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on${'$'}: 2022-03-03 00:30:31.330
             |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |entity_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]
+            |field_path${'$'}: /address_book/person
             |main${'$'}person_group${'$'}id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark

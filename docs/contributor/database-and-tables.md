@@ -123,7 +123,8 @@ The following columns are stored for each entity:
     * For example, there is a `parent` association in the `organization` entity, and its target entity is
       the `organization` entity (self-referential). The `id` field is the key field in the `organization` entity. So the
       `parent` association is stored in a column called `parent$id`.
-* A text representation of the path to the entity is stored in a non-indexed `entity_path$` TEXT column.
+* A text representation of the path to the field composing the entity is stored in a non-indexed `field_path$` TEXT
+  column.
 * `created_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
   `NOT NULL DEFAULT CURRENT_TIMESTAMP`. It is set when an entity is created.
 * `updated_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
@@ -131,10 +132,10 @@ The following columns are stored for each entity:
 
 # Ancestors
 
-Since the model is a tree, every entity instance in the model tree has a parent path. Tree-ware supports the ability to
-list all entities under any ancestor in the parent path. To support this, the key fields of each ancestor are added as
-columns in the entity-table. These columns are named by joining the ancestor table names and their key field names with
-a dollar sign.
+Since the model is a tree, every entity instance in the model tree has a parent (field) path. Tree-ware supports the
+ability to list all entities under any ancestor in the parent path. To support this, the key fields of each ancestor are
+added as columns in the entity-table. These columns are named by joining the ancestor table names and their key field
+names with a dollar sign.
 
 # Recursive Ancestors
 
