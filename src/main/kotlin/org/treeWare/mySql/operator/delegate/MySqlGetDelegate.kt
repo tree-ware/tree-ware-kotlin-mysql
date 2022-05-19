@@ -44,7 +44,7 @@ class MySqlGetDelegate(
         if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
         else getAncestorKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
-        requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
+        requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null, true)) }
         val query = select.build()
         println("#### fetchComposition() query: $query")
         val statement = connection.createStatement()
@@ -86,7 +86,7 @@ class MySqlGetDelegate(
         }
         getAncestorKeyColumns(entityMeta, ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
-        requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null)) }
+        requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null, true)) }
         val query = select.build()
         println("#### fetchCompositionSet() query: $query")
         val statement = connection.createStatement()
@@ -112,6 +112,7 @@ class MySqlGetDelegate(
             if (errors.isEmpty()) FetchCompositionSetResult.Entities(responseEntities)
             else FetchCompositionSetResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
+            e.printStackTrace()
             FetchCompositionSetResult.ErrorList(
                 listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entities"))
             )
@@ -134,7 +135,7 @@ private fun setResponseField(result: ResultSet, columnIndex: Int, responseField:
     if (isListField(responseField)) {
         return setResponseListField(result, columnIndex, responseField as MutableListFieldModel)
     } else if (isAssociationField(responseField)) {
-        setResponseAssociationField(result, columnIndex, responseField as MutableSingleFieldModel)
+        return setResponseAssociationField(result, columnIndex, responseField as MutableSingleFieldModel)
     } else setResponseSingleField(result, columnIndex, responseField as MutableSingleFieldModel)
     return emptyList()
 }
@@ -149,12 +150,14 @@ private fun setResponseListField(
     return decodeJsonField(reader, responseListField)
 }
 
-// TODO #### an association might have multiple columns (keys of target), so it should return a count of the columns used from the resultSet.
 private fun setResponseAssociationField(
     result: ResultSet,
     columnIndex: Int,
     responseAssociationField: MutableSingleFieldModel
-) {
+): List<String> {
+    val json = result.getString(columnIndex) ?: return emptyList()
+    val reader = StringReader(json)
+    return decodeJsonField(reader, responseAssociationField)
 }
 
 private fun setResponseSingleField(result: ResultSet, columnIndex: Int, responseSingleField: MutableSingleFieldModel) {

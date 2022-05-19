@@ -45,6 +45,11 @@ COLUMN_TYPE: json
 COLUMN_KEY:
 
 TABLE_NAME: city$city_info
+COLUMN_NAME: self
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
 COLUMN_NAME: self$country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
@@ -57,6 +62,11 @@ COLUMN_KEY: MUL
 TABLE_NAME: city$city_info
 COLUMN_NAME: self$state
 COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city$city_info
+COLUMN_NAME: self2
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: city$city_info
@@ -340,6 +350,11 @@ COLUMN_TYPE: blob
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_person
+COLUMN_NAME: self
+COLUMN_TYPE: text
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_person
 COLUMN_NAME: self$id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
@@ -372,6 +387,11 @@ COLUMN_KEY: MUL
 TABLE_NAME: main$address_book_relation
 COLUMN_NAME: main$person_group$id
 COLUMN_TYPE: binary(16)
+COLUMN_KEY:
+
+TABLE_NAME: main$address_book_relation
+COLUMN_NAME: person
+COLUMN_TYPE: text
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_relation

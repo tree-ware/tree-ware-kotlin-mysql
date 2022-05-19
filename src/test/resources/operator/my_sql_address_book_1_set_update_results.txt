@@ -14,9 +14,11 @@ latitude: 42.651935
 longitude: -73.75478
 city_center: Point(latitude: 42.651935, longitude: -73.75478, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "Princeton", "state": "New Jersey", "country": "United States of America"}]}]
+self: null
 self$name: null
 self$state: null
 self$country: null
+self2: null
 self2$name: null
 self2$state: null
 self2$country: null
@@ -33,9 +35,11 @@ latitude: 40.712983
 longitude: -74.007206
 city_center: Point(latitude: 40.712983, longitude: -74.007206, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "San Francisco", "state": "California", "country": "United States of America"}]}, {"city_info": [{"name": "Albany", "state": "New York", "country": "United States of America"}]}]
+self: null
 self$name: null
 self$state: null
 self$country: null
+self2: null
 self2$name: null
 self2$state: null
 self2$country: null
@@ -52,9 +56,11 @@ latitude: 40.360595
 longitude: -74.664442
 city_center: Point(latitude: 40.360595, longitude: -74.664442, SRID: 4326)
 related_city_info: []
+self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
 self$name: Princeton
 self$state: New Jersey
 self$country: United States of America
+self2: {"city_info":[{"country":"United States of America","state":"New Jersey","name":"Princeton"}]}
 self2$name: Princeton
 self2$state: New Jersey
 self2$country: United States of America
@@ -71,9 +77,11 @@ latitude: 37.77938
 longitude: -122.418434
 city_center: Point(latitude: 37.77938, longitude: -122.418434, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "Princeton", "state": "New Jersey", "country": "United States of America"}]}]
+self: null
 self$name: null
 self$state: null
 self$country: null
+self2: null
 self2$name: null
 self2$state: null
 self2$country: null
@@ -137,6 +145,7 @@ last_name: Kent 3
 hero_name: Superman 3
 email: null
 picture: null
+self: null
 self$id: null
 
 * Row 2 *
@@ -150,6 +159,7 @@ last_name: Lane 2
 hero_name: null
 email: [{"value": "lois.lane.2@dailyplanet.com"}]
 picture: Picture of Lois Lane 2
+self: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 self$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 3 *
@@ -163,6 +173,7 @@ last_name: Kent 2
 hero_name: Superman 2
 email: [{"value": "clark.kent.2@dailyplanet.com"}]
 picture: Picture of Clark Kent 2
+self: null
 self$id: null
 
 * Row 4 *
@@ -176,6 +187,7 @@ last_name: Lane 3
 hero_name: n/a
 email: null
 picture: null
+self: null
 self$id: null
 
 * Row 5 *
@@ -189,6 +201,7 @@ last_name: Olsen
 hero_name: null
 email: null
 picture: null
+self: null
 self$id: null
 
 = Table main$address_book_relation =
@@ -201,6 +214,7 @@ main$person_group$id: null
 main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: 6
+person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 2 *
@@ -211,6 +225,7 @@ main$person_group$id: null
 main$address_book_person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 id: 16634916-8f83-4376-ad42-37038e108a0b
 relationship: 6
+person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 3 *
@@ -221,6 +236,7 @@ main$person_group$id: null
 main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce
 relationship: 7
+person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
 person$id: ec983c56-320f-4d66-9dde-f180e8ac3807
 
 = Table main$address_book_root =

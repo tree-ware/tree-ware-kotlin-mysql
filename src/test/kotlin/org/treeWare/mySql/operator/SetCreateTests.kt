@@ -160,9 +160,11 @@ class SetCreateTests {
             |longitude: null
             |city_center: null
             |related_city_info: []
+            |self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
             |self${'$'}name: Princeton
             |self${'$'}state: New Jersey
             |self${'$'}country: United States of America
+            |self2: {"city_info":[{"country":"United States of America","state":"New Jersey","name":"Princeton"}]}
             |self2${'$'}name: Princeton
             |self2${'$'}state: New Jersey
             |self2${'$'}country: United States of America
@@ -332,6 +334,7 @@ class SetCreateTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
         """.trimMargin()

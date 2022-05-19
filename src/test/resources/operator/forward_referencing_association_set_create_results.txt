@@ -25,6 +25,7 @@ last_name: null
 hero_name: null
 email: null
 picture: null
+self: null
 self$id: null
 
 * Row 2 *
@@ -38,6 +39,7 @@ last_name: null
 hero_name: null
 email: null
 picture: null
+self: null
 self$id: null
 
 = Table main$address_book_relation =
@@ -50,6 +52,7 @@ main$person_group$id: null
 main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: null
+person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 = Table main$address_book_root =

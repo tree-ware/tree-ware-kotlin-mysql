@@ -108,6 +108,12 @@ collide.
 
 The following columns are stored for each entity:
 
+* `created_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
+  `NOT NULL DEFAULT CURRENT_TIMESTAMP`. It is set when an entity is created.
+* `updated_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
+  `NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`. It is set when any changes are made to the entity.
+* A text representation of the path to the field composing the entity is stored in a non-indexed `field_path$` TEXT
+  column.
 * All non-composition fields in the entity are stored in separate columns.
     * For example:
         * the `id`, `name`, and `parent` fields in the `organization` entity
@@ -123,12 +129,13 @@ The following columns are stored for each entity:
     * For example, there is a `parent` association in the `organization` entity, and its target entity is
       the `organization` entity (self-referential). The `id` field is the key field in the `organization` entity. So the
       `parent` association is stored in a column called `parent$id`.
-* A text representation of the path to the field composing the entity is stored in a non-indexed `field_path$` TEXT
-  column.
-* `created_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
-  `NOT NULL DEFAULT CURRENT_TIMESTAMP`. It is set when an entity is created.
-* `updated_on$` timestamp column. Tree-ware sets it explicitly in the API layer even though it is marked as
-  `NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`. It is set when any changes are made to the entity.
+* The columns mentioned above for associations is not sufficient to reconstruct their full paths. So an additional
+  column is used for storing the entire path in a TEXT column. The column name is the association field name.
+    * The column value is the JSON representation of the association value. In the future, a more compact path
+      representation [will be used](https://github.com/tree-ware/tree-ware-kotlin-mysql/issues/76).
+    * An alternate to storing the path is to use the other association columns above to look up the target entity and
+      use its `field_path$` and keys to build up the association path. While this takes up less storage, it takes up
+      more time. So this approach is not the current choice.
 
 # Ancestors
 

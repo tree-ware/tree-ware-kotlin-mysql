@@ -132,6 +132,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 2 *
@@ -145,6 +146,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |= Table main${'$'}address_book_relation =
@@ -157,6 +159,7 @@ class SetMixedTests {
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
+            |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
             |person${'$'}id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |
         """.trimMargin()
@@ -212,6 +215,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 2 *
@@ -225,6 +229,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 3 *
@@ -238,6 +243,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |= Table main${'$'}address_book_relation =
@@ -250,6 +256,7 @@ class SetMixedTests {
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
+            |person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
             |person${'$'}id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |
         """.trimMargin()
@@ -316,6 +323,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 2 *
@@ -329,6 +337,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 3 *
@@ -342,6 +351,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |= Table main${'$'}address_book_relation =
@@ -354,6 +364,7 @@ class SetMixedTests {
             |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
+            |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
             |person${'$'}id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |
         """.trimMargin()
@@ -440,6 +451,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |* Row 2 *
@@ -453,6 +465,7 @@ class SetMixedTests {
             |hero_name: null
             |email: null
             |picture: null
+            |self: null
             |self${'$'}id: null
             |
             |= Table main${'$'}address_book_relation =

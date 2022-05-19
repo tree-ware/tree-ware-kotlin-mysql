@@ -30,23 +30,25 @@ internal data class SqlColumn(
 internal fun getSqlColumns(
     namePrefix: String?,
     field: FieldModel,
-    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
+    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    forSelectClause: Boolean = false
 ): List<SqlColumn> {
     val fieldMeta = requireNotNull(field.meta) { "Field meta is missing" }
     val fieldValue: Any? =
         if (isListField(field)) (field as ListFieldModel).values else (field as SingleFieldModel).value
-    return getSqlColumnsForMeta(namePrefix, fieldMeta, fieldValue, entityDelegates)
+    return getSqlColumnsForMeta(namePrefix, fieldMeta, fieldValue, entityDelegates, forSelectClause)
 }
 
 internal fun getSqlColumnsForMeta(
     namePrefix: String?,
     fieldMeta: EntityModel,
     fieldValue: Any?,
-    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
+    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    forSelectClause: Boolean = false
 ): List<SqlColumn> =
     if (isListFieldMeta(fieldMeta)) listOf(getSqlJsonListColumn(fieldMeta, fieldValue as List<ElementModel>))
     else when (val fieldType = requireNotNull(getFieldTypeMeta(fieldMeta)) { "Field meta is missing" }) {
-        FieldType.ASSOCIATION -> getAssociationSqlColumns(fieldMeta, fieldValue)
+        FieldType.ASSOCIATION -> getAssociationSqlColumns(fieldMeta, fieldValue, forSelectClause)
         FieldType.COMPOSITION -> getCompositionSqlColumns(fieldMeta, fieldValue, entityDelegates)
             ?.let { listOf(it) } ?: emptyList()
         else -> getSingleSqlColumn(namePrefix, fieldType, fieldMeta, fieldValue)
@@ -74,25 +76,43 @@ private fun getSqlJsonColumn(
     else SqlColumn(null, getMetaName(fieldMeta), jsonValue, Preprocess.QUOTE)
 }
 
-private fun getAssociationSqlColumns(fieldMeta: EntityModel, fieldValue: Any?): List<SqlColumn> {
+/**
+ * @return SQL columns for the association field. if `forSelectClause` is `true`, only the JSON column is returned;
+ * else the columns derived from the target keys and the JSON column are returned.
+ */
+private fun getAssociationSqlColumns(
+    fieldMeta: EntityModel,
+    fieldValue: Any?,
+    forSelectClause: Boolean
+): List<SqlColumn> {
     return if (fieldValue == null) {
         val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
             ?: throw IllegalStateException("Association meta-model is not resolved")
         val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
         val fieldName = getMetaName(fieldMeta)
-        targetKeyFieldsMeta.map { SqlColumn(fieldName, getMetaName(it), null) }
+        val jsonColumn = SqlColumn(null, fieldName, null)
+        if (forSelectClause) listOf(jsonColumn)
+        else targetKeyFieldsMeta.map { SqlColumn(fieldName, getMetaName(it), null) } + jsonColumn
     } else {
-        val target = getAssociationTargetEntity(fieldValue as AssociationModel)
-        val keys = target.getKeyFields(true)
-        assertInDevMode(keys.missing.isEmpty())
         val fieldName = getMetaName(fieldMeta)
-        keys.available.mapNotNull { key ->
-            getSingleSqlColumn(
-                fieldName,
-                getFieldType(key),
-                requireNotNull(key.meta) { "Key field meta is missing" },
-                key.value
-            )
+        val association = fieldValue as AssociationModel
+        val writer = StringWriter()
+        encodeJson(association, writer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
+        val jsonValue = writer.toString()
+        val jsonColumn = SqlColumn(null, fieldName, jsonValue, Preprocess.QUOTE)
+        if (forSelectClause) listOf(jsonColumn)
+        else {
+            val target = getAssociationTargetEntity(association)
+            val keys = target.getKeyFields(true)
+            assertInDevMode(keys.missing.isEmpty())
+            keys.available.mapNotNull { key ->
+                getSingleSqlColumn(
+                    fieldName,
+                    getFieldType(key),
+                    requireNotNull(key.meta) { "Key field meta is missing" },
+                    key.value
+                )
+            } + jsonColumn
         }
     }
 }

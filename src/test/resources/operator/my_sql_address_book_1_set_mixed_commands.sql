@@ -8,8 +8,8 @@ INSERT INTO test$address_book.main$address_book_relation
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce'));
 UPDATE test$address_book.main$address_book_relation
-  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807')
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), person = '{"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}'
   WHERE id = UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce') AND field_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';
 UPDATE test$address_book.main$address_book_relation
-  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807')
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), person = '{"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}'
   WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';
