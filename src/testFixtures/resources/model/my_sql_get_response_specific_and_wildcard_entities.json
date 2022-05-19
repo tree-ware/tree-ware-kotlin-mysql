@@ -28,10 +28,24 @@
         "relation": [
           {
             "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": "colleague"
+            "relationship": "colleague",
+            "person": {
+              "person": [
+                {
+                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+                }
+              ]
+            }
           },
           {
-            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce"
+            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+            "person": {
+              "person": [
+                {
+                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+                }
+              ]
+            }
           }
         ],
         "last_name": "Kent"
@@ -71,23 +85,36 @@
               }
             ]
           }
-        ]
+        ],
+        "self": null,
+        "self2": null
       },
       {
         "name": "Albany",
         "state": "New York",
         "country": "United States of America",
-        "info": "Capital of New York state"
+        "info": "Capital of New York state",
+        "self2": null
       },
       {
         "name": "Princeton",
         "state": "New Jersey",
-        "country": "United States of America"
+        "country": "United States of America",
+        "self2": {
+          "city_info": [
+            {
+              "country": "United States of America",
+              "state": "New Jersey",
+              "name": "Princeton"
+            }
+          ]
+        }
       },
       {
         "name": "San Francisco",
         "state": "California",
-        "country": "United States of America"
+        "country": "United States of America",
+        "self2": null
       }
     ]
   }

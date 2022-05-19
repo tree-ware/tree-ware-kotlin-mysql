@@ -252,10 +252,10 @@ private class GenerateCreateDatabaseCommandsVisitor(
     }
 
     override fun visitFieldMeta(leaderFieldMeta1: EntityModel): TraversalAction {
-        val clauses = getFieldClauses(leaderFieldMeta1)
+        val clauses = getFieldClauses(leaderFieldMeta1, false)
         val isKey = isKeyFieldMeta(leaderFieldMeta1)
-        if (isKey) clauses?.getColumns()?.forEach { keys.add(it.name) }
-        clauses?.also { addFieldClauses(it) }
+        if (isKey) clauses.forEach { clause -> clause.getColumns().forEach { keys.add(it.name) } }
+        clauses.forEach { addFieldClauses(it) }
         return TraversalAction.CONTINUE
     }
 
@@ -334,8 +334,8 @@ private class GenerateCreateDatabaseCommandsVisitor(
         val keyFieldsMeta = getKeyFieldsMeta(ancestorEntityMeta)
         val foreignKey = ForeignKey(ancestorTableName, ancestorTableName, null, null, false)
         keyFieldsMeta.forEach { fieldMeta ->
-            val clauses = getFieldClauses(fieldMeta)
-            clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
+            val clauses = getFieldClauses(fieldMeta, true)
+            clauses.forEach { clause -> clause.getColumns().forEach { foreignKey.addKey(it.name, it.type) } }
         }
         addAncestorClauses(foreignKey)
     }
@@ -350,8 +350,8 @@ private class GenerateCreateDatabaseCommandsVisitor(
         } else {
             val keyFieldsMeta = getKeyFieldsMeta(parent.firstKeyedAncestorMeta)
             keyFieldsMeta.forEach { fieldMeta ->
-                val clauses = getFieldClauses(fieldMeta)
-                clauses?.getColumns()?.forEach { foreignKey.addKey(it.name, it.type) }
+                val clauses = getFieldClauses(fieldMeta, true)
+                clauses.forEach { clause -> clause.getColumns().forEach { foreignKey.addKey(it.name, it.type) } }
             }
         }
         addAncestorClauses(foreignKey)
@@ -373,27 +373,29 @@ private class GenerateCreateDatabaseCommandsVisitor(
         getFieldsMeta(uniqueMeta).values.forEach { uniqueFieldElementMeta ->
             val uniqueFieldMeta = uniqueFieldElementMeta as PrimitiveModel
             val entityFieldMeta = getFieldMeta(entityMeta, uniqueFieldMeta.value as String)
-            getFieldClauses(entityFieldMeta)?.getColumns()?.forEach { index.addColumn(it.name) }
+            getFieldClauses(entityFieldMeta, true).forEach { clause ->
+                clause.getColumns().forEach { index.addColumn(it.name) }
+            }
         }
         addIndex(index)
     }
 
-    private fun getFieldClauses(fieldMeta: EntityModel): SqlClauses? =
+    private fun getFieldClauses(fieldMeta: EntityModel, isForKeyOrUnique: Boolean): List<SqlClauses> =
         when (getFieldTypeMeta(fieldMeta)) {
             FieldType.COMPOSITION -> {
                 val compositionMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
                 val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
                 val entityDelegate = entityDelegates?.get(entityFullName)
-                if (entityDelegate?.isSingleColumn() != true) null
-                else getSingleFieldClauses(fieldMeta, entityDelegate.getSingleColumnType())
+                if (entityDelegate?.isSingleColumn() != true) emptyList()
+                else listOf(getSingleFieldClauses(fieldMeta, entityDelegate.getSingleColumnType()))
             }
-            FieldType.ASSOCIATION -> getAssociationFieldClauses(fieldMeta)
-            else -> getSingleFieldClauses(fieldMeta)
+            FieldType.ASSOCIATION -> getAssociationFieldClauses(fieldMeta, isForKeyOrUnique)
+            else -> listOf(getSingleFieldClauses(fieldMeta))
         }
 }
 
-private fun getAssociationFieldClauses(fieldMeta: EntityModel): SqlClauses {
-    if (isListFieldMeta(fieldMeta)) return getSingleFieldClauses(fieldMeta)
+private fun getAssociationFieldClauses(fieldMeta: EntityModel, isForKeyOrUnique: Boolean): List<SqlClauses> {
+    if (isListFieldMeta(fieldMeta)) return listOf(getSingleFieldClauses(fieldMeta))
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")
     val targetAux = getMySqlMetaModelMap(targetEntityMeta)
@@ -401,13 +403,14 @@ private fun getAssociationFieldClauses(fieldMeta: EntityModel): SqlClauses {
         ?: throw IllegalStateException("Association target entity my_sql_ aux is not validated")
 
     val fieldName = getMetaName(fieldMeta)
+    val pathColumn = Column(fieldName, "TEXT")
     val foreignKey = ForeignKey(fieldName, targetTableName, null, OnDelete.RESTRICT)
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
     targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
         val targetFieldClauses = getSingleFieldClauses(targetKeyFieldMeta)
         targetFieldClauses.getColumns().forEach { foreignKey.addKey(it.name, it.type) }
     }
-    return foreignKey
+    return if (isForKeyOrUnique) listOf(foreignKey) else listOf(pathColumn, foreignKey)
 }
 
 private fun getSingleFieldClauses(fieldMeta: EntityModel, columnType: String? = null): SqlClauses {

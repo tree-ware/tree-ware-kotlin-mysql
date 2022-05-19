@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_person (
   hero_name VARCHAR(64),
   email JSON,
   picture BLOB,
+  self TEXT,
   self$id BINARY(16),
   PRIMARY KEY (id),
   UNIQUE INDEX self (self$id)
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS test$address_book.main$address_book_relation (
   main$address_book_person$id BINARY(16),
   id BINARY(16),
   relationship INT UNSIGNED,
+  person TEXT,
   person$id BINARY(16),
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
@@ -73,9 +75,11 @@ CREATE TABLE IF NOT EXISTS test$address_book.city$city_info (
   longitude DOUBLE,
   city_center POINT SRID 4326,
   related_city_info JSON,
+  self TEXT,
   self$name VARCHAR(128),
   self$state VARCHAR(64),
   self$country VARCHAR(64),
+  self2 TEXT,
   self2$name VARCHAR(128),
   self2$state VARCHAR(64),
   self2$country VARCHAR(64),

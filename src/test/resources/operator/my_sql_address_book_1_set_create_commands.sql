@@ -87,16 +87,16 @@ INSERT INTO test$address_book.city$city_info
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 'San Francisco', 'California', 'United States of America', 'The cultural and financial center of Northern California', 37.779379, -122.418433, ST_SRID(Point(-122.418433, 37.779379), 4326));
 UPDATE test$address_book.main$address_book_relation
-  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd')
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}'
   WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';
 UPDATE test$address_book.main$address_book_relation
-  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807')
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), person = '{"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}'
   WHERE id = UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce') AND field_path$ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';
 UPDATE test$address_book.main$address_book_person
-  SET updated_on$ = '2022-04-14T00:40:41.450', self$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd')
+  SET updated_on$ = '2022-04-14T00:40:41.450', self$id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), self = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}'
   WHERE id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd') AND field_path$ = '/address_book/person';
 UPDATE test$address_book.main$address_book_relation
-  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f')
+  SET updated_on$ = '2022-04-14T00:40:41.450', person$id = UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), person = '{"person":[{"id":"cc477201-48ec-4367-83a4-7fdbd92f8a6f"}]}'
   WHERE id = UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b') AND field_path$ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation';
 UPDATE test$address_book.city$city_info
   SET updated_on$ = '2022-04-14T00:40:41.450', related_city_info = '[{"city_info":[{"name":"Albany","state":"New York","country":"United States of America"}]},{"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}]'
@@ -105,5 +105,5 @@ UPDATE test$address_book.city$city_info
   SET updated_on$ = '2022-04-14T00:40:41.450', related_city_info = '[{"city_info":[{"name":"New York City","state":"New York","country":"United States of America"}]}]'
   WHERE name = 'Albany' AND state = 'New York' AND country = 'United States of America' AND field_path$ = '/address_book/city_info';
 UPDATE test$address_book.city$city_info
-  SET updated_on$ = '2022-04-14T00:40:41.450', related_city_info = '[]', self$name = 'Princeton', self$state = 'New Jersey', self$country = 'United States of America', self2$name = 'Princeton', self2$state = 'New Jersey', self2$country = 'United States of America'
+  SET updated_on$ = '2022-04-14T00:40:41.450', related_city_info = '[]', self$name = 'Princeton', self$state = 'New Jersey', self$country = 'United States of America', self = '{"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}', self2$name = 'Princeton', self2$state = 'New Jersey', self2$country = 'United States of America', self2 = '{"city_info":[{"country":"United States of America","state":"New Jersey","name":"Princeton"}]}'
   WHERE name = 'Princeton' AND state = 'New Jersey' AND country = 'United States of America' AND field_path$ = '/address_book/city_info';

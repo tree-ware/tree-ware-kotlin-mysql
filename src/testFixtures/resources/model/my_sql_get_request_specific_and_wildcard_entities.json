@@ -21,7 +21,8 @@
             "relationship": null
           },
           {
-            "id": null
+            "id": null,
+            "person": null
           }
         ]
       },
@@ -40,7 +41,8 @@
         "state": "New York",
         "country": "United States of America",
         "info": null,
-        "related_city_info": []
+        "related_city_info": [],
+        "self": null
       },
       {
         "name": "Albany",
@@ -51,7 +53,8 @@
       {
         "name": null,
         "state": null,
-        "country": null
+        "country": null,
+        "self2": null
       }
     ]
   }
