@@ -251,17 +251,11 @@ private fun getValueFromResult(
         }
     }
     FieldType.BLOB -> TODO() // TODO #### implement
-    FieldType.PASSWORD1WAY -> result.getString(columnIndex)?.let { string ->
-        // TODO #### convert to JSON
-        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
-            (it as MutablePrimitiveModel).value = string
-        }
-    }
+    FieldType.PASSWORD1WAY,
     FieldType.PASSWORD2WAY -> result.getString(columnIndex)?.let { string ->
-        // TODO #### convert to JSON
-        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
-            (it as MutablePrimitiveModel).value = string
-        }
+        val reader = StringReader(string)
+        decodeJsonField(reader, responseSingleField)
+        responseSingleField.value
     }
     FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")
     FieldType.ENUMERATION -> result.getInt(columnIndex).let { number ->
