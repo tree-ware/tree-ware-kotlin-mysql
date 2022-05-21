@@ -145,7 +145,7 @@ private fun setResponseListField(
     columnIndex: Int,
     responseListField: MutableListFieldModel
 ): List<String> {
-    val json = result.getString(columnIndex)
+    val json = result.getString(columnIndex) ?: return emptyList()
     val reader = StringReader(json)
     return decodeJsonField(reader, responseListField)
 }
@@ -161,49 +161,121 @@ private fun setResponseAssociationField(
 }
 
 private fun setResponseSingleField(result: ResultSet, columnIndex: Int, responseSingleField: MutableSingleFieldModel) {
-    val responseValue = newMutableValueModel(responseSingleField.meta, responseSingleField)
-    setValueFromResult(getFieldType(responseSingleField), responseValue, result, columnIndex)
+    val responseValue = getValueFromResult(responseSingleField, result, columnIndex)
     responseSingleField.setValue(responseValue)
 }
 
-private fun setValueFromResult(
-    fieldType: FieldType,
-    value: MutableElementModel,
+private fun getValueFromResult(
+    responseSingleField: MutableSingleFieldModel,
     result: ResultSet,
     columnIndex: Int
-) {
-    when (fieldType) {
-        FieldType.BOOLEAN -> (value as MutablePrimitiveModel).value = result.getBoolean(columnIndex)
-        FieldType.UINT8 -> (value as MutablePrimitiveModel).value = result.getByte(columnIndex).toUByte()
-        FieldType.UINT16 -> (value as MutablePrimitiveModel).value = result.getShort(columnIndex).toUShort()
-        FieldType.UINT32 -> (value as MutablePrimitiveModel).value = result.getInt(columnIndex).toUInt()
-        FieldType.UINT64 -> (value as MutablePrimitiveModel).value = result.getLong(columnIndex).toULong()
-        FieldType.INT8 -> (value as MutablePrimitiveModel).value = result.getByte(columnIndex)
-        FieldType.INT16 -> (value as MutablePrimitiveModel).value = result.getShort(columnIndex)
-        FieldType.INT32 -> (value as MutablePrimitiveModel).value = result.getInt(columnIndex)
-        FieldType.INT64 -> (value as MutablePrimitiveModel).value = result.getLong(columnIndex)
-        FieldType.FLOAT -> (value as MutablePrimitiveModel).value = result.getFloat(columnIndex)
-        FieldType.DOUBLE -> (value as MutablePrimitiveModel).value = result.getDouble(columnIndex)
-        FieldType.BIG_INTEGER -> (value as MutablePrimitiveModel).value =
-            result.getBigDecimal(columnIndex).toBigInteger()
-        FieldType.BIG_DECIMAL -> (value as MutablePrimitiveModel).value = result.getBigDecimal(columnIndex)
-        FieldType.TIMESTAMP -> (value as MutablePrimitiveModel).value =
-            result.getTimestamp(columnIndex, Calendar.getInstance(UTC_TIMEZONE)).time
-        FieldType.STRING -> (value as MutablePrimitiveModel).value = result.getString(columnIndex)
-        FieldType.UUID -> (value as MutablePrimitiveModel).value = getUuidString(result, columnIndex)
-        FieldType.BLOB -> TODO()
-        FieldType.PASSWORD1WAY -> result.getString(columnIndex) // TODO #### convert to JSON
-        FieldType.PASSWORD2WAY -> result.getString(columnIndex) // TODO #### convert to JSON
-        FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")
-        FieldType.ENUMERATION -> (value as MutableEnumerationModel).setNumber(result.getInt(columnIndex).toUInt())
-        FieldType.ASSOCIATION -> throw IllegalStateException("Setting association as a single SQL value")
-        FieldType.COMPOSITION -> throw IllegalStateException("Setting composition as a single SQL value")
+): MutableElementModel? = when (getFieldType(responseSingleField)) {
+    FieldType.BOOLEAN -> result.getBoolean(columnIndex).let { boolean ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = boolean
+        }
     }
+    FieldType.UINT8 -> result.getByte(columnIndex).toUByte().let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.UINT16 -> result.getShort(columnIndex).toUShort().let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.UINT32 -> result.getInt(columnIndex).toUInt().let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.UINT64 -> result.getLong(columnIndex).toULong().let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.INT8 -> result.getByte(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.INT16 -> result.getShort(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.INT32 -> result.getInt(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.INT64 -> result.getLong(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.FLOAT -> result.getFloat(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.DOUBLE -> result.getDouble(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.BIG_INTEGER -> result.getBigDecimal(columnIndex)?.toBigInteger()?.let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.BIG_DECIMAL -> result.getBigDecimal(columnIndex)?.let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = number
+        }
+    }
+    FieldType.TIMESTAMP -> result.getTimestamp(columnIndex, Calendar.getInstance(UTC_TIMEZONE))?.time?.let { time ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = time
+        }
+    }
+    FieldType.STRING -> result.getString(columnIndex)?.let { string ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = string
+        }
+    }
+    FieldType.UUID -> getUuidString(result, columnIndex)?.let { uuid ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = uuid
+        }
+    }
+    FieldType.BLOB -> TODO() // TODO #### implement
+    FieldType.PASSWORD1WAY -> result.getString(columnIndex)?.let { string ->
+        // TODO #### convert to JSON
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = string
+        }
+    }
+    FieldType.PASSWORD2WAY -> result.getString(columnIndex)?.let { string ->
+        // TODO #### convert to JSON
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = string
+        }
+    }
+    FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")
+    FieldType.ENUMERATION -> result.getInt(columnIndex).let { number ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutableEnumerationModel).setNumber(number.toUInt())
+        }
+    }
+    FieldType.ASSOCIATION -> throw IllegalStateException("Setting association as a single SQL value")
+    FieldType.COMPOSITION -> throw IllegalStateException("Setting composition as a single SQL value")
 }
 
-private fun getUuidString(result: ResultSet, columnIndex: Int): String {
+private fun getUuidString(result: ResultSet, columnIndex: Int): String? {
     // TODO(cleanup): better to use `SELECT BIN_TO_UUID(id) as id` in the query and avoid potential endian issues.
-    val bytes = result.getBytes(columnIndex)
+    val bytes = result.getBytes(columnIndex) ?: return null
     val buffer = ByteBuffer.wrap(bytes)
     val mostSignificant = buffer.long
     val leastSignificant = buffer.long

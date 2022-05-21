@@ -24,7 +24,6 @@
       {
         "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
         "first_name": "Clark",
-        "hero_name": "Superman",
         "relation": [
           {
             "id": "05ade278-4b44-43da-a0cc-14463854e397",
@@ -48,16 +47,19 @@
             }
           }
         ],
-        "last_name": "Kent"
+        "last_name": "Kent",
+        "hero_name": "Superman"
       },
       {
         "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
         "first_name": "Lois",
-        "last_name": "Lane"
+        "last_name": "Lane",
+        "hero_name": null
       },
       {
         "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-        "last_name": "Olsen"
+        "last_name": "Olsen",
+        "hero_name": null
       }
     ],
     "city_info": [
@@ -94,7 +96,18 @@
         "state": "New York",
         "country": "United States of America",
         "info": "Capital of New York state",
-        "self2": null
+        "self2": null,
+        "related_city_info": [
+          {
+            "city_info": [
+              {
+                "name": "New York City",
+                "state": "New York",
+                "country": "United States of America"
+              }
+            ]
+          }
+        ]
       },
       {
         "name": "Princeton",
@@ -108,13 +121,15 @@
               "name": "Princeton"
             }
           ]
-        }
+        },
+        "related_city_info": []
       },
       {
         "name": "San Francisco",
         "state": "California",
         "country": "United States of America",
-        "self2": null
+        "self2": null,
+        "related_city_info": []
       }
     ]
   }
