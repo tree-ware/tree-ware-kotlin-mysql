@@ -23,7 +23,15 @@
             "id": null,
             "person": null
           }
-        ]
+        ],
+        "password": {
+          "current": null,
+          "previous": []
+        },
+        "secret": {
+          "main": null,
+          "other": []
+        }
       },
       {
         "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
@@ -32,7 +40,15 @@
       {
         "id": null,
         "last_name": null,
-        "hero_name": null
+        "hero_name": null,
+        "password": {
+          "current": null,
+          "previous": []
+        },
+        "secret": {
+          "main": null,
+          "other": []
+        }
       }
     ],
     "city_info": [
