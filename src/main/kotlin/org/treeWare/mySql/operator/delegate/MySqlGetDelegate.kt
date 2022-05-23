@@ -1,5 +1,6 @@
 package org.treeWare.mySql.operator.delegate
 
+import org.lighthousegames.logging.logging
 import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getParentEntityMeta
 import org.treeWare.model.core.*
@@ -46,7 +47,7 @@ class MySqlGetDelegate(
         select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null, true)) }
         val query = select.build()
-        println("#### fetchComposition() query: $query")
+        if (logCommands) logger.info { query }
         val statement = connection.createStatement()
         return try {
             val result = statement.executeQuery(query)
@@ -88,7 +89,7 @@ class MySqlGetDelegate(
         select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
         requestFields.forEach { select.addSelectColumns(getSqlColumns(null, it, null, true)) }
         val query = select.build()
-        println("#### fetchCompositionSet() query: $query")
+        if (logCommands) logger.info { query }
         val statement = connection.createStatement()
         return try {
             val result = statement.executeQuery(query)
@@ -275,3 +276,5 @@ private fun getUuidString(result: ResultSet, columnIndex: Int): String? {
     val leastSignificant = buffer.long
     return UUID(mostSignificant, leastSignificant).toString()
 }
+
+private val logger = logging()
