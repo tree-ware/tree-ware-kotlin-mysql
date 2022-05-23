@@ -251,7 +251,11 @@ private fun getValueFromResult(
             (it as MutablePrimitiveModel).value = uuid
         }
     }
-    FieldType.BLOB -> TODO() // TODO #### implement
+    FieldType.BLOB -> result.getBytes(columnIndex)?.let { bytes ->
+        newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            (it as MutablePrimitiveModel).value = bytes
+        }
+    }
     FieldType.PASSWORD1WAY,
     FieldType.PASSWORD2WAY -> result.getString(columnIndex)?.let { string ->
         val reader = StringReader(string)
