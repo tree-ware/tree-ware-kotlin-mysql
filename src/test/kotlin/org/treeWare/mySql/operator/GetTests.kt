@@ -73,6 +73,19 @@ class GetTests {
     }
 
     @Test
+    fun `get() must fetch nested wildcard entities in a request`() {
+        val request =
+            getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_nested_wildcard_entities.json")
+        val response = get(request, getEntityDelegates, connection)
+        assertTrue(response is GetResponse.Model)
+        assertMatchesJson(
+            response.model,
+            "model/my_sql_get_response_nested_wildcard_entities.json",
+            EncodePasswords.ALL
+        )
+    }
+
+    @Test
     fun `get() must fetch specific and wildcard entities in a request`() {
         val request =
             getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_specific_and_wildcard_entities.json")

@@ -1,0 +1,20 @@
+{
+  "address_book": {
+    "name": null,
+    "person": [
+      {
+        "id": null,
+        "last_name": null,
+        "hero_name": null,
+        "password": {
+          "current": null,
+          "previous": []
+        },
+        "secret": {
+          "main": null,
+          "other": []
+        }
+      }
+    ]
+  }
+}
