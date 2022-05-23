@@ -66,11 +66,13 @@
           ]
         },
         "last_name": "Kent",
-        "hero_name": "Superman"
+        "hero_name": "Superman",
+        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50"
       },
       {
         "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
         "first_name": "Lois",
+        "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
         "last_name": "Lane",
         "hero_name": null,
         "password": null,
@@ -80,6 +82,7 @@
         "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
         "last_name": "Olsen",
         "hero_name": null,
+        "picture": null,
         "password": {},
         "secret": {}
       }

@@ -35,12 +35,14 @@
       },
       {
         "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "first_name": null
+        "first_name": null,
+        "picture": null
       },
       {
         "id": null,
         "last_name": null,
         "hero_name": null,
+        "picture": null,
         "password": {
           "current": null,
           "previous": []
