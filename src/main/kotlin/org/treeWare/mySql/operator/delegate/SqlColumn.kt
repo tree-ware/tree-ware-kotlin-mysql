@@ -5,6 +5,7 @@ import org.treeWare.model.core.*
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.encoder.encodeJson
 import org.treeWare.model.operator.EntityDelegateRegistry
+import org.treeWare.model.operator.GetEntityDelegate
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.getAssociationTargetEntity
 import org.treeWare.util.assertInDevMode
@@ -30,27 +31,41 @@ internal data class SqlColumn(
 internal fun getSqlColumns(
     namePrefix: String?,
     field: FieldModel,
-    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>? = null,
     forSelectClause: Boolean = false
 ): List<SqlColumn> {
     val fieldMeta = requireNotNull(field.meta) { "Field meta is missing" }
     val fieldValue: Any? =
         if (isListField(field)) (field as ListFieldModel).values else (field as SingleFieldModel).value
-    return getSqlColumnsForMeta(namePrefix, fieldMeta, fieldValue, entityDelegates, forSelectClause)
+    return getSqlColumnsForMeta(
+        namePrefix,
+        fieldMeta,
+        fieldValue,
+        setEntityDelegates,
+        getEntityDelegates,
+        forSelectClause
+    )
 }
 
 internal fun getSqlColumnsForMeta(
     namePrefix: String?,
     fieldMeta: EntityModel,
     fieldValue: Any?,
-    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?,
     forSelectClause: Boolean = false
 ): List<SqlColumn> =
     if (isListFieldMeta(fieldMeta)) listOf(getSqlJsonListColumn(fieldMeta, fieldValue as List<ElementModel>))
     else when (val fieldType = requireNotNull(getFieldTypeMeta(fieldMeta)) { "Field meta is missing" }) {
         FieldType.ASSOCIATION -> getAssociationSqlColumns(fieldMeta, fieldValue, forSelectClause)
-        FieldType.COMPOSITION -> getCompositionSqlColumns(fieldMeta, fieldValue, entityDelegates)
-            ?.let { listOf(it) } ?: emptyList()
+        FieldType.COMPOSITION -> getCompositionSqlColumns(
+            fieldMeta,
+            fieldValue,
+            setEntityDelegates,
+            getEntityDelegates,
+            forSelectClause
+        )
         else -> getSingleSqlColumn(namePrefix, fieldType, fieldMeta, fieldValue)
             ?.let { listOf(it) } ?: emptyList()
     }
@@ -120,14 +135,21 @@ private fun getAssociationSqlColumns(
 private fun getCompositionSqlColumns(
     fieldMeta: EntityModel,
     fieldValue: Any?,
-    entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
-): SqlColumn? {
+    setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
+    getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?,
+    forSelectClause: Boolean
+): List<SqlColumn> {
     val compositionMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
     val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
-    val entityDelegate = entityDelegates?.get(entityFullName)
-    if (entityDelegate?.isSingleValue() != true) throw IllegalStateException("Getting composition as a single SQL column")
-    return entityDelegate.getSingleValue(fieldValue as EntityModel)?.let {
-        SqlColumn(null, getMetaName(fieldMeta), it)
+    val setEntityDelegate = setEntityDelegates?.get(entityFullName)
+    if (setEntityDelegate?.isSingleValue() != true) throw IllegalStateException("Getting composition as a single SQL column")
+    return if (forSelectClause) {
+        val getEntityDelegate = getEntityDelegates?.get(entityFullName) as MySqlGetEntityDelegate?
+            ?: throw IllegalStateException("Get entity delegate is missing")
+        getEntityDelegate.getSelectColumns(fieldMeta)
+    } else {
+        val singleValue = setEntityDelegate.getSingleValue(fieldValue as EntityModel)
+        listOf(SqlColumn(null, getMetaName(fieldMeta), singleValue))
     }
 }
 
