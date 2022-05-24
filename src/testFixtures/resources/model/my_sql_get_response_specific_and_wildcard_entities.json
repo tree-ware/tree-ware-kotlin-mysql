@@ -93,6 +93,10 @@
         "state": "New York",
         "country": "United States of America",
         "info": "One of the most populous and most densely populated major city in USA",
+        "city_center": {
+          "latitude": 40.712982,
+          "longitude": -74.007205
+        },
         "related_city_info": [
           {
             "city_info": [
@@ -132,7 +136,11 @@
               }
             ]
           }
-        ]
+        ],
+        "city_center": {
+          "latitude": 42.651934,
+          "longitude": -73.75477
+        }
       },
       {
         "name": "Princeton",
@@ -147,14 +155,22 @@
             }
           ]
         },
-        "related_city_info": []
+        "related_city_info": [],
+        "city_center": {
+          "latitude": 40.360594,
+          "longitude": -74.664441
+        }
       },
       {
         "name": "San Francisco",
         "state": "California",
         "country": "United States of America",
         "self2": null,
-        "related_city_info": []
+        "related_city_info": [],
+        "city_center": {
+          "latitude": 37.779379,
+          "longitude": -122.418433
+        }
       }
     ]
   }

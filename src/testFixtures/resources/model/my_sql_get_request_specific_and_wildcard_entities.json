@@ -59,6 +59,10 @@
         "state": "New York",
         "country": "United States of America",
         "info": null,
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        },
         "related_city_info": [],
         "self": null
       },
@@ -73,7 +77,11 @@
         "state": null,
         "country": null,
         "self2": null,
-        "related_city_info": []
+        "related_city_info": [],
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        }
       }
     ]
   }
