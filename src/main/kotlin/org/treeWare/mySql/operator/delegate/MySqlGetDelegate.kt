@@ -6,8 +6,8 @@ import org.treeWare.metaModel.getParentEntityMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.get.FetchCompositionResult
-import org.treeWare.model.operator.get.FetchCompositionSetResult
+import org.treeWare.model.operator.get.GetCompositionResult
+import org.treeWare.model.operator.get.GetCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
 import org.treeWare.mySql.operator.FIELD_PATH_COLUMN_NAME
 import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_NAME
@@ -33,12 +33,12 @@ class MySqlGetDelegate(
     private val connection: Connection,
     private val logCommands: Boolean
 ) : GetDelegate {
-    override fun fetchComposition(
+    override fun getComposition(
         fieldPath: String,
         ancestorKeys: List<Keys>,
         requestFields: List<FieldModel>,
         responseParentField: MutableSingleFieldModel
-    ): FetchCompositionResult {
+    ): GetCompositionResult {
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
@@ -72,10 +72,10 @@ class MySqlGetDelegate(
                     columnIndex += columnsConsumed
                 }
             }
-            if (errors.isEmpty()) FetchCompositionResult.Entity(responseEntity)
-            else FetchCompositionResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
+            if (errors.isEmpty()) GetCompositionResult.Entity(responseEntity)
+            else GetCompositionResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
-            FetchCompositionResult.ErrorList(
+            GetCompositionResult.ErrorList(
                 listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entity"))
             )
         } finally {
@@ -83,13 +83,13 @@ class MySqlGetDelegate(
         }
     }
 
-    override fun fetchCompositionSet(
+    override fun getCompositionSet(
         fieldPath: String,
         ancestorKeys: List<Keys>,
         requestKeys: List<SingleFieldModel>,
         requestFields: List<FieldModel>,
         responseParentField: MutableSetFieldModel
-    ): FetchCompositionSetResult {
+    ): GetCompositionSetResult {
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
@@ -138,11 +138,11 @@ class MySqlGetDelegate(
                 }
                 responseEntities.add(responseEntity)
             }
-            if (errors.isEmpty()) FetchCompositionSetResult.Entities(responseEntities)
-            else FetchCompositionSetResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
+            if (errors.isEmpty()) GetCompositionSetResult.Entities(responseEntities)
+            else GetCompositionSetResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
             e.printStackTrace()
-            FetchCompositionSetResult.ErrorList(
+            GetCompositionSetResult.ErrorList(
                 listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entities"))
             )
         } finally {
