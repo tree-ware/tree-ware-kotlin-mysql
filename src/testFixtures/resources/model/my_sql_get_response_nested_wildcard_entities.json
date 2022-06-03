@@ -61,6 +61,72 @@
         "password": {},
         "secret": {}
       }
+    ],
+    "city_info": [
+      {
+        "name": "Albany",
+        "state": "New York",
+        "country": "United States of America",
+        "city_center": {
+          "latitude": 42.651934,
+          "longitude": -73.75477
+        },
+        "keyless": {
+          "name": "Albany keyless",
+          "keyless_child": {
+            "name": "Albany keyless child"
+          },
+          "keyed_child": {
+            "name": "Albany keyed child",
+            "other": 2
+          }
+        }
+      },
+      {
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "city_center": {
+          "latitude": 40.712982,
+          "longitude": -74.007205
+        },
+        "keyless": {
+          "name": "NYC keyless",
+          "keyless_child": {
+            "name": "NYC keyless child"
+          },
+          "keyed_child": {
+            "name": "NYC keyed child",
+            "other": 1
+          }
+        }
+      },
+      {
+        "name": "Princeton",
+        "state": "New Jersey",
+        "country": "United States of America",
+        "city_center": {
+          "latitude": 40.360594,
+          "longitude": -74.664441
+        },
+        "keyless": {
+          "keyless_child": {},
+          "keyed_child": {}
+        }
+      },
+      {
+        "name": "San Francisco",
+        "state": "California",
+        "country": "United States of America",
+        "city_center": {
+          "latitude": 37.779379,
+          "longitude": -122.418433
+        },
+        "keyless": {
+          "keyless_child": {},
+          "keyed_child": {}
+        }
+      }
     ]
   }
 }

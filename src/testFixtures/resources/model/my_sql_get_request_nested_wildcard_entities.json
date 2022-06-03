@@ -15,6 +15,27 @@
           "other": []
         }
       }
+    ],
+    "city_info": [
+      {
+        "name": null,
+        "state": null,
+        "country": null,
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        },
+        "keyless": {
+          "name": null,
+          "keyless_child": {
+            "name": null
+          },
+          "keyed_child": {
+            "name": null,
+            "other": null
+          }
+        }
+      }
     ]
   }
 }

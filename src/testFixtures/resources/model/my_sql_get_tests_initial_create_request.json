@@ -216,6 +216,16 @@
         "city_center": {
           "latitude": 40.712982,
           "longitude": -74.007205
+        },
+        "keyless": {
+          "name": "NYC keyless",
+          "keyless_child": {
+            "name": "NYC keyless child"
+          },
+          "keyed_child": {
+            "name": "NYC keyed child",
+            "other": 1
+          }
         }
       },
       {
@@ -239,6 +249,16 @@
         "city_center": {
           "latitude": 42.651934,
           "longitude": -73.75477
+        },
+        "keyless": {
+          "name": "Albany keyless",
+          "keyless_child": {
+            "name": "Albany keyless child"
+          },
+          "keyed_child": {
+            "name": "Albany keyed child",
+            "other": 2
+          }
         }
       },
       {

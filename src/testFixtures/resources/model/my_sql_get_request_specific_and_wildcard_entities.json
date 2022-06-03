@@ -64,13 +64,21 @@
           "longitude": null
         },
         "related_city_info": [],
-        "self": null
+        "self": null,
+        "keyless": {
+          "name": null
+        }
       },
       {
         "name": "Albany",
         "state": "New York",
         "country": "United States of America",
-        "info": null
+        "info": null,
+        "keyless": {
+          "keyless_child": {
+            "name": null
+          }
+        }
       },
       {
         "name": null,
@@ -81,6 +89,12 @@
         "city_center": {
           "latitude": null,
           "longitude": null
+        },
+        "keyless": {
+          "keyed_child": {
+            "name": null,
+            "other": null
+          }
         }
       }
     ]

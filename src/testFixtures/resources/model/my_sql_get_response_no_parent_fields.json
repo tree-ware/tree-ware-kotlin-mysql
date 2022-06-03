@@ -91,6 +91,11 @@
         "city_center": {
           "latitude": 40.712982,
           "longitude": -74.007205
+        },
+        "keyless": {
+          "keyless_child": {
+            "name": "NYC keyless child"
+          }
         }
       },
       {
@@ -100,6 +105,12 @@
         "city_center": {
           "latitude": 42.651934,
           "longitude": -73.75477
+        },
+        "keyless": {
+          "keyed_child": {
+            "name": "Albany keyed child",
+            "other": 2
+          }
         }
       },
       {
@@ -109,6 +120,9 @@
         "city_center": {
           "latitude": 40.360594,
           "longitude": -74.664441
+        },
+        "keyless": {
+          "keyed_child": {}
         }
       },
       {
@@ -118,6 +132,9 @@
         "city_center": {
           "latitude": 37.779379,
           "longitude": -122.418433
+        },
+        "keyless": {
+          "keyed_child": {}
         }
       }
     ]
