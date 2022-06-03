@@ -47,6 +47,11 @@
         "city_center": {
           "latitude": null,
           "longitude": null
+        },
+        "keyless": {
+          "keyless_child": {
+            "name": null
+          }
         }
       },
       {
@@ -56,6 +61,12 @@
         "city_center": {
           "latitude": null,
           "longitude": null
+        },
+        "keyless": {
+          "keyed_child": {
+            "name": null,
+            "other": null
+          }
         }
       }
     ]
