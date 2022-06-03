@@ -1,0 +1,63 @@
+{
+  "address_book": {
+    "settings": {
+      "advanced": {
+        "background_color": null
+      }
+    },
+    "person": [
+      {
+        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+        "relation": [
+          {
+            "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            "relationship": null
+          },
+          {
+            "id": null,
+            "person": null
+          }
+        ],
+        "password": {
+          "current": null,
+          "previous": []
+        },
+        "secret": {
+          "main": null,
+          "other": []
+        }
+      },
+      {
+        "id": null,
+        "password": {
+          "current": null,
+          "previous": []
+        },
+        "secret": {
+          "main": null,
+          "other": []
+        }
+      }
+    ],
+    "city_info": [
+      {
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        }
+      },
+      {
+        "name": null,
+        "state": null,
+        "country": null,
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        }
+      }
+    ]
+  }
+}

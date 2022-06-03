@@ -97,4 +97,13 @@ class GetTests {
             EncodePasswords.ALL
         )
     }
+
+    @Test
+    fun `get() must fetch entities when non-key fields are not requested in parent entities`() {
+        val request =
+            getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_no_parent_fields.json")
+        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        assertTrue(response is GetResponse.Model)
+        assertMatchesJson(response.model, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
+    }
 }

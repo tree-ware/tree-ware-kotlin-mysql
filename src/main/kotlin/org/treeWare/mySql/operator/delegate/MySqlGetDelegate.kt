@@ -5,7 +5,10 @@ import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getParentEntityMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
-import org.treeWare.model.operator.*
+import org.treeWare.model.operator.ElementModelError
+import org.treeWare.model.operator.EntityDelegateRegistry
+import org.treeWare.model.operator.GetEntityDelegate
+import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.get.GetCompositionResult
 import org.treeWare.model.operator.get.GetCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
@@ -39,6 +42,8 @@ class MySqlGetDelegate(
         requestFields: List<FieldModel>,
         responseParentField: MutableSingleFieldModel
     ): GetCompositionResult {
+        val responseEntity = responseParentField.getOrNewValue() as MutableEntityModel
+        if (requestFields.isEmpty()) return GetCompositionResult.Entity(responseEntity)
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
@@ -61,7 +66,6 @@ class MySqlGetDelegate(
         val statement = connection.createStatement()
         return try {
             val result = statement.executeQuery(query)
-            val responseEntity = responseParentField.getOrNewValue() as MutableEntityModel
             val errors = mutableListOf<String>()
             while (result.next()) {
                 var columnIndex = 1
@@ -90,13 +94,14 @@ class MySqlGetDelegate(
         requestFields: List<FieldModel>,
         responseParentField: MutableSetFieldModel
     ): GetCompositionSetResult {
+        if (requestKeys.isEmpty() && requestFields.isEmpty()) return GetCompositionSetResult.Entities(emptyList())
         val entityMeta = getCompositionEntityMeta(responseParentField)
         val tableName = getEntityMetaTableFullName(entityMeta)
         val select = SelectCommandBuilder(tableName)
         requestKeys.forEach { requestKey ->
             val columns = getSqlColumns(null, requestKey, setEntityDelegates)
-            if (requestKey.value == null) select.addSelectColumns(columns)
-            else select.addWhereColumns(columns)
+            select.addSelectColumns(columns)
+            if (requestKey.value != null) select.addWhereColumns(columns)
         }
         getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
@@ -123,12 +128,9 @@ class MySqlGetDelegate(
                 var columnIndex = 1
                 requestKeys.forEach { requestKey ->
                     val responseKey = responseEntity.getOrNewField(getFieldName(requestKey))
-                    // Non-null key fields are in the WHERE clause and therefore not part of the result.
-                    if (requestKey.value == null) {
-                        val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseKey)
-                        errors.addAll(fieldErrors)
-                        columnIndex += columnsConsumed
-                    } else copy(requestKey, responseKey)
+                    val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseKey)
+                    errors.addAll(fieldErrors)
+                    columnIndex += columnsConsumed
                 }
                 requestFields.forEach { requestField ->
                     val responseField = responseEntity.getOrNewField(getFieldName(requestField))
