@@ -74,8 +74,7 @@ class GetTests {
 
     @Test
     fun `get() must fetch nested wildcard entities in a request`() {
-        val request =
-            getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_nested_wildcard_entities.json")
+        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_nested_wildcard_entities.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(
@@ -100,10 +99,17 @@ class GetTests {
 
     @Test
     fun `get() must fetch entities when non-key fields are not requested in parent entities`() {
-        val request =
-            getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_no_parent_fields.json")
+        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_no_parent_fields.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
+    }
+
+    @Test
+    fun `get() must not fetch entities if entity path in request does not match entity path in DB`() {
+        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_invalid_entity_paths.json")
+        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        assertTrue(response is GetResponse.Model)
+        assertMatchesJson(response.model, "model/my_sql_get_response_invalid_entity_paths.json", EncodePasswords.ALL)
     }
 }
