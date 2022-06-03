@@ -1,0 +1,30 @@
+{
+  "address_book": {
+    "city_info": [
+      {
+        "name": "New York City",
+        "state": "New York",
+        "country": "United States of America",
+        "self": null,
+        "keyless": {
+          "name": null
+        }
+      },
+      {
+        "name": null,
+        "state": "New York",
+        "country": "United States of America",
+        "info": null,
+        "city_center": {
+          "latitude": null,
+          "longitude": null
+        },
+        "keyless": {
+          "keyless_child": {
+            "name": null
+          }
+        }
+      }
+    ]
+  }
+}
