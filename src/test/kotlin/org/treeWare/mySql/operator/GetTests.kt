@@ -106,6 +106,14 @@ class GetTests {
     }
 
     @Test
+    fun `get() must fetch entities when a subset of keys are specified in a request`() {
+        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_subset_of_keys.json")
+        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        assertTrue(response is GetResponse.Model)
+        assertMatchesJson(response.model, "model/my_sql_get_response_subset_of_keys.json", EncodePasswords.ALL)
+    }
+
+    @Test
     fun `get() must not fetch entities if entity path in request does not match entity path in DB`() {
         val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_invalid_entity_paths.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
