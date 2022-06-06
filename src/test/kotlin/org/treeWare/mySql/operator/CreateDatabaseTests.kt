@@ -7,7 +7,7 @@ import com.wix.mysql.distribution.Version.v8_0_17
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
@@ -48,13 +48,11 @@ class CreateDatabaseTests {
         val indexesSchemaBefore = getIndexesSchema(connection, expectedDatabaseName)
         assertEquals("", indexesSchemaBefore)
 
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-            ?: throw IllegalStateException("Meta-model has validation errors")
         val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         val delegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
 
-        createDatabase(metaModel, delegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, delegates, connection)
 
         val expectedColumnsSchemaAfter = readFile("operator/my_sql_address_book_db_columns_schema.txt")
         val actualColumnsSchemaAfter = getColumnsSchema(connection, expectedDatabaseName)

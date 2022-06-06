@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
@@ -33,10 +33,7 @@ import kotlin.test.assertNotEquals
 
 private const val TEST_DATABASE = "test\$address_book"
 
-private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-    ?: throw IllegalStateException("Meta-model has validation errors")
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
-
 
 private const val CREATE_TIME = "2022-03-03T00:30:31.330Z"
 private val createClock = Clock.fixed(Instant.parse(CREATE_TIME), ZoneOffset.UTC)
@@ -67,11 +64,11 @@ class SetKeylessEntityTests {
         connection.autoCommit = false
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(metaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
         emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
     }
 
-    @AfterEach()
+    @AfterEach
     fun afterEach() {
         clearDatabase(connection, TEST_DATABASE)
     }
@@ -87,7 +84,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must succeed when creating new keyless entities`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -101,7 +98,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must fail when recreating existing keyless entities`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -130,7 +127,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must succeed when updating existing keyless entities`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -141,7 +138,7 @@ class SetKeylessEntityTests {
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val update = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_update_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -155,7 +152,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must fail when updating non-existing keyless entities`() {
         val update = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_update_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -179,7 +176,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must succeed when deleting existing keyless entities`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -189,7 +186,7 @@ class SetKeylessEntityTests {
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val delete = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -202,7 +199,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must succeed when deleting non-existing keyless entities`() {
         val delete = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -215,7 +212,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must fail when creating a keyless entity without a parent`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -236,7 +233,7 @@ class SetKeylessEntityTests {
     @Test
     fun `set() must fail when deleting a keyless entity that has children in the database`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -270,7 +267,11 @@ class SetKeylessEntityTests {
             |}
         """.trimMargin()
         val delete =
-            getMainModelFromJsonString(metaModel, deleteJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                deleteJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val deleteErrorsExpected = listOf(
             "/address_book/city_info[Fremont,California,USA]/keyless: unable to delete: has children or source entity",
             "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to delete: has children or source entity",

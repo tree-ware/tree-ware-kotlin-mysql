@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
@@ -32,8 +32,6 @@ import kotlin.test.assertNotEquals
 
 private const val TEST_DATABASE = "test\$address_book"
 
-private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-    ?: throw IllegalStateException("Meta-model has validation errors")
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
 private const val CREATE_TIME = "2022-03-03T00:30:31.330Z"
@@ -64,10 +62,10 @@ class SetUpdateTests {
         connection.autoCommit = false
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(metaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
     }
 
-    @AfterEach()
+    @AfterEach
     fun afterEach() {
         clearDatabase(connection, TEST_DATABASE)
     }
@@ -81,7 +79,7 @@ class SetUpdateTests {
     fun `Set-update must fail for a new model`() {
         val emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
         val update = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -122,7 +120,7 @@ class SetUpdateTests {
         val expectedRows = readFile("operator/my_sql_address_book_1_set_update_results.txt")
 
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -132,7 +130,7 @@ class SetUpdateTests {
         assertNotEquals(expectedRows, createdRows)
 
         val update = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -166,7 +164,11 @@ class SetUpdateTests {
             |}
         """.trimMargin()
         val create =
-            getMainModelFromJsonString(metaModel, createJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                createJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
@@ -196,7 +198,11 @@ class SetUpdateTests {
         val updateErrorsExpected =
             listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update")
         val update =
-            getMainModelFromJsonString(metaModel, updateJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                updateJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
         assertEquals(updateErrorsExpected.joinToString("\n"), updateErrors.joinToString("\n"))
         val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
