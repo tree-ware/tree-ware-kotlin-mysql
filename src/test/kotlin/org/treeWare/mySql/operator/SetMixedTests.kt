@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.EntityDelegateRegistry
@@ -31,10 +31,7 @@ import kotlin.test.assertNotEquals
 
 private const val TEST_DATABASE = "test\$address_book"
 
-private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-    ?: throw IllegalStateException("Meta-model has validation errors")
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
-
 
 private const val CREATE_TIME = "2022-03-03T00:30:31.330Z"
 private val createClock = Clock.fixed(Instant.parse(CREATE_TIME), ZoneOffset.UTC)
@@ -65,11 +62,11 @@ class SetMixedTests {
         connection.autoCommit = false
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(metaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
         emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
     }
 
-    @AfterEach()
+    @AfterEach
     fun afterEach() {
         clearDatabase(connection, TEST_DATABASE)
     }
@@ -115,7 +112,11 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val create =
-            getMainModelFromJsonString(metaModel, createJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                createJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
         val afterCreateRowsExpected = """
@@ -198,7 +199,11 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val mixed =
-            getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                mixedJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
         assertEquals("", mixedErrors.joinToString("\n"))
         val afterMixedRowsExpected = """
@@ -306,7 +311,11 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val create =
-            getMainModelFromJsonString(metaModel, createJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                createJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
         val afterCreateRowsExpected = """
@@ -403,7 +412,11 @@ class SetMixedTests {
         val mixedErrorsExpected =
             listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity")
         val mixed =
-            getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                mixedJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
         assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
         val afterMixedRows =
@@ -434,7 +447,11 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val create =
-            getMainModelFromJsonString(metaModel, createJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                createJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
         val afterCreateRowsExpected = """
@@ -507,7 +524,11 @@ class SetMixedTests {
         val mixedErrorsExpected =
             listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create association in entity: no parent or target entity")
         val mixed =
-            getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                mixedJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
         assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
         val afterMixedRows =
@@ -564,7 +585,11 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val create =
-            getMainModelFromJsonString(metaModel, createJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                createJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
         assertEquals("", createErrors.joinToString("\n"))
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
@@ -617,7 +642,11 @@ class SetMixedTests {
             "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity",
         )
         val mixed =
-            getMainModelFromJsonString(metaModel, mixedJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                mixedJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
         assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
         val afterMixedRows = getDatabaseRows(connection, TEST_DATABASE)

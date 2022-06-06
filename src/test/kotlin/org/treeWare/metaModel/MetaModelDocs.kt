@@ -9,13 +9,10 @@ import kotlin.test.Test
 class MetaModelDocs {
     @Test
     fun `Generate MySQL address-book meta-model docs`() {
-        val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-            ?: throw IllegalStateException("Meta-model has validation errors")
-
-        val mainMetaName = getMainMetaName(metaModel)
+        val mainMetaName = getMainMetaName(mySqlAddressBookMetaModel)
         val fileName = "${mainMetaName}_meta_model"
         val fileWriter = File("${fileName}.dot").bufferedWriter()
-        encodeDot(metaModel, fileWriter)
+        encodeDot(mySqlAddressBookMetaModel, fileWriter)
         fileWriter.flush()
 
         Runtime.getRuntime().exec("dot -Tpng ${fileName}.dot -o ${fileName}.png").waitFor()

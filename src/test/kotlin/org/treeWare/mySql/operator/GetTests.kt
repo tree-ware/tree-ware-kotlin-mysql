@@ -6,7 +6,7 @@ import com.wix.mysql.distribution.Version
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.assertMatchesJson
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.EncodePasswords
@@ -24,8 +24,6 @@ import java.time.ZoneOffset
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-    ?: throw IllegalStateException("Meta-model has validation errors")
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -52,12 +50,12 @@ class GetTests {
         connection.autoCommit = false
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(metaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
     }
 
     init {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_get_tests_initial_create_request.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -74,7 +72,10 @@ class GetTests {
 
     @Test
     fun `get() must fetch nested wildcard entities in a request`() {
-        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_nested_wildcard_entities.json")
+        val request = getMainModelFromJsonFile(
+            mySqlAddressBookMetaModel,
+            "model/my_sql_get_request_nested_wildcard_entities.json"
+        )
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(
@@ -87,7 +88,10 @@ class GetTests {
     @Test
     fun `get() must fetch specific and wildcard entities in a request`() {
         val request =
-            getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_specific_and_wildcard_entities.json")
+            getMainModelFromJsonFile(
+                mySqlAddressBookMetaModel,
+                "model/my_sql_get_request_specific_and_wildcard_entities.json"
+            )
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(
@@ -99,7 +103,8 @@ class GetTests {
 
     @Test
     fun `get() must fetch entities when non-key fields are not requested in parent entities`() {
-        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_no_parent_fields.json")
+        val request =
+            getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_no_parent_fields.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
@@ -107,7 +112,8 @@ class GetTests {
 
     @Test
     fun `get() must fetch entities when a subset of keys are specified in a request`() {
-        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_subset_of_keys.json")
+        val request =
+            getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_subset_of_keys.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_subset_of_keys.json", EncodePasswords.ALL)
@@ -115,7 +121,8 @@ class GetTests {
 
     @Test
     fun `get() must not fetch entities if entity path in request does not match entity path in DB`() {
-        val request = getMainModelFromJsonFile(metaModel, "model/my_sql_get_request_invalid_entity_paths.json")
+        val request =
+            getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_invalid_entity_paths.json")
         val response = get(request, setEntityDelegates, getEntityDelegates, connection)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_invalid_entity_paths.json", EncodePasswords.ALL)

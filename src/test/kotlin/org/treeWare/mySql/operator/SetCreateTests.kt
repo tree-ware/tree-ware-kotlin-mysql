@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.newMySqlAddressBookMetaModel
+import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
@@ -33,8 +33,6 @@ import kotlin.test.assertNotEquals
 
 private const val TEST_DATABASE = "test\$address_book"
 
-private val metaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
-    ?: throw IllegalStateException("Meta-model has validation errors")
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
 private const val NOW = "2022-04-14T00:40:41.450Z"
@@ -62,10 +60,10 @@ class SetCreateTests {
         connection.autoCommit = false
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(metaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
     }
 
-    @AfterEach()
+    @AfterEach
     fun afterEach() {
         clearDatabase(connection, TEST_DATABASE)
     }
@@ -78,7 +76,7 @@ class SetCreateTests {
     @Test
     fun `Set-create must succeed for a new model`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -92,7 +90,7 @@ class SetCreateTests {
     @Test
     fun `Set-create must succeed for a forward-referencing association`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "operator/forward_referencing_association_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -139,7 +137,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create = getMainModelFromJsonString(
-            metaModel,
+            mySqlAddressBookMetaModel,
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -184,7 +182,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create = getMainModelFromJsonString(
-            metaModel,
+            mySqlAddressBookMetaModel,
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -219,7 +217,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create = getMainModelFromJsonString(
-            metaModel,
+            mySqlAddressBookMetaModel,
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -265,7 +263,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create = getMainModelFromJsonString(
-            metaModel,
+            mySqlAddressBookMetaModel,
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -314,7 +312,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create = getMainModelFromJsonString(
-            metaModel,
+            mySqlAddressBookMetaModel,
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -345,7 +343,7 @@ class SetCreateTests {
     @Test
     fun `Set-create must fail for an old model`() {
         val create = getMainModelFromJsonFile(
-            metaModel,
+            mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
@@ -414,7 +412,11 @@ class SetCreateTests {
         val expectedErrors =
             listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: no parent or target entity")
         val create =
-            getMainModelFromJsonString(metaModel, modelJson, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                modelJson,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val setErrors = set(create, setEntityDelegates, connection, clock = clock)
         assertEquals(expectedErrors.joinToString("\n"), setErrors.joinToString("\n"))
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
@@ -445,7 +447,11 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val create1 =
-            getMainModelFromJsonString(metaModel, create1Json, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                create1Json,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val create1Errors = set(create1, setEntityDelegates, connection, clock = clock)
         assertEquals("", create1Errors.joinToString("\n"))
         val afterCreate1Rows = getDatabaseRows(connection, TEST_DATABASE)
@@ -475,7 +481,11 @@ class SetCreateTests {
         val create2ErrorsExpected =
             listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate")
         val create2 =
-            getMainModelFromJsonString(metaModel, create2Json, multiAuxDecodingStateMachineFactory = auxDecodingFactory)
+            getMainModelFromJsonString(
+                mySqlAddressBookMetaModel,
+                create2Json,
+                multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            )
         val create2Errors = set(create2, setEntityDelegates, connection, clock = clock)
         assertEquals(create2ErrorsExpected.joinToString("\n"), create2Errors.joinToString("\n"))
         val afterCreate2Rows = getDatabaseRows(connection, TEST_DATABASE)

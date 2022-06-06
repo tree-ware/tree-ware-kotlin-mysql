@@ -22,3 +22,6 @@ fun newMySqlAddressBookMetaModel(environment: String, hasher: Hasher?, cipher: C
         listOf(MySqlMetaModelMapAuxPlugin(environment)),
         true
     )
+
+val mySqlAddressBookMetaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
+    ?: throw IllegalStateException("Meta-model has validation errors")
