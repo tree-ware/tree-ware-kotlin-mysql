@@ -150,8 +150,8 @@ private fun getTypedKeyMetaModelJson(fieldType: FieldType): String {
     val fieldTypeJson = fieldType.toString().lowercase()
     val typeInfoJson = when (fieldType) {
         FieldType.ENUMERATION -> """"enumeration": {"name": "enumeration1", "package": "test.common"},"""
-        FieldType.ASSOCIATION -> """"association": {"name": "entity2", "package": "test.common"},"""
-        FieldType.COMPOSITION -> """"composition": {"name": "entity3", "package": "test.common"},"""
+        FieldType.ASSOCIATION -> """"association": {"entity": "entity2", "package": "test.common"},"""
+        FieldType.COMPOSITION -> """"composition": {"entity": "entity3", "package": "test.common"},"""
         else -> ""
     }
     val mainPackageJson = """

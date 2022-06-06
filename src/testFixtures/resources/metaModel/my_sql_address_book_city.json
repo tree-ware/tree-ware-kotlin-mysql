@@ -60,7 +60,7 @@
                 "number": 8,
                 "type": "composition",
                 "composition": {
-                  "name": "point",
+                  "entity": "point",
                   "package": "org.tree_ware.meta_model.geo"
                 }
               },
@@ -69,7 +69,7 @@
                 "number": 31,
                 "type": "association",
                 "association": {
-                  "name": "address_book_city_info",
+                  "entity": "address_book_city_info",
                   "package": "address_book.city"
                 },
                 "multiplicity": "list"
@@ -80,7 +80,7 @@
                 "info": "For testing keyless compositions",
                 "type": "composition",
                 "composition": {
-                  "name": "keyless",
+                  "entity": "keyless",
                   "package": "test.keyless"
                 }
               },
@@ -90,7 +90,7 @@
                 "info": "An association to self, for testing multi-column unique indexes",
                 "type": "association",
                 "association": {
-                  "name": "address_book_city_info",
+                  "entity": "address_book_city_info",
                   "package": "address_book.city"
                 }
               },
@@ -100,7 +100,7 @@
                 "info": "An association to self, for testing multi-column foreign key indexes",
                 "type": "association",
                 "association": {
-                  "name": "address_book_city_info",
+                  "entity": "address_book_city_info",
                   "package": "address_book.city"
                 }
               }

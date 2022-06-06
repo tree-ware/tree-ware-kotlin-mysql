@@ -105,7 +105,7 @@
                 "number": 3,
                 "type": "composition",
                 "composition": {
-                  "name": "address_book_settings",
+                  "entity": "address_book_settings",
                   "package": "address_book.main"
                 },
                 "multiplicity": "optional"
@@ -115,7 +115,7 @@
                 "number": 4,
                 "type": "composition",
                 "composition": {
-                  "name": "address_book_person",
+                  "entity": "address_book_person",
                   "package": "address_book.main"
                 },
                 "multiplicity": "set"
@@ -126,7 +126,7 @@
                 "info": "",
                 "type": "composition",
                 "composition": {
-                  "name": "person_group",
+                  "entity": "person_group",
                   "package": "address_book.main"
                 },
                 "multiplicity": "set"
@@ -136,7 +136,7 @@
                 "number": 6,
                 "type": "composition",
                 "composition": {
-                  "name": "address_book_city_info",
+                  "entity": "address_book_city_info",
                   "package": "address_book.city"
                 },
                 "multiplicity": "set"
@@ -174,7 +174,7 @@
                 "number": 4,
                 "type": "composition",
                 "composition": {
-                  "name": "advanced_settings",
+                  "entity": "advanced_settings",
                   "package": "address_book.main"
                 }
               }
@@ -221,7 +221,7 @@
                 "info": "",
                 "type": "composition",
                 "composition": {
-                  "name": "address_book_person",
+                  "entity": "address_book_person",
                   "package": "address_book.main"
                 },
                 "multiplicity": "set"
@@ -232,7 +232,7 @@
                 "info": "",
                 "type": "composition",
                 "composition": {
-                  "name": "person_group",
+                  "entity": "person_group",
                   "package": "address_book.main"
                 },
                 "multiplicity": "set"
@@ -286,7 +286,7 @@
                 "number": 7,
                 "type": "composition",
                 "composition": {
-                  "name": "address_book_relation",
+                  "entity": "address_book_relation",
                   "package": "address_book.main"
                 },
                 "multiplicity": "set"
@@ -296,7 +296,7 @@
                 "number": 8,
                 "type": "composition",
                 "composition": {
-                  "name": "password",
+                  "entity": "password",
                   "package": "test.crypto"
                 },
                 "multiplicity": "optional"
@@ -306,7 +306,7 @@
                 "number": 10,
                 "type": "composition",
                 "composition": {
-                  "name": "secret",
+                  "entity": "secret",
                   "package": "test.crypto"
                 },
                 "multiplicity": "optional"
@@ -317,7 +317,7 @@
                 "info": "An association to self, for testing purposes",
                 "type": "association",
                 "association": {
-                  "name": "address_book_person",
+                  "entity": "address_book_person",
                   "package": "address_book.main"
                 }
               },
@@ -327,7 +327,7 @@
                 "info": "For testing keyless compositions",
                 "type": "composition",
                 "composition": {
-                  "name": "keyless",
+                  "entity": "keyless",
                   "package": "test.keyless"
                 }
               }
@@ -368,7 +368,7 @@
                 "number": 3,
                 "type": "association",
                 "association": {
-                  "name": "address_book_person",
+                  "entity": "address_book_person",
                   "package": "address_book.main"
                 }
               }

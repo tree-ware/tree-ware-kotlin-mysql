@@ -23,7 +23,7 @@
                 "number": 2,
                 "type": "composition",
                 "composition": {
-                  "name": "keyless_child",
+                  "entity": "keyless_child",
                   "package": "test.keyless"
                 }
               },
@@ -32,7 +32,7 @@
                 "number": 3,
                 "type": "composition",
                 "composition": {
-                  "name": "keyed_child",
+                  "entity": "keyed_child",
                   "package": "test.keyless"
                 }
               }
