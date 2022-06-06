@@ -4,7 +4,7 @@
       "name": "address_book",
       "type": "composition",
       "composition": {
-        "name": "address_book_root",
+        "entity": "address_book_root",
         "package": "address_book.main"
       }
     }
