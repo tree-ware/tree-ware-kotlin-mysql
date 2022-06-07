@@ -1,3 +1,4 @@
+= Table tables =
 
 TABLE_NAME: city$city_info
 INDEX_NAME: coordinates

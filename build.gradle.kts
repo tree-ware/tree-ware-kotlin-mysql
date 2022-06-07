@@ -4,6 +4,7 @@ group = "org.tree-ware"
 version = "1.0-SNAPSHOT"
 
 val mySqlConnectorVersion = "8.0.27"
+val testContainerVersion = "1.17.2"
 val mySqlEmbeddedVersion = "4.6.1"
 
 plugins {
@@ -33,8 +34,9 @@ dependencies {
     }
 
     testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
-    testImplementation("com.wix:wix-embedded-mysql:$mySqlEmbeddedVersion")
+    testImplementation("org.testcontainers:mysql:$testContainerVersion")
     testImplementation(kotlin("test"))
+    testImplementation("com.wix:wix-embedded-mysql:$mySqlEmbeddedVersion")
 }
 
 tasks.test {

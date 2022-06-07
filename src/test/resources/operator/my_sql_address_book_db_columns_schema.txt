@@ -1,3 +1,4 @@
+= Table tables =
 
 TABLE_NAME: city$city_info
 COLUMN_NAME: city_center
@@ -206,7 +207,7 @@ COLUMN_KEY: PRI
 
 TABLE_NAME: keyless$keyed_child
 COLUMN_NAME: other
-COLUMN_TYPE: int(11)
+COLUMN_TYPE: int
 COLUMN_KEY:
 
 TABLE_NAME: keyless$keyed_child
@@ -401,7 +402,7 @@ COLUMN_KEY: MUL
 
 TABLE_NAME: main$address_book_relation
 COLUMN_NAME: relationship
-COLUMN_TYPE: int(10) unsigned
+COLUMN_TYPE: int unsigned
 COLUMN_KEY:
 
 TABLE_NAME: main$address_book_relation
@@ -431,7 +432,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_root
 COLUMN_NAME: singleton_key$
-COLUMN_TYPE: int(10) unsigned
+COLUMN_TYPE: int unsigned
 COLUMN_KEY: PRI
 
 TABLE_NAME: main$address_book_root
@@ -466,7 +467,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$address_book_settings
 COLUMN_NAME: main$address_book_root$singleton_key$
-COLUMN_TYPE: int(10) unsigned
+COLUMN_TYPE: int unsigned
 COLUMN_KEY: UNI
 
 TABLE_NAME: main$address_book_settings
@@ -476,7 +477,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$advanced_settings
 COLUMN_NAME: background_color
-COLUMN_TYPE: int(10) unsigned
+COLUMN_TYPE: int unsigned
 COLUMN_KEY:
 
 TABLE_NAME: main$advanced_settings
@@ -491,7 +492,7 @@ COLUMN_KEY:
 
 TABLE_NAME: main$advanced_settings
 COLUMN_NAME: main$address_book_root$singleton_key$
-COLUMN_TYPE: int(10) unsigned
+COLUMN_TYPE: int unsigned
 COLUMN_KEY: UNI
 
 TABLE_NAME: main$advanced_settings
