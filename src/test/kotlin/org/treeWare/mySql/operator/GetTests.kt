@@ -1,8 +1,5 @@
 package org.treeWare.mySql.operator
 
-import com.wix.mysql.EmbeddedMysql
-import com.wix.mysql.config.MysqldConfig
-import com.wix.mysql.distribution.Version
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -18,13 +15,15 @@ import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
-import org.treeWare.mySql.test.getAvailableServerPort
+import org.treeWare.mySql.test.MySqlTestContainer
+import org.treeWare.mySql.test.clearDatabase
 import java.sql.Connection
-import java.sql.DriverManager
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 import kotlin.test.assertTrue
+
+private const val TEST_DATABASE = "test\$address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
@@ -34,22 +33,13 @@ class GetTests {
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
     private val getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?
 
-    private val port = getAvailableServerPort()
-    private val mysqld: EmbeddedMysql
     private val connection: Connection
 
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
         getEntityDelegates = operatorEntityDelegateRegistry.get(GetOperatorId)
-
-        val config = MysqldConfig.aMysqldConfig(Version.v8_0_17)
-            .withPort(port)
-            .withServerVariable("mysqlx", 0) // disable the X plugin
-            .build()
-        mysqld = EmbeddedMysql.anEmbeddedMysql(config).start()
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:$port/", "root", "")
-        connection.autoCommit = false
+        connection = MySqlTestContainer.getConnection()
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
@@ -70,8 +60,9 @@ class GetTests {
 
     @AfterAll
     fun afterAll() {
-        mysqld.stop()
+        clearDatabase(connection, "test\$address_book")
     }
+
 
     @Test
     fun `get() must fetch nested wildcard entities in a request`() {

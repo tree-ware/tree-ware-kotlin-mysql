@@ -3,9 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "org.tree-ware"
 version = "1.0-SNAPSHOT"
 
-val mySqlConnectorVersion = "8.0.27"
+val mySqlConnectorVersion = "8.0.29"
 val testContainerVersion = "1.17.2"
-val mySqlEmbeddedVersion = "4.6.1"
 
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.7.0")
@@ -26,7 +25,6 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     implementation(project(":tree-ware-kotlin-core"))
-
     implementation(kotlin("stdlib"))
 
     implementation("mysql:mysql-connector-java:$mySqlConnectorVersion") {
@@ -34,11 +32,13 @@ dependencies {
     }
 
     testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
-    testImplementation("org.testcontainers:mysql:$testContainerVersion")
     testImplementation(kotlin("test"))
-    testImplementation("com.wix:wix-embedded-mysql:$mySqlEmbeddedVersion")
+
+
+    testFixturesImplementation("org.testcontainers:mysql:$testContainerVersion")
 }
 
 tasks.test {
     useJUnitPlatform()
 }
+

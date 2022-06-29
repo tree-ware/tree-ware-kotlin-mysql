@@ -3,33 +3,33 @@ package org.treeWare.mySql.operator
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.testcontainers.containers.MySQLContainer
-import org.testcontainers.utility.DockerImageName
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
+import org.treeWare.mySql.test.MySqlTestContainer
+import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getColumnsSchema
 import org.treeWare.mySql.test.getIndexesSchema
 import java.sql.Connection
-import java.sql.DriverManager
 import kotlin.test.assertEquals
+
+private const val TEST_DATABASE = "test\$address_book"
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreateDatabaseTests {
-    private val dbServer: MySQLContainer<Nothing>
     private val connection: Connection
 
     init {
-        dbServer = MySQLContainer<Nothing>(DockerImageName.parse("mysql:8.0.29"))
-        dbServer.start()
-        connection = DriverManager.getConnection(dbServer.jdbcUrl, "root", dbServer.password)
+        connection = MySqlTestContainer.getConnection()
     }
 
     @AfterAll
     fun afterAll() {
-        dbServer.stop()
+        clearDatabase(connection, TEST_DATABASE)
     }
+
+
     @Test
     fun `Database and tables must be created for the specified meta-model`() {
         val expectedDatabaseName = "test\$address_book"
