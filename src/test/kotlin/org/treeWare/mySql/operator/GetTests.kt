@@ -12,6 +12,7 @@ import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFacto
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.operator.*
+import org.treeWare.model.operator.get.GetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
