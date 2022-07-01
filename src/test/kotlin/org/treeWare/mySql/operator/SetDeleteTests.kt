@@ -75,46 +75,6 @@ class SetDeleteTests {
     }
 
     @Test
-    fun `Set-delete must fail if entities to be deleted have children without set_ aux in the request`() {
-        val deleteJson = """
-            |{
-            |  "address_book": {
-            |    "set_": "delete",
-            |    "name": "Super Heroes",
-            |    "last_updated": "1587147731",
-            |    "settings": {
-            |      "last_name_first": true,
-            |      "encrypt_hero_name": false
-            |    },
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent"
-            |      },
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |      }
-            |    ]
-            |  }
-            |}
-        """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
-        val expectedErrors = listOf(
-            "/address_book/settings: entity without `delete` must not be in the subtree of a `delete`",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: entity without `delete` must not be in the subtree of a `delete`",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: entity without `delete` must not be in the subtree of a `delete`"
-        )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
-        assertEquals(expectedErrors.joinToString("\n"), deleteErrors.joinToString("\n"))
-    }
-
-    @Test
     fun `Set-delete must fail if entities to be deleted have children in the database`() {
         // Test strategy:
         // 1) create a model using the model in `SetCreateTests`. Verify that the model is in the DB.
