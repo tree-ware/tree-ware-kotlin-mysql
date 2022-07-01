@@ -3,8 +3,8 @@ package org.treeWare.mySql.operator
 import org.treeWare.model.core.MainModel
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.GetEntityDelegate
-import org.treeWare.model.operator.GetResponse
 import org.treeWare.model.operator.SetEntityDelegate
+import org.treeWare.model.operator.get.GetResponse
 import org.treeWare.mySql.operator.delegate.MySqlGetDelegate
 import java.sql.Connection
 
