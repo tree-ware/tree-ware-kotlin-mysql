@@ -11,10 +11,9 @@ import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
@@ -83,30 +82,71 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedErrors = listOf(
-            "/address_book: unable to update",
-            "/address_book/settings: unable to update",
-            "/address_book/settings/advanced: unable to update",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to update",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: unable to update",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: unable to update",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret: unable to update",
-            "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]: unable to update",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]: unable to update",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]: unable to update",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]: unable to update",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]: unable to update",
-            "/address_book/city_info[Albany,New York,United States of America]: unable to update",
-            "/address_book/city_info[New York City,New York,United States of America]: unable to update",
-            "/address_book/city_info[San Francisco,California,United States of America]: unable to update",
-            "/address_book/city_info[Princeton,New Jersey,United States of America]: unable to update",
+        val expectedUpdateResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError("/address_book", "unable to update"),
+                ElementModelError("/address_book/settings", "unable to update"),
+                ElementModelError("/address_book/settings/advanced", "unable to update"),
+                ElementModelError("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]", "unable to update"),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret",
+                    "unable to update"
+                ),
+                ElementModelError("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]", "unable to update"),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret",
+                    "unable to update"
+                ),
+                ElementModelError("/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]", "unable to update"),
+                ElementModelError("/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]", "unable to update"),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Albany,New York,United States of America]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[New York City,New York,United States of America]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[San Francisco,California,United States of America]",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Princeton,New Jersey,United States of America]",
+                    "unable to update"
+                ),
+            )
         )
-        val actualErrors = set(update, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(expectedErrors.joinToString("\n"), actualErrors.joinToString("\n"))
+        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val actualRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, actualRows)
     }
@@ -124,8 +164,9 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val createdRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(expectedRows, createdRows)
 
@@ -134,8 +175,9 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
-        assertEquals("", updateErrors.joinToString("\n"))
+        val expectedUpdateResponse = SetResponse.Success
+        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val updatedRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, updatedRows)
     }
@@ -169,8 +211,9 @@ class SetUpdateTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -195,16 +238,22 @@ class SetUpdateTests {
             |  }
             |}
         """.trimMargin()
-        val updateErrorsExpected =
-            listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update")
+        val expectedUpdateResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to update"
+                )
+            )
+        )
         val update =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 updateJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(updateErrorsExpected.joinToString("\n"), updateErrors.joinToString("\n"))
+        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterUpdateRows)
     }

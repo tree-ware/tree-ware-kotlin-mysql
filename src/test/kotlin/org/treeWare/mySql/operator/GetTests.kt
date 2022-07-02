@@ -13,6 +13,8 @@ import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.operator.*
 import org.treeWare.model.operator.get.GetResponse
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
@@ -22,7 +24,6 @@ import java.sql.DriverManager
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
@@ -62,8 +63,9 @@ class GetTests {
         )
         val now = "2022-04-14T00:40:41.450Z"
         val clock = Clock.fixed(Instant.parse(now), ZoneOffset.UTC)
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
     }
 
     @AfterAll

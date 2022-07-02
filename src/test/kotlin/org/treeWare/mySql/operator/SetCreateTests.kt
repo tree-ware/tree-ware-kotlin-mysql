@@ -11,10 +11,9 @@ import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
@@ -80,8 +79,9 @@ class SetCreateTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
         val actualRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, actualRows)
@@ -94,8 +94,9 @@ class SetCreateTests {
             "operator/forward_referencing_association_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/forward_referencing_association_set_create_results.txt")
         val actualRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, actualRows)
@@ -141,8 +142,9 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table city${'$'}city_info =
             |
@@ -186,8 +188,9 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main${'$'}address_book_root =
             |
@@ -221,8 +224,9 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main${'$'}address_book_root =
             |
@@ -267,8 +271,9 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main${'$'}address_book_root =
             |
@@ -316,8 +321,9 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedResponse = SetResponse.Success
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main${'$'}address_book_person =
             |
@@ -350,38 +356,98 @@ class SetCreateTests {
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
 
         // Create the model the first time.
-        val setErrors1 = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors1.joinToString("\n"))
+        val expectedResponse1 = SetResponse.Success
+        val actualResponse1 = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse1, actualResponse1)
         val actualRows1 = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, actualRows1)
 
         // Try to create the same model again. It should fail.
-        val setErrors2 = set(create, setEntityDelegates, connection, clock = clock)
-        val expectedErrors2 = listOf(
-            "/address_book: unable to create: duplicate",
-            "/address_book/settings: unable to create: duplicate",
-            "/address_book/settings/advanced: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret: unable to create: duplicate",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to create: duplicate",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]: unable to create: duplicate",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password: unable to create: duplicate",
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret: unable to create: duplicate",
-            "/address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]: unable to create: duplicate",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]: unable to create: duplicate",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]: unable to create: duplicate",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]: unable to create: duplicate",
-            "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]: unable to create: duplicate",
-            "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]: unable to create: duplicate",
-            "/address_book/city_info[New York City,New York,United States of America]: unable to create: duplicate",
-            "/address_book/city_info[Albany,New York,United States of America]: unable to create: duplicate",
-            "/address_book/city_info[Princeton,New Jersey,United States of America]: unable to create: duplicate",
-            "/address_book/city_info[San Francisco,California,United States of America]: unable to create: duplicate",
+        val actualResponse2 = set(create, setEntityDelegates, connection, clock = clock)
+        val expectedResponse2 = SetResponse.ErrorList(
+            listOf(
+                ElementModelError("/address_book", "unable to create: duplicate"),
+                ElementModelError("/address_book/settings", "unable to create: duplicate"),
+                ElementModelError("/address_book/settings/advanced", "unable to create: duplicate"),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[New York City,New York,United States of America]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Albany,New York,United States of America]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Princeton,New Jersey,United States of America]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[San Francisco,California,United States of America]",
+                    "unable to create: duplicate"
+                ),
+            )
         )
-        assertEquals(expectedErrors2.joinToString("\n"), setErrors2.joinToString("\n"))
+        assertSetResponse(expectedResponse2, actualResponse2)
         val actualRows2 = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, actualRows2)
     }
@@ -409,16 +475,22 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val expectedErrors =
-            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: no parent or target entity")
+        val expectedResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to create: no parent or target entity"
+                )
+            )
+        )
         val create =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 modelJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals(expectedErrors.joinToString("\n"), setErrors.joinToString("\n"))
+        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse, actualResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
     }
@@ -446,14 +518,15 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
+        val expectedResponse1 = SetResponse.Success
         val create1 =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 create1Json,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val create1Errors = set(create1, setEntityDelegates, connection, clock = clock)
-        assertEquals("", create1Errors.joinToString("\n"))
+        val actualResponse1 = set(create1, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse1, actualResponse1)
         val afterCreate1Rows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreate1Rows)
 
@@ -478,16 +551,22 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create2ErrorsExpected =
-            listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create: duplicate")
+        val expectedResponse2 = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to create: duplicate"
+                )
+            )
+        )
         val create2 =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 create2Json,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val create2Errors = set(create2, setEntityDelegates, connection, clock = clock)
-        assertEquals(create2ErrorsExpected.joinToString("\n"), create2Errors.joinToString("\n"))
+        val actualResponse2 = set(create2, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedResponse2, actualResponse2)
         val afterCreate2Rows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreate1Rows, afterCreate2Rows)
     }
