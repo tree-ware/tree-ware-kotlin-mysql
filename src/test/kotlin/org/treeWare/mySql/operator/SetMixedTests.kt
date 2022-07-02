@@ -10,10 +10,9 @@ import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonString
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
@@ -117,8 +116,9 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main${'$'}address_book_person =
             |
@@ -204,8 +204,9 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
-        assertEquals("", mixedErrors.joinToString("\n"))
+        val expectedMixedResponse = SetResponse.Success
+        val actualMixedResponse = set(mixed, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRowsExpected = """
             |= Table main${'$'}address_book_person =
             |
@@ -316,8 +317,9 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main${'$'}address_book_person =
             |
@@ -409,16 +411,22 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val mixedErrorsExpected =
-            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity")
+        val expectedMixedResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to update: no parent or target entity"
+                )
+            )
+        )
         val mixed =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
+        val actualMixedResponse = set(mixed, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
             getTableRows(connection, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
@@ -446,14 +454,15 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
+        val expectedCreateResponse = SetResponse.Success
         val create =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main${'$'}address_book_person =
             |
@@ -521,16 +530,22 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val mixedErrorsExpected =
-            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to create association in entity: no parent or target entity")
+        val expectedMixedResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to create association in entity: no parent or target entity"
+                )
+            )
+        )
         val mixed =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
+        val actualMixedResponse = set(mixed, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
             getTableRows(connection, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
@@ -590,8 +605,9 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -636,10 +652,21 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val mixedErrorsExpected = listOf(
-            "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to delete: has children or source entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]: unable to create association in entity: no parent or target entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]: unable to update: no parent or target entity",
+        val expectedMixedResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "unable to delete: has children or source entity"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]",
+                    "unable to create association in entity: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "unable to update: no parent or target entity"
+                ),
+            )
         )
         val mixed =
             getMainModelFromJsonString(
@@ -647,8 +674,8 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val mixedErrors = set(mixed, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(mixedErrorsExpected.joinToString("\n"), mixedErrors.joinToString("\n"))
+        val actualMixedResponse = set(mixed, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterMixedRows)
     }

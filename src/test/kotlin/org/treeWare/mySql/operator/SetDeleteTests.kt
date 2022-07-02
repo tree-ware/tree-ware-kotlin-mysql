@@ -11,10 +11,9 @@ import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
@@ -87,8 +86,9 @@ class SetDeleteTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, afterCreateRows)
@@ -112,12 +112,18 @@ class SetDeleteTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
 
         // 3) the deletion attempt should fail and nothing should be deleted from the database.
-        val expectedErrors =
-            listOf("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to delete: has children or source entity")
-        assertEquals(expectedErrors.joinToString("\n"), deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "unable to delete: has children or source entity"
+                )
+            )
+        )
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
     }
@@ -169,8 +175,9 @@ class SetDeleteTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -193,13 +200,18 @@ class SetDeleteTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
 
         // 3) the deletion attempt should fail and nothing should be deleted from the database.
-        val expectedErrors =
-            listOf("/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]: unable to delete: has children or source entity")
-        assertEquals(expectedErrors.joinToString("\n"), deleteErrors.joinToString("\n"))
-        assertEquals(expectedErrors.joinToString("\n"), deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "unable to delete: has children or source entity"
+                )
+            )
+        )
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
     }
@@ -217,8 +229,9 @@ class SetDeleteTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val setErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", setErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(expectedRows, afterCreateRows)
@@ -229,10 +242,11 @@ class SetDeleteTests {
             "model/my_sql_address_book_1_set_delete_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
 
         // 3) since set() issues delete commands in reverse order, it should delete the entire model bottoms-up.
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.Success
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterDeleteRows)
     }
@@ -279,8 +293,9 @@ class SetDeleteTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -314,8 +329,9 @@ class SetDeleteTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
+        val expectedDeleteResponse = SetResponse.Success
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterDeleteRows)
     }
@@ -362,8 +378,9 @@ class SetDeleteTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -397,8 +414,9 @@ class SetDeleteTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
+        val expectedDeleteResponse = SetResponse.Success
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterDeleteRows)
     }
@@ -410,8 +428,9 @@ class SetDeleteTests {
             "model/my_sql_address_book_1_set_delete_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.Success
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
     }
 
     @Test
@@ -443,8 +462,9 @@ class SetDeleteTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val createErrors = set(create, setEntityDelegates, connection, clock = clock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = clock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -475,10 +495,11 @@ class SetDeleteTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = clock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = clock)
         // NOTE: delete operations never return errors, not even when the entity to be deleted is not found.
         // While no error is returned, the delete operation should fail by not updating the database.
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.Success
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
     }

@@ -4,6 +4,8 @@ import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
@@ -37,9 +39,10 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_create_commands.sql")
+        val expectedResponse = SetResponse.Success
         val setDelegate = MySqlSetDelegate(mySqlAddressBookMetaModel, entityDelegates, null, clock = clock)
-        val setErrors = set(addressBook1Create, setDelegate, entityDelegates)
-        assertEquals("", setErrors.joinToString("\n"))
+        val actualResponse = set(addressBook1Create, setDelegate, entityDelegates)
+        assertSetResponse(expectedResponse, actualResponse)
         assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.sql })
     }
 
@@ -51,9 +54,10 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_update_commands.sql")
+        val expectedResponse = SetResponse.Success
         val setDelegate = MySqlSetDelegate(mySqlAddressBookMetaModel, entityDelegates, null, clock = clock)
-        val setErrors = org.treeWare.model.operator.set(addressBook1Create, setDelegate, entityDelegates)
-        assertEquals("", setErrors.joinToString("\n"))
+        val actualResponse = org.treeWare.model.operator.set(addressBook1Create, setDelegate, entityDelegates)
+        assertSetResponse(expectedResponse, actualResponse)
         assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.sql })
     }
 
@@ -65,9 +69,10 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_delete_bottoms_up_commands.sql")
+        val expectedResponse = SetResponse.Success
         val setDelegate = MySqlSetDelegate(mySqlAddressBookMetaModel, entityDelegates, null, clock = clock)
-        val setErrors = set(delete, setDelegate, entityDelegates)
-        assertEquals("", setErrors.joinToString("\n"))
+        val actualResponse = set(delete, setDelegate, entityDelegates)
+        assertSetResponse(expectedResponse, actualResponse)
         assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.sql })
     }
 
@@ -79,9 +84,10 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_mixed_commands.sql")
+        val expectedResponse = SetResponse.Success
         val setDelegate = MySqlSetDelegate(mySqlAddressBookMetaModel, entityDelegates, null, clock = clock)
-        val setErrors = org.treeWare.model.operator.set(mixed, setDelegate, entityDelegates)
-        assertEquals("", setErrors.joinToString("\n"))
+        val actualResponse = org.treeWare.model.operator.set(mixed, setDelegate, entityDelegates)
+        assertSetResponse(expectedResponse, actualResponse)
         assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.sql })
     }
 }

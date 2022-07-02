@@ -11,10 +11,9 @@ import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.operator.SetEntityDelegate
-import org.treeWare.model.operator.SetOperatorId
+import org.treeWare.model.operator.*
+import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
@@ -88,8 +87,9 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
@@ -102,24 +102,48 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val recreateErrorsExpected = listOf(
-            "/address_book: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to create: duplicate",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to create: duplicate",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to create: duplicate",
+        val expectedRecreateResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError("/address_book", "unable to create: duplicate"),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError("/address_book/city_info[Fremont,California,USA]", "unable to create: duplicate"),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
+                    "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "unable to create: duplicate"
+                ),
+            )
         )
-        val recreateErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals(recreateErrorsExpected.joinToString("\n"), recreateErrors.joinToString("\n"))
+        val actualRecreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedRecreateResponse, actualRecreateResponse)
         val afterRecreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterRecreateRows)
     }
@@ -131,8 +155,9 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
@@ -142,8 +167,9 @@ class SetKeylessEntityTests {
             "model/my_sql_update_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
-        assertEquals("", updateErrors.joinToString("\n"))
+        val expectedUpdateResponse = SetResponse.Success
+        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRowsExpected = readFile("operator/my_sql_update_keyless_entities_results.txt")
         val afterUpdateRows = getKeylessTableRows()
         assertEquals(afterUpdateRowsExpected, afterUpdateRows)
@@ -156,19 +182,36 @@ class SetKeylessEntityTests {
             "model/my_sql_update_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedUpdateErrors = listOf(
-            "/address_book: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to update",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to update",
-            "/address_book/city_info[Fremont,California,USA]: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to update",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to update",
+        val expectedUpdateResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError("/address_book", "unable to update"),
+                ElementModelError("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]", "unable to update"),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "unable to update"
+                ),
+                ElementModelError("/address_book/city_info[Fremont,California,USA]", "unable to update"),
+                ElementModelError("/address_book/city_info[Fremont,California,USA]/keyless", "unable to update"),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "unable to update"
+                ),
+            )
         )
-        val updateErrors = set(update, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(expectedUpdateErrors.joinToString("\n"), updateErrors.joinToString("\n"))
+        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
@@ -180,8 +223,9 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -190,8 +234,9 @@ class SetKeylessEntityTests {
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.Success
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
@@ -203,8 +248,9 @@ class SetKeylessEntityTests {
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
-        assertEquals("", deleteErrors.joinToString("\n"))
+        val expectedDeleteResponse = SetResponse.Success
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
@@ -216,16 +262,36 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrorsExpected = listOf(
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to create: no parent or target entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child: unable to create: no parent or target entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child: unable to create: no parent or target entity",
-            "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]: unable to create: no parent or target entity",
+        val expectedCreateResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "unable to create: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "unable to create: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "unable to create: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "unable to create: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
+                    "unable to create: no parent or target entity"
+                ),
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "unable to create: no parent or target entity"
+                ),
+            )
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals(createErrorsExpected.joinToString("\n"), createErrors.joinToString("\n"))
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
     }
@@ -237,8 +303,9 @@ class SetKeylessEntityTests {
             "model/my_sql_create_keyless_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val createErrors = set(create, setEntityDelegates, connection, clock = createClock)
-        assertEquals("", createErrors.joinToString("\n"))
+        val expectedCreateResponse = SetResponse.Success
+        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
@@ -272,12 +339,20 @@ class SetKeylessEntityTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val deleteErrorsExpected = listOf(
-            "/address_book/city_info[Fremont,California,USA]/keyless: unable to delete: has children or source entity",
-            "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless: unable to delete: has children or source entity",
+        val expectedDeleteResponse = SetResponse.ErrorList(
+            listOf(
+                ElementModelError(
+                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "unable to delete: has children or source entity"
+                ),
+                ElementModelError(
+                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "unable to delete: has children or source entity"
+                ),
+            )
         )
-        val deleteErrors = set(delete, setEntityDelegates, connection, clock = updateClock)
-        assertEquals(deleteErrorsExpected.joinToString("\n"), deleteErrors.joinToString("\n"))
+        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
     }
