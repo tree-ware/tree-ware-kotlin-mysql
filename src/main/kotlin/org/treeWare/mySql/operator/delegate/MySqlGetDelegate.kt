@@ -5,10 +5,7 @@ import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getParentEntityMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
-import org.treeWare.model.operator.ElementModelError
-import org.treeWare.model.operator.EntityDelegateRegistry
-import org.treeWare.model.operator.GetEntityDelegate
-import org.treeWare.model.operator.SetEntityDelegate
+import org.treeWare.model.operator.*
 import org.treeWare.model.operator.get.GetCompositionResult
 import org.treeWare.model.operator.get.GetCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
@@ -77,9 +74,10 @@ class MySqlGetDelegate(
                 }
             }
             if (errors.isEmpty()) GetCompositionResult.Entity(responseEntity)
-            else GetCompositionResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
+            else GetCompositionResult.ErrorList(ErrorCode.CLIENT_ERROR, errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
             GetCompositionResult.ErrorList(
+                ErrorCode.SERVER_ERROR,
                 listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entity"))
             )
         } finally {
@@ -141,10 +139,13 @@ class MySqlGetDelegate(
                 responseEntities.add(responseEntity)
             }
             if (errors.isEmpty()) GetCompositionSetResult.Entities(responseEntities)
-            else GetCompositionSetResult.ErrorList(errors.map { ElementModelError(fieldPath, it) })
+            else GetCompositionSetResult.ErrorList(
+                ErrorCode.CLIENT_ERROR,
+                errors.map { ElementModelError(fieldPath, it) })
         } catch (e: Exception) {
             e.printStackTrace()
             GetCompositionSetResult.ErrorList(
+                ErrorCode.SERVER_ERROR,
                 listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entities"))
             )
         } finally {

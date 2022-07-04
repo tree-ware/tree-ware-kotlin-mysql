@@ -5,8 +5,10 @@ import org.treeWare.metaModel.*
 import org.treeWare.model.core.*
 import org.treeWare.model.operator.ElementModelError
 import org.treeWare.model.operator.EntityDelegateRegistry
+import org.treeWare.model.operator.ErrorCode
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.set.SetDelegate
+import org.treeWare.model.operator.set.SetResponse
 import org.treeWare.model.operator.set.aux.SetAux
 import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableName
@@ -64,10 +66,10 @@ internal class MySqlSetDelegate(
         rootTableName = getEntityMetaTableName(rootEntityMeta)
     }
 
-    override fun begin(): List<ElementModelError> {
+    override fun begin(): SetResponse {
         // Use the same value of now for all entities in the model.
         now = nowAsIso8601(clock)
-        return emptyList()
+        return SetResponse.Success
     }
 
     override fun setEntity(
@@ -79,7 +81,7 @@ internal class MySqlSetDelegate(
         keys: List<SingleFieldModel>,
         associations: List<FieldModel>,
         other: List<FieldModel>
-    ): List<ElementModelError> {
+    ): SetResponse {
         val tableName = getEntityTableFullName(entity)
         when (setAux) {
             SetAux.CREATE -> addCreateCommands(
@@ -94,10 +96,10 @@ internal class MySqlSetDelegate(
             SetAux.UPDATE -> addUpdateCommands(tableName, fieldPath, entityPath, keys, associations, other)
             SetAux.DELETE -> addDeleteCommands(tableName, fieldPath, entityPath, keys, entity)
         }
-        return emptyList()
+        return SetResponse.Success
     }
 
-    override fun end(): List<ElementModelError> = issueCommands()
+    override fun end(): SetResponse = issueCommands()
 
     private fun addCreateCommands(
         tableName: String,
@@ -206,8 +208,8 @@ internal class MySqlSetDelegate(
         return ancestorKeyCount
     }
 
-    private fun issueCommands(): List<ElementModelError> {
-        if (connection == null) return emptyList()
+    private fun issueCommands(): SetResponse {
+        if (connection == null) return SetResponse.Success
         val errors = mutableListOf<ElementModelError>()
         val statement = connection.createStatement()
         commands.forEach { command ->
@@ -223,8 +225,15 @@ internal class MySqlSetDelegate(
             }
         }
         statement.close()
-        if (errors.isEmpty()) connection.commit() else connection.rollback()
-        return errors
+        return if (errors.isEmpty()) {
+            if (logCommands) logger.info { "commit" }
+            connection.commit()
+            SetResponse.Success
+        } else {
+            if (logCommands) logger.info { "rollback" }
+            connection.rollback()
+            SetResponse.ErrorList(ErrorCode.CLIENT_ERROR, errors)
+        }
     }
 
     private var now = ""

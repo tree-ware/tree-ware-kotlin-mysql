@@ -109,6 +109,7 @@ class SetKeylessEntityTests {
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val expectedRecreateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
                 ElementModelError(
@@ -183,6 +184,7 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
                 ElementModelError("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]", "unable to update"),
@@ -263,6 +265,7 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
@@ -340,6 +343,7 @@ class SetKeylessEntityTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedDeleteResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/city_info[Fremont,California,USA]/keyless",

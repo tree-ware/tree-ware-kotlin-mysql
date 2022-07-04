@@ -83,6 +83,7 @@ class SetUpdateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
                 ElementModelError("/address_book/settings", "unable to update"),
@@ -239,6 +240,7 @@ class SetUpdateTests {
             |}
         """.trimMargin()
         val expectedUpdateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]",

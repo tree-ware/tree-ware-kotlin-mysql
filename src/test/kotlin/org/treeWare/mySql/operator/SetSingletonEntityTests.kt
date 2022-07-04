@@ -115,6 +115,7 @@ class SetSingletonEntityTests {
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val expectedRecreateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
                 ElementModelError("/address_book/settings", "unable to create: duplicate"),
@@ -162,6 +163,7 @@ class SetSingletonEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
                 ElementModelError("/address_book/settings", "unable to update"),
@@ -221,6 +223,7 @@ class SetSingletonEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book/settings", "unable to create: no parent or target entity"),
                 ElementModelError("/address_book/settings/advanced", "unable to create: no parent or target entity"),
@@ -259,6 +262,7 @@ class SetSingletonEntityTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedDeleteResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book: unable to delete",

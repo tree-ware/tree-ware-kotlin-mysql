@@ -412,6 +412,7 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val expectedMixedResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
@@ -531,6 +532,7 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val expectedMixedResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
@@ -653,6 +655,7 @@ class SetMixedTests {
             |}
         """.trimMargin()
         val expectedMixedResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",

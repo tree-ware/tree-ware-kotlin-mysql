@@ -365,6 +365,7 @@ class SetCreateTests {
         // Try to create the same model again. It should fail.
         val actualResponse2 = set(create, setEntityDelegates, connection, clock = clock)
         val expectedResponse2 = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
                 ElementModelError("/address_book/settings", "unable to create: duplicate"),
@@ -476,6 +477,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val expectedResponse = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
@@ -552,6 +554,7 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val expectedResponse2 = SetResponse.ErrorList(
+            ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
                     "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
