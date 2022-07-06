@@ -3,16 +3,17 @@ package org.treeWare.mySql.operator
 import org.lighthousegames.logging.logging
 import org.treeWare.model.core.MainModel
 import org.treeWare.model.operator.EntityDelegateRegistry
-import java.sql.Connection
+import javax.sql.DataSource
 
 private val logger = logging()
 
 fun createDatabase(
     mainMeta: MainModel,
     delegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?,
-    connection: Connection,
+    dataSource: DataSource,
     logCommands: Boolean = false
 ) {
+    val connection = dataSource.connection
     val commands = generateCreateDatabaseCommands(mainMeta, delegates)
     commands.forEach { command ->
         if (logCommands) logger.info { command }
@@ -26,4 +27,5 @@ fun createDatabase(
             statement.close()
         }
     }
+    connection.close()
 }

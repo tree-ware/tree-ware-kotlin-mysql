@@ -2,23 +2,25 @@ package org.treeWare.mySql.test
 
 import java.io.Writer
 import java.nio.ByteBuffer
-import java.sql.Connection
 import java.sql.ResultSet
+import javax.sql.DataSource
 
-fun printDatabase(connection: Connection, database: String, writer: Writer) {
+fun printDatabase(dataSource: DataSource, database: String, writer: Writer) {
     writer.appendLine("+ Database $database +")
-    val tables = getTableNames(connection, database)
+    val tables = getTableNames(dataSource, database)
     tables.forEach {
         writer.appendLine()
-        printTable(connection, database, it, writer)
+        printTable(dataSource, database, it, writer)
     }
 }
 
-fun printTable(connection: Connection, database: String, table: String, writer: Writer) {
+fun printTable(dataSource: DataSource, database: String, table: String, writer: Writer) {
+    val connection = dataSource.connection
     val statement = connection.createStatement()
     val resultSet = statement.executeQuery("SELECT * FROM $database.$table")
     printResultSet(resultSet, writer)
     statement.close()
+    connection.close()
 }
 
 fun printResultSet(result: ResultSet, writer: Writer, withoutRowNumbers: Boolean = false) {

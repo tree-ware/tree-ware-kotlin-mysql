@@ -17,10 +17,10 @@ import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
-import java.sql.Connection
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import javax.sql.DataSource
 import kotlin.test.assertTrue
 
 private const val TEST_DATABASE = "test\$address_book"
@@ -33,16 +33,15 @@ class GetTests {
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
     private val getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?
 
-    private val connection: Connection
+    private val dataSource: DataSource = MySqlTestContainer.getDataSource()
 
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
         getEntityDelegates = operatorEntityDelegateRegistry.get(GetOperatorId)
-        connection = MySqlTestContainer.getConnection()
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
     }
 
     init {
@@ -54,13 +53,13 @@ class GetTests {
         val now = "2022-04-14T00:40:41.450Z"
         val clock = Clock.fixed(Instant.parse(now), ZoneOffset.UTC)
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, connection, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
     }
 
     @AfterAll
     fun afterAll() {
-        clearDatabase(connection, "test\$address_book")
+        clearDatabase(dataSource, TEST_DATABASE)
     }
 
 
@@ -70,7 +69,7 @@ class GetTests {
             mySqlAddressBookMetaModel,
             "model/my_sql_get_request_nested_wildcard_entities.json"
         )
-        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        val response = get(request, setEntityDelegates, getEntityDelegates, dataSource)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(
             response.model,
@@ -86,7 +85,7 @@ class GetTests {
                 mySqlAddressBookMetaModel,
                 "model/my_sql_get_request_specific_and_wildcard_entities.json"
             )
-        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        val response = get(request, setEntityDelegates, getEntityDelegates, dataSource)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(
             response.model,
@@ -99,7 +98,7 @@ class GetTests {
     fun `get() must fetch entities when non-key fields are not requested in parent entities`() {
         val request =
             getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_no_parent_fields.json")
-        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        val response = get(request, setEntityDelegates, getEntityDelegates, dataSource)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
     }
@@ -108,7 +107,7 @@ class GetTests {
     fun `get() must fetch entities when a subset of keys are specified in a request`() {
         val request =
             getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_subset_of_keys.json")
-        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        val response = get(request, setEntityDelegates, getEntityDelegates, dataSource)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_subset_of_keys.json", EncodePasswords.ALL)
     }
@@ -117,7 +116,7 @@ class GetTests {
     fun `get() must not fetch entities if entity path in request does not match entity path in DB`() {
         val request =
             getMainModelFromJsonFile(mySqlAddressBookMetaModel, "model/my_sql_get_request_invalid_entity_paths.json")
-        val response = get(request, setEntityDelegates, getEntityDelegates, connection)
+        val response = get(request, setEntityDelegates, getEntityDelegates, dataSource)
         assertTrue(response is GetResponse.Model)
         assertMatchesJson(response.model, "model/my_sql_get_response_invalid_entity_paths.json", EncodePasswords.ALL)
     }

@@ -1,26 +1,21 @@
 package org.treeWare.mySql.test
 
+import com.zaxxer.hikari.HikariDataSource
 import org.testcontainers.containers.MySQLContainer
 import org.testcontainers.utility.DockerImageName
-import java.sql.Connection
-import java.sql.DriverManager
-
+import javax.sql.DataSource
 
 object MySqlTestContainer {
-    val dbServer = MySQLContainer<Nothing>(DockerImageName.parse("mysql:8.0.29"))
+    private val dbServer = MySQLContainer<Nothing>(DockerImageName.parse("mysql:8.0.29"))
 
     init {
         dbServer.start()
     }
 
-    fun getConnection(autoCommit: Boolean = false): Connection {
-        val connection = DriverManager.getConnection(
-            dbServer.jdbcUrl, "root", dbServer.password
-        )
-
-        if(!autoCommit) connection.autoCommit = false
-
-        return connection
+    fun getDataSource(): DataSource = HikariDataSource().apply {
+        this.jdbcUrl = dbServer.jdbcUrl
+        this.username = "root"
+        this.password = dbServer.password
+        this.isAutoCommit = false
     }
-
 }
