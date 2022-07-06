@@ -1,10 +1,11 @@
 package org.treeWare.mySql.test
 
 import java.io.StringWriter
-import java.sql.Connection
+import javax.sql.DataSource
 
-fun getColumnsSchema(connection: Connection, database: String): String {
+fun getColumnsSchema(dataSource: DataSource, database: String): String {
     val writer = StringWriter()
+    val connection = dataSource.connection
     val statement = connection.createStatement()
     val resultSet = statement.executeQuery(
         """
@@ -16,5 +17,6 @@ fun getColumnsSchema(connection: Connection, database: String): String {
     )
     printResultSet(resultSet, writer, true)
     statement.close()
+    connection.close()
     return writer.toString()
 }

@@ -17,10 +17,10 @@ import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
-import java.sql.Connection
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -39,26 +39,25 @@ class SetUpdateTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
 
-    private val connection: Connection
+    private val dataSource: DataSource = MySqlTestContainer.getDataSource()
 
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
-        connection = MySqlTestContainer.getConnection()
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
     }
 
     @AfterEach
     fun afterEach() {
-        clearDatabase(connection, TEST_DATABASE)
+        clearDatabase(dataSource, TEST_DATABASE)
     }
 
 
     @Test
     fun `Set-update must fail for a new model`() {
-        val emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
+        val emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
         val update = getMainModelFromJsonFile(
             mySqlAddressBookMetaModel,
             "model/my_sql_address_book_1_set_update.json",
@@ -128,9 +127,9 @@ class SetUpdateTests {
                 ),
             )
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
-        val actualRows = getDatabaseRows(connection, TEST_DATABASE)
+        val actualRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, actualRows)
     }
 
@@ -148,9 +147,9 @@ class SetUpdateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val createdRows = getDatabaseRows(connection, TEST_DATABASE)
+        val createdRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertNotEquals(expectedRows, createdRows)
 
         val update = getMainModelFromJsonFile(
@@ -159,15 +158,15 @@ class SetUpdateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateResponse = SetResponse.Success
-        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
-        val updatedRows = getDatabaseRows(connection, TEST_DATABASE)
+        val updatedRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(expectedRows, updatedRows)
     }
 
     @Test
     fun `Set-update must fail when updating an entity with existing keys but different entity path`() {
-        val emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
+        val emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
         val createJson = """
             |{
             |  "address_book": {
@@ -195,9 +194,9 @@ class SetUpdateTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         // Attempt to update the relation entity but under a different person entity.
@@ -236,9 +235,9 @@ class SetUpdateTests {
                 updateJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
-        val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterUpdateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterUpdateRows)
     }
 }

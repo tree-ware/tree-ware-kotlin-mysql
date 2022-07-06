@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 group = "org.tree-ware"
 version = "1.0-SNAPSHOT"
 
+val hikariCpVersion = "5.0.1"
 val mySqlConnectorVersion = "8.0.29"
 val testContainerVersion = "1.17.2"
 
@@ -35,6 +36,7 @@ dependencies {
     testImplementation(kotlin("test"))
 
 
+    testFixturesImplementation("com.zaxxer:HikariCP:$hikariCpVersion")
     testFixturesImplementation("org.testcontainers:mysql:$testContainerVersion")
 }
 

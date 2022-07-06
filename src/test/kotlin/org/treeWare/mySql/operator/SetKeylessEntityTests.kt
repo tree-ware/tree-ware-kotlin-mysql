@@ -18,10 +18,10 @@ import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
-import java.sql.Connection
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
+import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -40,27 +40,26 @@ class SetKeylessEntityTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
 
-    private val connection: Connection
+    private val dataSource: DataSource = MySqlTestContainer.getDataSource()
     private val emptyDatabaseRows: String
 
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
-        connection = MySqlTestContainer.getConnection()
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, connection)
-        emptyDatabaseRows = getDatabaseRows(connection, TEST_DATABASE)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
+        emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
     }
 
     @AfterEach
     fun afterEach() {
-        clearDatabase(connection, TEST_DATABASE)
+        clearDatabase(dataSource, TEST_DATABASE)
     }
 
 
     private fun getKeylessTableRows(): String =
-        getTableRows(connection, TEST_DATABASE, "keyless\$keyless", "keyless\$keyless_child", "keyless\$keyed_child")
+        getTableRows(dataSource, TEST_DATABASE, "keyless\$keyless", "keyless\$keyless_child", "keyless\$keyed_child")
 
     @Test
     fun `set() must succeed when creating new keyless entities`() {
@@ -70,7 +69,7 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
@@ -85,9 +84,9 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val expectedRecreateResponse = SetResponse.ErrorList(
@@ -125,9 +124,9 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualRecreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualRecreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedRecreateResponse, actualRecreateResponse)
-        val afterRecreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterRecreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterRecreateRows)
     }
 
@@ -139,7 +138,7 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
@@ -151,7 +150,7 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedUpdateResponse = SetResponse.Success
-        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRowsExpected = readFile("operator/my_sql_update_keyless_entities_results.txt")
         val afterUpdateRows = getKeylessTableRows()
@@ -194,9 +193,9 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, connection, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
-        val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterUpdateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
 
@@ -208,9 +207,9 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val delete = getMainModelFromJsonFile(
@@ -219,9 +218,9 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedDeleteResponse = SetResponse.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
-        val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterUpdateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
 
@@ -233,9 +232,9 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedDeleteResponse = SetResponse.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
-        val afterUpdateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterUpdateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
     }
 
@@ -275,9 +274,9 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
     }
 
@@ -289,9 +288,9 @@ class SetKeylessEntityTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, connection, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val deleteJson = """
@@ -337,9 +336,9 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualDeleteResponse = set(delete, setEntityDelegates, connection, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
-        val afterDeleteRows = getDatabaseRows(connection, TEST_DATABASE)
+        val afterDeleteRows = getDatabaseRows(dataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
     }
 }
