@@ -11,10 +11,11 @@ fun createDatabase(
     mainMeta: MainModel,
     delegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?,
     dataSource: DataSource,
-    logCommands: Boolean = false
+    logCommands: Boolean = false,
+    foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val connection = dataSource.connection
-    val commands = generateCreateDatabaseCommands(mainMeta, delegates)
+    val commands = generateCreateDatabaseCommands(mainMeta, delegates, foreignKeyConstraints)
     commands.forEach { command ->
         if (logCommands) logger.info { command }
         val statement = connection.createStatement()

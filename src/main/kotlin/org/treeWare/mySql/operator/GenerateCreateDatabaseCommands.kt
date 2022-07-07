@@ -21,9 +21,10 @@ object GenerateCreateDatabaseCommandsOperatorId : OperatorId<GenerateCreateDatab
 
 fun generateCreateDatabaseCommands(
     mainMeta: MainModel,
-    entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?
+    entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?,
+    foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ): List<String> {
-    val visitor = GenerateCreateDatabaseCommandsVisitor(entityDelegates)
+    val visitor = GenerateCreateDatabaseCommandsVisitor(entityDelegates, foreignKeyConstraints)
     metaModelForEach(mainMeta, visitor)
     return visitor.createCommands + visitor.alterCommands
 }
@@ -149,7 +150,8 @@ private interface CreateDatabaseCommandBuilder {
 }
 
 private class GenerateCreateDatabaseCommandsVisitor(
-    private val entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?
+    private val entityDelegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?,
+    private val foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) : CreateDatabaseCommandBuilder, AbstractLeader1MetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val createCommands = mutableListOf<String>()
     val alterCommands = mutableListOf<String>()
@@ -214,7 +216,7 @@ private class GenerateCreateDatabaseCommandsVisitor(
     private fun addAlterCommand(tableName: String) {
         val foreignKeyClauses =
             ancestorClauses.filter { it.hasForeignKeys() } + fieldClauses.filter { it.hasForeignKeys() }
-        if (foreignKeyClauses.isEmpty()) return
+        if (foreignKeyClauses.isEmpty() || foreignKeyConstraints == CreateForeignKeyConstraints.NONE) return
         val alterTableWriter = StringWriter()
         alterTableWriter.append("ALTER TABLE $tableName")
         foreignKeyClauses.forEachIndexed { index, clause ->
