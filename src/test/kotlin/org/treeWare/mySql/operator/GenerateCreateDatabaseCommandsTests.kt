@@ -20,4 +20,18 @@ class GenerateCreateDatabaseCommandsTests {
         val actual = commands.joinToString("\n")
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun `Create-command generator must be able to exclude foreign key constraints`() {
+        val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
+        registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
+        val entityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+
+        val commands =
+            generateCreateDatabaseCommands(mySqlAddressBookMetaModel, entityDelegates, CreateForeignKeyConstraints.NONE)
+
+        val expected = readFile("operator/my_sql_address_book_create_database_commands_no_foreign_keys.sql")
+        val actual = commands.joinToString("\n")
+        assertEquals(expected, actual)
+    }
 }
