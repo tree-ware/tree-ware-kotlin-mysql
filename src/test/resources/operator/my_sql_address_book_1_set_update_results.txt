@@ -1,11 +1,11 @@
-+ Database test$address_book +
++ Database test__address_book +
 
-= Table city$city_info =
+= Table city__city_info =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/city_info
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/city_info
 name: Albany
 state: New York
 country: United States of America
@@ -15,18 +15,18 @@ longitude: -73.75478
 city_center: Point(latitude: 42.651935, longitude: -73.75478, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "Princeton", "state": "New Jersey", "country": "United States of America"}]}]
 self: null
-self$name: null
-self$state: null
-self$country: null
+self__name: null
+self__state: null
+self__country: null
 self2: null
-self2$name: null
-self2$state: null
-self2$country: null
+self2__name: null
+self2__state: null
+self2__country: null
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/city_info
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/city_info
 name: New York City
 state: New York
 country: United States of America
@@ -36,18 +36,18 @@ longitude: -74.007206
 city_center: Point(latitude: 40.712983, longitude: -74.007206, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "San Francisco", "state": "California", "country": "United States of America"}]}, {"city_info": [{"name": "Albany", "state": "New York", "country": "United States of America"}]}]
 self: null
-self$name: null
-self$state: null
-self$country: null
+self__name: null
+self__state: null
+self__country: null
 self2: null
-self2$name: null
-self2$state: null
-self2$country: null
+self2__name: null
+self2__state: null
+self2__country: null
 
 * Row 3 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/city_info
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/city_info
 name: Princeton
 state: New Jersey
 country: United States of America
@@ -57,18 +57,18 @@ longitude: -74.664442
 city_center: Point(latitude: 40.360595, longitude: -74.664442, SRID: 4326)
 related_city_info: []
 self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
-self$name: Princeton
-self$state: New Jersey
-self$country: United States of America
+self__name: Princeton
+self__state: New Jersey
+self__country: United States of America
 self2: {"city_info":[{"country":"United States of America","state":"New Jersey","name":"Princeton"}]}
-self2$name: Princeton
-self2$state: New Jersey
-self2$country: United States of America
+self2__name: Princeton
+self2__state: New Jersey
+self2__country: United States of America
 
 * Row 4 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/city_info
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/city_info
 name: San Francisco
 state: California
 country: United States of America
@@ -78,67 +78,67 @@ longitude: -122.418434
 city_center: Point(latitude: 37.77938, longitude: -122.418434, SRID: 4326)
 related_city_info: [{"city_info": [{"name": "Princeton", "state": "New Jersey", "country": "United States of America"}]}]
 self: null
-self$name: null
-self$state: null
-self$country: null
+self__name: null
+self__state: null
+self__country: null
 self2: null
-self2$name: null
-self2$state: null
-self2$country: null
+self2__name: null
+self2__state: null
+self2__country: null
 
-= Table crypto$password =
+= Table crypto__password =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password
-main$person_group$id: null
-main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password
+main__person_group__id: null
+main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 current: null
 previous: [{"hashed": "test-hashed-superman-2", "hash_version": 1}]
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password
-main$person_group$id: null
-main$address_book_person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password
+main__person_group__id: null
+main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 current: {"hashed": "test-hashed-lois-2", "hash_version": 1}
 previous: [{"hashed": "test-hashed-password2-2", "hash_version": 1}]
 
-= Table crypto$secret =
+= Table crypto__secret =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret
-main$person_group$id: null
-main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret
+main__person_group__id: null
+main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 main: null
 other: [{"encrypted": "test-encrypted-secret2-2", "cipher_version": 1}]
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret
-main$person_group$id: null
-main$address_book_person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret
+main__person_group__id: null
+main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 main: {"encrypted": "test-encrypted-main-secret-2", "cipher_version": 1}
 other: [{"encrypted": "test-encrypted-secret2-2", "cipher_version": 1}]
 
-= Table keyless$keyed_child =
+= Table keyless__keyed_child =
 
-= Table keyless$keyless =
+= Table keyless__keyless =
 
-= Table keyless$keyless_child =
+= Table keyless__keyless_child =
 
-= Table main$address_book_person =
+= Table main__address_book_person =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
-main$person_group$id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
+main__person_group__id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 id: 546a4982-b39a-4d01-aeb3-22d60c6963c0
 first_name: Clark 3
 last_name: Kent 3
@@ -146,13 +146,13 @@ hero_name: Superman 3
 email: null
 picture: null
 self: null
-self$id: null
+self__id: null
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person
-main$person_group$id: null
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person
+main__person_group__id: null
 id: a8aacf55-7810-4b43-afe5-4344f25435fd
 first_name: Lois 2
 last_name: Lane 2
@@ -160,13 +160,13 @@ hero_name: null
 email: [{"value": "lois.lane.2@dailyplanet.com"}]
 picture: Picture of Lois Lane 2
 self: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-self$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+self__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 3 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person
-main$person_group$id: null
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person
+main__person_group__id: null
 id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 first_name: Clark 2
 last_name: Kent 2
@@ -174,13 +174,13 @@ hero_name: Superman 2
 email: [{"value": "clark.kent.2@dailyplanet.com"}]
 picture: Picture of Clark Kent 2
 self: null
-self$id: null
+self__id: null
 
 * Row 4 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
-main$person_group$id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
+main__person_group__id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 id: e391c509-67d6-4846-bfea-0f7cd9c91bf7
 first_name: Lois 3
 last_name: Lane 3
@@ -188,13 +188,13 @@ hero_name: n/a
 email: null
 picture: null
 self: null
-self$id: null
+self__id: null
 
 * Row 5 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-03-03 00:30:31.330
-field_path$: /address_book/person
-main$person_group$id: null
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-03-03 00:30:31.330
+field_path_: /address_book/person
+main__person_group__id: null
 id: ec983c56-320f-4d66-9dde-f180e8ac3807
 first_name: Jimmy
 last_name: Olsen
@@ -202,95 +202,95 @@ hero_name: null
 email: null
 picture: null
 self: null
-self$id: null
+self__id: null
 
-= Table main$address_book_relation =
+= Table main__address_book_relation =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-main$person_group$id: null
-main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+main__person_group__id: null
+main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: 6
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation
-main$person_group$id: null
-main$address_book_person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation
+main__person_group__id: null
+main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 id: 16634916-8f83-4376-ad42-37038e108a0b
 relationship: 6
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
 * Row 3 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-03-03 00:30:31.330
-field_path$: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-main$person_group$id: null
-main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-03-03 00:30:31.330
+field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+main__person_group__id: null
+main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce
 relationship: 7
 person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
-person$id: ec983c56-320f-4d66-9dde-f180e8ac3807
+person__id: ec983c56-320f-4d66-9dde-f180e8ac3807
 
-= Table main$address_book_root =
+= Table main__address_book_root =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book
-singleton_key$: 0
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book
+singleton_key_: 0
 name: Super Heroes 2
 last_updated: 2022-04-19 17:52:57.222
 
-= Table main$address_book_settings =
+= Table main__address_book_settings =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/settings
-main$address_book_root$singleton_key$: 0
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/settings
+main__address_book_root__singleton_key_: 0
 last_name_first: 0
 encrypt_hero_name: 1
 card_colors: [{"value": "blue"}, {"value": "red"}]
 
-= Table main$advanced_settings =
+= Table main__advanced_settings =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/settings/advanced
-main$address_book_root$singleton_key$: 0
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/settings/advanced
+main__address_book_root__singleton_key_: 0
 background_color: 4
 
-= Table main$person_group =
+= Table main__person_group =
 
 * Row 1 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/groups
-main$person_group$id: null
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/groups
+main__person_group__id: null
 id: ad9aaea8-30fe-45ed-93ef-bd368da0c756
 name: Marvel 2
 
 * Row 2 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/groups
-main$person_group$id: null
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/groups
+main__person_group__id: null
 id: ca0a22e8-c300-4347-91b0-167a5f6f4f9a
 name: DC 2
 
 * Row 3 *
-created_on$: 2022-03-03 00:30:31.330
-updated_on$: 2022-04-04 00:40:41.440
-field_path$: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups
-main$person_group$id: ca0a22e8-c300-4347-91b0-167a5f6f4f9a
+created_on_: 2022-03-03 00:30:31.330
+updated_on_: 2022-04-04 00:40:41.440
+field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups
+main__person_group__id: ca0a22e8-c300-4347-91b0-167a5f6f4f9a
 id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 name: Superman 2

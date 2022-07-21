@@ -1,222 +1,222 @@
 = Table tables =
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: coordinates
 COLUMN_NAME: latitude
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: coordinates
 COLUMN_NAME: longitude
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: PRIMARY
 COLUMN_NAME: name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: PRIMARY
 COLUMN_NAME: state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: PRIMARY
 COLUMN_NAME: country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: self
-COLUMN_NAME: self$name
+COLUMN_NAME: self__name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: self
-COLUMN_NAME: self$state
+COLUMN_NAME: self__state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 INDEX_NAME: self
-COLUMN_NAME: self$country
+COLUMN_NAME: self__country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 0
 
-TABLE_NAME: city$city_info
-INDEX_NAME: self2$name
-COLUMN_NAME: self2$name
+TABLE_NAME: city__city_info
+INDEX_NAME: self2__name
+COLUMN_NAME: self2__name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: city$city_info
-INDEX_NAME: self2$name
-COLUMN_NAME: self2$state
+TABLE_NAME: city__city_info
+INDEX_NAME: self2__name
+COLUMN_NAME: self2__state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 1
 
-TABLE_NAME: city$city_info
-INDEX_NAME: self2$name
-COLUMN_NAME: self2$country
+TABLE_NAME: city__city_info
+INDEX_NAME: self2__name
+COLUMN_NAME: self2__country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 1
 
-TABLE_NAME: crypto$password
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: crypto__password
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: crypto$secret
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: crypto__secret
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyed_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyed_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: keyless$keyed_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyed_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 1
 
-TABLE_NAME: keyless$keyed_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyed_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 1
 
-TABLE_NAME: keyless$keyed_child
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyed_child
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: keyless$keyed_child
+TABLE_NAME: keyless__keyed_child
 INDEX_NAME: PRIMARY
 COLUMN_NAME: name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyless
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyless
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyless
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyless
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyless_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__name
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyless_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__state
 SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless_child
-INDEX_NAME: city$city_info$name
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyless_child
+INDEX_NAME: city__city_info__name
+COLUMN_NAME: city__city_info__country
 SEQ_IN_INDEX: 3
 NON_UNIQUE: 0
 
-TABLE_NAME: keyless$keyless_child
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyless_child
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$address_book_person
-INDEX_NAME: main$person_group$id
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: main__address_book_person
+INDEX_NAME: main__person_group__id
+COLUMN_NAME: main__person_group__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 INDEX_NAME: PRIMARY
 COLUMN_NAME: id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 INDEX_NAME: self
-COLUMN_NAME: self$id
+COLUMN_NAME: self__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$address_book_relation
-INDEX_NAME: main$address_book_person$id
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: main__address_book_relation
+INDEX_NAME: main__address_book_person__id
+COLUMN_NAME: main__address_book_person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: main$address_book_relation
-INDEX_NAME: person$id
-COLUMN_NAME: person$id
+TABLE_NAME: main__address_book_relation
+INDEX_NAME: person__id
+COLUMN_NAME: person__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: main$address_book_relation
+TABLE_NAME: main__address_book_relation
 INDEX_NAME: PRIMARY
 COLUMN_NAME: id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$address_book_root
+TABLE_NAME: main__address_book_root
 INDEX_NAME: PRIMARY
-COLUMN_NAME: singleton_key$
+COLUMN_NAME: singleton_key_
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$address_book_settings
-INDEX_NAME: main$address_book_root$singleton_key$
-COLUMN_NAME: main$address_book_root$singleton_key$
+TABLE_NAME: main__address_book_settings
+INDEX_NAME: main__address_book_root__singleton_key_
+COLUMN_NAME: main__address_book_root__singleton_key_
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$advanced_settings
-INDEX_NAME: main$address_book_root$singleton_key$
-COLUMN_NAME: main$address_book_root$singleton_key$
+TABLE_NAME: main__advanced_settings
+INDEX_NAME: main__address_book_root__singleton_key_
+COLUMN_NAME: main__address_book_root__singleton_key_
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
-TABLE_NAME: main$person_group
-INDEX_NAME: main$person_group$id
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: main__person_group
+INDEX_NAME: main__person_group__id
+COLUMN_NAME: main__person_group__id
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 1
 
-TABLE_NAME: main$person_group
+TABLE_NAME: main__person_group
 INDEX_NAME: PRIMARY
 COLUMN_NAME: id
 SEQ_IN_INDEX: 1

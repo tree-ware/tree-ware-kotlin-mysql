@@ -228,7 +228,7 @@ internal fun addSqlColumn(column: SqlColumn, nameValueSeparator: String, builder
 }
 
 internal fun addSqlColumnName(column: SqlColumn, builder: StringBuilder) {
-    column.namePrefix?.also { builder.append(it).append("$") }
+    column.namePrefix?.also { builder.append(it).append("__") }
     builder.append(column.name)
 }
 

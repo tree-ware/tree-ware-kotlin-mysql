@@ -24,7 +24,7 @@ import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 

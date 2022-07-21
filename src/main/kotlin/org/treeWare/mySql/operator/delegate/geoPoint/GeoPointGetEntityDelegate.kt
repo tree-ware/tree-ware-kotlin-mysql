@@ -13,8 +13,8 @@ internal class GeoPointGetEntityDelegate : GetEntityDelegate, MySqlGetEntityDele
     override fun getSelectColumns(fieldMeta: EntityModel): List<SqlColumn> {
         val columnName = getMetaName(fieldMeta)
         return listOf(
-            SqlColumn(null, "ST_Longitude($columnName) AS $columnName\$lng", null),
-            SqlColumn(null, "ST_Latitude($columnName) AS $columnName\$lat", null),
+            SqlColumn(null, "ST_Longitude($columnName) AS ${columnName}__lng", null),
+            SqlColumn(null, "ST_Latitude($columnName) AS ${columnName}__lat", null),
         )
     }
 

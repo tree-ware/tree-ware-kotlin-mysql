@@ -64,7 +64,7 @@ private class ForeignKey(
 
     override fun getColumns(): List<Column> =
         if (localKeyPrefix == null) keys
-        else keys.map { Column("$localKeyPrefix\$${it.name}", it.type) }
+        else keys.map { Column("${localKeyPrefix}__${it.name}", it.type) }
 
     override fun writeColumnsTo(writer: Writer) {
         keys.forEach { writeColumnTo(writer, it.name, it.type, localKeyPrefix) }
@@ -92,7 +92,7 @@ private class ForeignKey(
             if (index != 0) writer.write(", ")
             localKeyPrefix?.also {
                 writer.write(it)
-                writer.write("$")
+                writer.write("__")
             }
             writer.write(column.name)
         }
@@ -103,7 +103,7 @@ private class ForeignKey(
             if (index != 0) writer.write(", ")
             foreignKeyPrefix?.also {
                 writer.write(it)
-                writer.write("$")
+                writer.write("__")
             }
             writer.write(column.name)
         }
@@ -116,7 +116,7 @@ private fun writeColumnTo(writer: Writer, name: String, type: String, namePrefix
     writer.write(",\n  ")
     namePrefix?.also {
         writer.write(namePrefix)
-        writer.write("$")
+        writer.write("__")
     }
     writer.write(name)
     writer.write(" ")
