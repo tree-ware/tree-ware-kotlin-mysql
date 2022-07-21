@@ -25,7 +25,7 @@ import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
@@ -62,9 +62,9 @@ class SetSingletonEntityTests {
         getTableRows(
             dataSource,
             TEST_DATABASE,
-            "main\$address_book_root",
-            "main\$address_book_settings",
-            "main\$advanced_settings"
+            "main__address_book_root",
+            "main__address_book_settings",
+            "main__advanced_settings"
         )
 
     @Test
@@ -276,19 +276,19 @@ class SetSingletonEntityTests {
         val actualCreateRootResponse = set(createRoot, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateRootResponse, actualCreateRootResponse)
         val afterCreateRootRowsExpected = """
-            |= Table main${'$'}address_book_root =
+            |= Table main__address_book_root =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book
-            |singleton_key${'$'}: 0
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book
+            |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null
             |
-            |= Table main${'$'}address_book_settings =
+            |= Table main__address_book_settings =
             |
-            |= Table main${'$'}advanced_settings =
+            |= Table main__advanced_settings =
             |
         """.trimMargin()
         val afterCreateRootRows = getSingletonTableRows()
@@ -317,34 +317,34 @@ class SetSingletonEntityTests {
         val actualCreateChildrenResponse = set(createChildren, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedCreateChildrenResponse, actualCreateChildrenResponse)
         val afterCreateChildrenRowsExpected = """
-            |= Table main${'$'}address_book_root =
+            |= Table main__address_book_root =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book
-            |singleton_key${'$'}: 0
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book
+            |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null
             |
-            |= Table main${'$'}address_book_settings =
+            |= Table main__address_book_settings =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-04 00:40:41.440
-            |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |field_path${'$'}: /address_book/settings
-            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |created_on_: 2022-04-04 00:40:41.440
+            |updated_on_: 2022-04-04 00:40:41.440
+            |field_path_: /address_book/settings
+            |main__address_book_root__singleton_key_: 0
             |last_name_first: 1
             |encrypt_hero_name: null
             |card_colors: null
             |
-            |= Table main${'$'}advanced_settings =
+            |= Table main__advanced_settings =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-04 00:40:41.440
-            |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |field_path${'$'}: /address_book/settings/advanced
-            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |created_on_: 2022-04-04 00:40:41.440
+            |updated_on_: 2022-04-04 00:40:41.440
+            |field_path_: /address_book/settings/advanced
+            |main__address_book_root__singleton_key_: 0
             |background_color: 3
             |
         """.trimMargin()

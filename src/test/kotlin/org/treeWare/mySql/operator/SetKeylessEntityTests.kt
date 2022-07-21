@@ -25,7 +25,7 @@ import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
@@ -59,7 +59,7 @@ class SetKeylessEntityTests {
 
 
     private fun getKeylessTableRows(): String =
-        getTableRows(dataSource, TEST_DATABASE, "keyless\$keyless", "keyless\$keyless_child", "keyless\$keyed_child")
+        getTableRows(dataSource, TEST_DATABASE, "keyless__keyless", "keyless__keyless_child", "keyless__keyed_child")
 
     @Test
     fun `set() must succeed when creating new keyless entities`() {

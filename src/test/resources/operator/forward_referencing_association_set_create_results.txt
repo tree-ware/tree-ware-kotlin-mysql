@@ -1,24 +1,24 @@
-+ Database test$address_book +
++ Database test__address_book +
 
-= Table city$city_info =
+= Table city__city_info =
 
-= Table crypto$password =
+= Table crypto__password =
 
-= Table crypto$secret =
+= Table crypto__secret =
 
-= Table keyless$keyed_child =
+= Table keyless__keyed_child =
 
-= Table keyless$keyless =
+= Table keyless__keyless =
 
-= Table keyless$keyless_child =
+= Table keyless__keyless_child =
 
-= Table main$address_book_person =
+= Table main__address_book_person =
 
 * Row 1 *
-created_on$: 2022-04-14 00:40:41.450
-updated_on$: 2022-04-14 00:40:41.450
-field_path$: /address_book/person
-main$person_group$id: null
+created_on_: 2022-04-14 00:40:41.450
+updated_on_: 2022-04-14 00:40:41.450
+field_path_: /address_book/person
+main__person_group__id: null
 id: a8aacf55-7810-4b43-afe5-4344f25435fd
 first_name: null
 last_name: null
@@ -26,13 +26,13 @@ hero_name: null
 email: null
 picture: null
 self: null
-self$id: null
+self__id: null
 
 * Row 2 *
-created_on$: 2022-04-14 00:40:41.450
-updated_on$: 2022-04-14 00:40:41.450
-field_path$: /address_book/person
-main$person_group$id: null
+created_on_: 2022-04-14 00:40:41.450
+updated_on_: 2022-04-14 00:40:41.450
+field_path_: /address_book/person
+main__person_group__id: null
 id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 first_name: null
 last_name: null
@@ -40,33 +40,33 @@ hero_name: null
 email: null
 picture: null
 self: null
-self$id: null
+self__id: null
 
-= Table main$address_book_relation =
+= Table main__address_book_relation =
 
 * Row 1 *
-created_on$: 2022-04-14 00:40:41.450
-updated_on$: 2022-04-14 00:40:41.450
-field_path$: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-main$person_group$id: null
-main$address_book_person$id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+created_on_: 2022-04-14 00:40:41.450
+updated_on_: 2022-04-14 00:40:41.450
+field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+main__person_group__id: null
+main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: null
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-person$id: a8aacf55-7810-4b43-afe5-4344f25435fd
+person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 
-= Table main$address_book_root =
+= Table main__address_book_root =
 
 * Row 1 *
-created_on$: 2022-04-14 00:40:41.450
-updated_on$: 2022-04-14 00:40:41.450
-field_path$: /address_book
-singleton_key$: 0
+created_on_: 2022-04-14 00:40:41.450
+updated_on_: 2022-04-14 00:40:41.450
+field_path_: /address_book
+singleton_key_: 0
 name: Super Heroes
 last_updated: null
 
-= Table main$address_book_settings =
+= Table main__address_book_settings =
 
-= Table main$advanced_settings =
+= Table main__advanced_settings =
 
-= Table main$person_group =
+= Table main__person_group =

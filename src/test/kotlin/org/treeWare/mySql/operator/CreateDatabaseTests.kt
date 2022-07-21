@@ -14,7 +14,7 @@ import org.treeWare.mySql.test.getIndexesSchema
 import javax.sql.DataSource
 import kotlin.test.assertEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CreateDatabaseTests {
@@ -28,7 +28,7 @@ class CreateDatabaseTests {
 
     @Test
     fun `Database and tables must be created for the specified meta-model`() {
-        val expectedDatabaseName = "test\$address_book"
+        val expectedDatabaseName = "test__address_book"
 
         val columnsSchemaBefore = getColumnsSchema(dataSource, expectedDatabaseName)
         assertEquals("= Table tables =\n", columnsSchemaBefore)

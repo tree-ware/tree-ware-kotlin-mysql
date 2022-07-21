@@ -23,7 +23,7 @@ import java.time.ZoneOffset
 import javax.sql.DataSource
 import kotlin.test.assertTrue
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 

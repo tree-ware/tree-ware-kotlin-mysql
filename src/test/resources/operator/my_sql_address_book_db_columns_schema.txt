@@ -1,531 +1,531 @@
 = Table tables =
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: city_center
 COLUMN_TYPE: point
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY: PRI
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: created_on$
+TABLE_NAME: city__city_info
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: field_path$
+TABLE_NAME: city__city_info
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: info
 COLUMN_TYPE: varchar(512)
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: latitude
 COLUMN_TYPE: double
 COLUMN_KEY: MUL
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: longitude
 COLUMN_TYPE: double
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: PRI
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: related_city_info
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: self
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: self$country
-COLUMN_TYPE: varchar(64)
-COLUMN_KEY:
-
-TABLE_NAME: city$city_info
-COLUMN_NAME: self$name
-COLUMN_TYPE: varchar(128)
-COLUMN_KEY: MUL
-
-TABLE_NAME: city$city_info
-COLUMN_NAME: self$state
-COLUMN_TYPE: varchar(64)
-COLUMN_KEY:
-
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
 COLUMN_NAME: self2
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: self2$country
+TABLE_NAME: city__city_info
+COLUMN_NAME: self2__country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: self2$name
+TABLE_NAME: city__city_info
+COLUMN_NAME: self2__name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: MUL
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: self2$state
+TABLE_NAME: city__city_info
+COLUMN_NAME: self2__state
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: city$city_info
+TABLE_NAME: city__city_info
+COLUMN_NAME: self__country
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city__city_info
+COLUMN_NAME: self__name
+COLUMN_TYPE: varchar(128)
+COLUMN_KEY: MUL
+
+TABLE_NAME: city__city_info
+COLUMN_NAME: self__state
+COLUMN_TYPE: varchar(64)
+COLUMN_KEY:
+
+TABLE_NAME: city__city_info
 COLUMN_NAME: state
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY: PRI
 
-TABLE_NAME: city$city_info
-COLUMN_NAME: updated_on$
+TABLE_NAME: city__city_info
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
-COLUMN_NAME: created_on$
+TABLE_NAME: crypto__password
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
+TABLE_NAME: crypto__password
 COLUMN_NAME: current
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
-COLUMN_NAME: field_path$
+TABLE_NAME: crypto__password
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: crypto__password
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
 
-TABLE_NAME: crypto$password
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: crypto__password
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
+TABLE_NAME: crypto__password
 COLUMN_NAME: previous
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: crypto$password
-COLUMN_NAME: updated_on$
+TABLE_NAME: crypto__password
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
-COLUMN_NAME: created_on$
+TABLE_NAME: crypto__secret
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
-COLUMN_NAME: field_path$
+TABLE_NAME: crypto__secret
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
+TABLE_NAME: crypto__secret
 COLUMN_NAME: main
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: crypto__secret
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
 
-TABLE_NAME: crypto$secret
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: crypto__secret
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
+TABLE_NAME: crypto__secret
 COLUMN_NAME: other
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: crypto$secret
-COLUMN_NAME: updated_on$
+TABLE_NAME: crypto__secret
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: city__city_info__country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: city__city_info__name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: MUL
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: city__city_info__state
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: created_on$
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: field_path$
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
+TABLE_NAME: keyless__keyed_child
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY: PRI
 
-TABLE_NAME: keyless$keyed_child
+TABLE_NAME: keyless__keyed_child
 COLUMN_NAME: other
 COLUMN_TYPE: int
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyed_child
-COLUMN_NAME: updated_on$
+TABLE_NAME: keyless__keyed_child
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: city__city_info__country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: city__city_info__name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: MUL
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: city__city_info__state
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: created_on$
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: field_path$
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
+TABLE_NAME: keyless__keyless
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless
-COLUMN_NAME: updated_on$
+TABLE_NAME: keyless__keyless
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: city$city_info$country
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: city__city_info__country
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: city$city_info$name
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: city__city_info__name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: MUL
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: city$city_info$state
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: city__city_info__state
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: created_on$
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: field_path$
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
+TABLE_NAME: keyless__keyless_child
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: keyless$keyless_child
-COLUMN_NAME: updated_on$
+TABLE_NAME: keyless__keyless_child
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
-COLUMN_NAME: created_on$
+TABLE_NAME: main__address_book_person
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: email
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
-COLUMN_NAME: field_path$
+TABLE_NAME: main__address_book_person
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: first_name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: hero_name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: PRI
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: last_name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: main__address_book_person
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: picture
 COLUMN_TYPE: blob
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: self
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_person
-COLUMN_NAME: self$id
+TABLE_NAME: main__address_book_person
+COLUMN_NAME: self__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: UNI
 
-TABLE_NAME: main$address_book_person
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__address_book_person
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: created_on$
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: field_path$
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
+TABLE_NAME: main__address_book_relation
 COLUMN_NAME: id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: PRI
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: main$address_book_person$id
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: main__address_book_person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
+TABLE_NAME: main__address_book_relation
 COLUMN_NAME: person
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: person$id
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: person__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
 
-TABLE_NAME: main$address_book_relation
+TABLE_NAME: main__address_book_relation
 COLUMN_NAME: relationship
 COLUMN_TYPE: int unsigned
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_relation
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__address_book_relation
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_root
-COLUMN_NAME: created_on$
+TABLE_NAME: main__address_book_root
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_root
-COLUMN_NAME: field_path$
+TABLE_NAME: main__address_book_root
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_root
+TABLE_NAME: main__address_book_root
 COLUMN_NAME: last_updated
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_root
+TABLE_NAME: main__address_book_root
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_root
-COLUMN_NAME: singleton_key$
+TABLE_NAME: main__address_book_root
+COLUMN_NAME: singleton_key_
 COLUMN_TYPE: int unsigned
 COLUMN_KEY: PRI
 
-TABLE_NAME: main$address_book_root
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__address_book_root
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
+TABLE_NAME: main__address_book_settings
 COLUMN_NAME: card_colors
 COLUMN_TYPE: json
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
-COLUMN_NAME: created_on$
+TABLE_NAME: main__address_book_settings
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
+TABLE_NAME: main__address_book_settings
 COLUMN_NAME: encrypt_hero_name
 COLUMN_TYPE: tinyint(1)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
-COLUMN_NAME: field_path$
+TABLE_NAME: main__address_book_settings
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
+TABLE_NAME: main__address_book_settings
 COLUMN_NAME: last_name_first
 COLUMN_TYPE: tinyint(1)
 COLUMN_KEY:
 
-TABLE_NAME: main$address_book_settings
-COLUMN_NAME: main$address_book_root$singleton_key$
+TABLE_NAME: main__address_book_settings
+COLUMN_NAME: main__address_book_root__singleton_key_
 COLUMN_TYPE: int unsigned
 COLUMN_KEY: UNI
 
-TABLE_NAME: main$address_book_settings
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__address_book_settings
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$advanced_settings
+TABLE_NAME: main__advanced_settings
 COLUMN_NAME: background_color
 COLUMN_TYPE: int unsigned
 COLUMN_KEY:
 
-TABLE_NAME: main$advanced_settings
-COLUMN_NAME: created_on$
+TABLE_NAME: main__advanced_settings
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$advanced_settings
-COLUMN_NAME: field_path$
+TABLE_NAME: main__advanced_settings
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$advanced_settings
-COLUMN_NAME: main$address_book_root$singleton_key$
+TABLE_NAME: main__advanced_settings
+COLUMN_NAME: main__address_book_root__singleton_key_
 COLUMN_TYPE: int unsigned
 COLUMN_KEY: UNI
 
-TABLE_NAME: main$advanced_settings
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__advanced_settings
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$person_group
-COLUMN_NAME: created_on$
+TABLE_NAME: main__person_group
+COLUMN_NAME: created_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
-TABLE_NAME: main$person_group
-COLUMN_NAME: field_path$
+TABLE_NAME: main__person_group
+COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
 
-TABLE_NAME: main$person_group
+TABLE_NAME: main__person_group
 COLUMN_NAME: id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: PRI
 
-TABLE_NAME: main$person_group
-COLUMN_NAME: main$person_group$id
+TABLE_NAME: main__person_group
+COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
 
-TABLE_NAME: main$person_group
+TABLE_NAME: main__person_group
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
-TABLE_NAME: main$person_group
-COLUMN_NAME: updated_on$
+TABLE_NAME: main__person_group
+COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:

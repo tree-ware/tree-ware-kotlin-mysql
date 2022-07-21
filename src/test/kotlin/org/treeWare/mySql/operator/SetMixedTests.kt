@@ -23,7 +23,7 @@ import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
@@ -101,13 +101,13 @@ class SetMixedTests {
         val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
-            |= Table main${'$'}address_book_person =
+            |= Table main__address_book_person =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -115,13 +115,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 2 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -129,24 +129,24 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
-            |= Table main${'$'}address_book_relation =
+            |= Table main__address_book_relation =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main${'$'}person_group${'$'}id: null
-            |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |main__person_group__id: null
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-            |person${'$'}id: a8aacf55-7810-4b43-afe5-4344f25435fd
+            |person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -189,13 +189,13 @@ class SetMixedTests {
         val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRowsExpected = """
-            |= Table main${'$'}address_book_person =
+            |= Table main__address_book_person =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -203,13 +203,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 2 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -217,13 +217,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 3 *
-            |created_on${'$'}: 2022-04-04 00:40:41.440
-            |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-04-04 00:40:41.440
+            |updated_on_: 2022-04-04 00:40:41.440
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -231,24 +231,24 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
-            |= Table main${'$'}address_book_relation =
+            |= Table main__address_book_relation =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-04-04 00:40:41.440
-            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main${'$'}person_group${'$'}id: null
-            |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-04-04 00:40:41.440
+            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |main__person_group__id: null
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
-            |person${'$'}id: ec983c56-320f-4d66-9dde-f180e8ac3807
+            |person__id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |
         """.trimMargin()
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterMixedRowsExpected, afterMixedRows)
     }
 
@@ -302,13 +302,13 @@ class SetMixedTests {
         val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
-            |= Table main${'$'}address_book_person =
+            |= Table main__address_book_person =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -316,13 +316,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 2 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -330,13 +330,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 3 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -344,24 +344,24 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
-            |= Table main${'$'}address_book_relation =
+            |= Table main__address_book_relation =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main${'$'}person_group${'$'}id: null
-            |main${'$'}address_book_person${'$'}id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |main__person_group__id: null
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
-            |person${'$'}id: a8aacf55-7810-4b43-afe5-4344f25435fd
+            |person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -410,7 +410,7 @@ class SetMixedTests {
         val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
     }
 
@@ -446,13 +446,13 @@ class SetMixedTests {
         val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
-            |= Table main${'$'}address_book_person =
+            |= Table main__address_book_person =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -460,13 +460,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
             |* Row 2 *
-            |created_on${'$'}: 2022-03-03 00:30:31.330
-            |updated_on${'$'}: 2022-03-03 00:30:31.330
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-03-03 00:30:31.330
+            |updated_on_: 2022-03-03 00:30:31.330
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -474,13 +474,13 @@ class SetMixedTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
-            |= Table main${'$'}address_book_relation =
+            |= Table main__address_book_relation =
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -530,7 +530,7 @@ class SetMixedTests {
         val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person", "main\$address_book_relation")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
     }
 

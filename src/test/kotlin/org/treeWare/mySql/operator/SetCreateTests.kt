@@ -25,7 +25,7 @@ import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
-private const val TEST_DATABASE = "test\$address_book"
+private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
@@ -126,12 +126,12 @@ class SetCreateTests {
         val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
-            |= Table city${'$'}city_info =
+            |= Table city__city_info =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book/city_info
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book/city_info
             |name: Princeton
             |state: New Jersey
             |country: United States of America
@@ -141,16 +141,16 @@ class SetCreateTests {
             |city_center: null
             |related_city_info: []
             |self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
-            |self${'$'}name: Princeton
-            |self${'$'}state: New Jersey
-            |self${'$'}country: United States of America
+            |self__name: Princeton
+            |self__state: New Jersey
+            |self__country: United States of America
             |self2: {"city_info":[{"country":"United States of America","state":"New Jersey","name":"Princeton"}]}
-            |self2${'$'}name: Princeton
-            |self2${'$'}state: New Jersey
-            |self2${'$'}country: United States of America
+            |self2__name: Princeton
+            |self2__state: New Jersey
+            |self2__country: United States of America
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "city\$city_info")
+        val actualRows = getTableRows(dataSource, TEST_DATABASE, "city__city_info")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -172,18 +172,18 @@ class SetCreateTests {
         val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
-            |= Table main${'$'}address_book_root =
+            |= Table main__address_book_root =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book
-            |singleton_key${'$'}: 0
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book
+            |singleton_key_: 0
             |name: null
             |last_updated: null
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main\$address_book_root")
+        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main__address_book_root")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -208,30 +208,30 @@ class SetCreateTests {
         val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
-            |= Table main${'$'}address_book_root =
+            |= Table main__address_book_root =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book
-            |singleton_key${'$'}: 0
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book
+            |singleton_key_: 0
             |name: null
             |last_updated: null
             |
-            |= Table main${'$'}address_book_settings =
+            |= Table main__address_book_settings =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book/settings
-            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book/settings
+            |main__address_book_root__singleton_key_: 0
             |last_name_first: 1
             |encrypt_hero_name: null
             |card_colors: null
             |
         """.trimMargin()
         val actualRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_root", "main\$address_book_settings")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -255,30 +255,30 @@ class SetCreateTests {
         val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
-            |= Table main${'$'}address_book_root =
+            |= Table main__address_book_root =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book
-            |singleton_key${'$'}: 0
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book
+            |singleton_key_: 0
             |name: null
             |last_updated: null
             |
-            |= Table main${'$'}address_book_settings =
+            |= Table main__address_book_settings =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book/settings
-            |main${'$'}address_book_root${'$'}singleton_key${'$'}: 0
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book/settings
+            |main__address_book_root__singleton_key_: 0
             |last_name_first: null
             |encrypt_hero_name: null
             |card_colors: null
             |
         """.trimMargin()
         val actualRows =
-            getTableRows(dataSource, TEST_DATABASE, "main\$address_book_root", "main\$address_book_settings")
+            getTableRows(dataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -305,13 +305,13 @@ class SetCreateTests {
         val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
-            |= Table main${'$'}address_book_person =
+            |= Table main__address_book_person =
             |
             |* Row 1 *
-            |created_on${'$'}: 2022-04-14 00:40:41.450
-            |updated_on${'$'}: 2022-04-14 00:40:41.450
-            |field_path${'$'}: /address_book/person
-            |main${'$'}person_group${'$'}id: null
+            |created_on_: 2022-04-14 00:40:41.450
+            |updated_on_: 2022-04-14 00:40:41.450
+            |field_path_: /address_book/person
+            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: null
             |last_name: null
@@ -319,10 +319,10 @@ class SetCreateTests {
             |email: null
             |picture: null
             |self: null
-            |self${'$'}id: null
+            |self__id: null
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main\$address_book_person")
+        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main__address_book_person")
         assertEquals(expectedRows, actualRows)
     }
 

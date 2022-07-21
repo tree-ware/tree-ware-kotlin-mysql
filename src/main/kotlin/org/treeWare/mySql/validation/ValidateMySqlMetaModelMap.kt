@@ -64,7 +64,7 @@ private class ValidateMySqlMetaModelMapVisitor(
     override fun visitMainMeta(leaderMainMeta1: MutableMainModel): TraversalAction {
         val mainMetaName = getMainMetaName(leaderMainMeta1)
         path.addLast(mainMetaName)
-        databaseName = "${environment}\$$mainMetaName"
+        databaseName = "${environment}__$mainMetaName"
         val nameErrors = validateDatabaseName(databaseName)
         if (nameErrors.isNotEmpty()) errors.addAll(nameErrors)
         else {
@@ -95,7 +95,7 @@ private class ValidateMySqlMetaModelMapVisitor(
         path.addLast(entityName)
         val aux = getMySqlMetaModelMap(leaderEntityMeta1) ?: return TraversalAction.ABORT_SUB_TREE
         val tableSuffix = aux.tableName ?: entityName
-        val tableName = "${tablePrefix}\$${tableSuffix}"
+        val tableName = "${tablePrefix}__${tableSuffix}"
         val entityErrors = mutableListOf<String>()
         entityErrors.addAll(validateTableName(tableName))
         entityErrors.addAll(validateKeys(getPathName(), leaderEntityMeta1))
