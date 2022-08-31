@@ -1,8 +1,13 @@
 package org.treeWare.mySql.operator
 
 const val CREATED_ON_COLUMN_NAME = "created_on_"
+const val CREATED_ON_COLUMN_TYPE = "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)"
+
 const val UPDATED_ON_COLUMN_NAME = "updated_on_"
+const val UPDATED_ON_COLUMN_TYPE = "TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3)"
+
 const val FIELD_PATH_COLUMN_NAME = "field_path_"
+const val FIELD_PATH_COLUMN_TYPE = "TEXT"
 
 const val SINGLETON_KEY_COLUMN_NAME = "singleton_key_"
 const val SINGLETON_KEY_COLUMN_TYPE = "INT UNSIGNED"

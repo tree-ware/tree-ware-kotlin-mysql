@@ -140,6 +140,50 @@
                   "package": "address_book.city"
                 },
                 "multiplicity": "set"
+              },
+              {
+                "name": "settings_sub_tree_1",
+                "number": 7,
+                "type": "composition",
+                "composition": {
+                  "entity": "address_book_settings",
+                  "package": "address_book.main"
+                },
+                "granularity": "sub_tree",
+                "multiplicity": "optional"
+              },
+              {
+                "name": "settings_sub_tree_2",
+                "number": 8,
+                "type": "composition",
+                "composition": {
+                  "entity": "address_book_settings",
+                  "package": "address_book.main"
+                },
+                "granularity": "sub_tree",
+                "multiplicity": "optional"
+              },
+              {
+                "name": "persons_sub_tree_1",
+                "number": 9,
+                "type": "composition",
+                "composition": {
+                  "entity": "address_book_person",
+                  "package": "address_book.main"
+                },
+                "granularity": "sub_tree",
+                "multiplicity": "set"
+              },
+              {
+                "name": "persons_sub_tree_2",
+                "number": 10,
+                "type": "composition",
+                "composition": {
+                  "entity": "address_book_person",
+                  "package": "address_book.main"
+                },
+                "granularity": "sub_tree",
+                "multiplicity": "set"
               }
             ]
           },

@@ -43,7 +43,7 @@ class SetCreateTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
-        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
     }
 
@@ -224,10 +224,10 @@ class SetCreateTests {
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
             |field_path_: /address_book/settings
-            |main__address_book_root__singleton_key_: 0
             |last_name_first: 1
             |encrypt_hero_name: null
             |card_colors: null
+            |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
         val actualRows =
@@ -271,10 +271,10 @@ class SetCreateTests {
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
             |field_path_: /address_book/settings
-            |main__address_book_root__singleton_key_: 0
             |last_name_first: null
             |encrypt_hero_name: null
             |card_colors: null
+            |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
         val actualRows =
@@ -311,7 +311,6 @@ class SetCreateTests {
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: null
             |last_name: null
@@ -320,6 +319,7 @@ class SetCreateTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
         """.trimMargin()
         val actualRows = getTableRows(dataSource, TEST_DATABASE, "main__address_book_person")

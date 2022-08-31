@@ -9,13 +9,13 @@ private val logger = logging()
 
 fun createDatabase(
     mainMeta: MainModel,
-    delegates: EntityDelegateRegistry<GenerateCreateDatabaseCommandsEntityDelegate>?,
+    delegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     dataSource: DataSource,
     logCommands: Boolean = false,
     foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val connection = dataSource.connection
-    val commands = generateCreateDatabaseCommands(mainMeta, delegates, foreignKeyConstraints)
+    val commands = generateDdlCommands(mainMeta, delegates, foreignKeyConstraints)
     commands.forEach { command ->
         if (logCommands) logger.info { command }
         val statement = connection.createStatement()

@@ -45,7 +45,7 @@ class SetMixedTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
-        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
         emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
     }
@@ -107,7 +107,6 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -116,12 +115,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -130,6 +129,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |= Table main__address_book_relation =
             |
@@ -137,12 +137,12 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main__person_group__id: null
-            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
             |person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |main__person_group__id: null
             |
         """.trimMargin()
         val afterCreateRows =
@@ -195,7 +195,6 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -204,12 +203,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -218,12 +217,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 3 *
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -232,6 +231,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |= Table main__address_book_relation =
             |
@@ -239,12 +239,12 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-04-04 00:40:41.440
             |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main__person_group__id: null
-            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
             |person__id: ec983c56-320f-4d66-9dde-f180e8ac3807
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |main__person_group__id: null
             |
         """.trimMargin()
         val afterMixedRows =
@@ -308,7 +308,6 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -317,12 +316,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -331,12 +330,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 3 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -345,6 +344,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |= Table main__address_book_relation =
             |
@@ -352,12 +352,12 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
-            |main__person_group__id: null
-            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
             |person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
+            |main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
+            |main__person_group__id: null
             |
         """.trimMargin()
         val afterCreateRows =
@@ -452,7 +452,6 @@ class SetMixedTests {
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -461,12 +460,12 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
             |field_path_: /address_book/person
-            |main__person_group__id: null
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -475,6 +474,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__person_group__id: null
             |
             |= Table main__address_book_relation =
             |

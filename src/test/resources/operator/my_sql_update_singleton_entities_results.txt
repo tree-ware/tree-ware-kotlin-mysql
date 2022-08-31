@@ -14,10 +14,10 @@ last_updated: 2022-04-30 01:07:39.123
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
 field_path_: /address_book/settings
-main__address_book_root__singleton_key_: 0
 last_name_first: 0
 encrypt_hero_name: 1
 card_colors: [{"value": "red"}]
+main__address_book_root__singleton_key_: 0
 
 = Table main__advanced_settings =
 
@@ -25,5 +25,5 @@ card_colors: [{"value": "red"}]
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
 field_path_: /address_book/settings/advanced
-main__address_book_root__singleton_key_: 0
 background_color: 4
+main__address_book_root__singleton_key_: 0
