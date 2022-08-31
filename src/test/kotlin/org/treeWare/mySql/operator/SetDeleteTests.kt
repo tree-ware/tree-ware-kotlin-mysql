@@ -43,7 +43,7 @@ class SetDeleteTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
-        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
         emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
     }

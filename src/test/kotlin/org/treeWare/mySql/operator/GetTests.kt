@@ -1,6 +1,7 @@
 package org.treeWare.mySql.operator
 
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
@@ -40,11 +41,12 @@ class GetTests {
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
         getEntityDelegates = operatorEntityDelegateRegistry.get(GetOperatorId)
 
-        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
     }
 
-    init {
+    @BeforeEach
+    fun beforeEach() {
         val create = getMainModelFromJsonFile(
             mySqlAddressBookMetaModel,
             "model/my_sql_get_tests_initial_create_request.json",
@@ -57,8 +59,8 @@ class GetTests {
         assertSetResponse(expectedResponse, actualResponse)
     }
 
-    @AfterAll
-    fun afterAll() {
+    @AfterEach
+    fun afterEach() {
         clearDatabase(dataSource, TEST_DATABASE)
     }
 

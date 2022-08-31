@@ -47,7 +47,7 @@ class SetSingletonEntityTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
-        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
         createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
         emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
     }
@@ -333,10 +333,10 @@ class SetSingletonEntityTests {
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
             |field_path_: /address_book/settings
-            |main__address_book_root__singleton_key_: 0
             |last_name_first: 1
             |encrypt_hero_name: null
             |card_colors: null
+            |main__address_book_root__singleton_key_: 0
             |
             |= Table main__advanced_settings =
             |
@@ -344,8 +344,8 @@ class SetSingletonEntityTests {
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
             |field_path_: /address_book/settings/advanced
-            |main__address_book_root__singleton_key_: 0
             |background_color: 3
+            |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
         val afterCreateChildrenRows = getSingletonTableRows()

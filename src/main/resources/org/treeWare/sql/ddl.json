@@ -1,0 +1,194 @@
+{
+  "meta_model": {
+    "root": {
+      "name": "ddl",
+      "type": "composition",
+      "composition": {
+        "entity": "ddl",
+        "package": "org.tree_ware.sql.ddl"
+      }
+    },
+    "packages": [
+      {
+        "name": "org.tree_ware.sql.ddl",
+        "info": "",
+        "enumerations": [
+        ],
+        "entities": [
+          {
+            "name": "ddl",
+            "info": "",
+            "fields": [
+              {
+                "name": "databases",
+                "number": 1,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "database",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              }
+            ]
+          },
+          {
+            "name": "database",
+            "info": "",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "info": "",
+                "type": "string",
+                "is_key": true
+              },
+              {
+                "name": "tables",
+                "number": 2,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "table",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              }
+            ]
+          },
+          {
+            "name": "table",
+            "info": "",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "info": "",
+                "type": "string",
+                "is_key": true
+              },
+              {
+                "name": "columns",
+                "number": 2,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "column",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              },
+              {
+                "name": "primary_key",
+                "number": 3,
+                "info": "",
+                "type": "string",
+                "multiplicity": "list"
+              },
+              {
+                "name": "indexes",
+                "number": 4,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "index",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              },
+              {
+                "name": "foreign_keys",
+                "number": 5,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "foreign_key",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              }
+            ]
+          },
+          {
+            "name": "column",
+            "info": "",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "info": "",
+                "type": "string",
+                "is_key": true
+              },
+              {
+                "name": "type",
+                "number": 2,
+                "info": "",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "index",
+            "info": "",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "info": "",
+                "type": "string",
+                "is_key": true
+              },
+              {
+                "name": "is_unique",
+                "number": 2,
+                "info": "",
+                "type": "boolean"
+              },
+              {
+                "name": "columns",
+                "number": 3,
+                "info": "",
+                "type": "string",
+                "multiplicity": "list"
+              }
+            ]
+          },
+          {
+            "name": "foreign_key",
+            "info": "",
+            "fields": [
+              {
+                "name": "name",
+                "number": 1,
+                "info": "",
+                "type": "string",
+                "is_key": true
+              },
+              {
+                "name": "source_columns",
+                "number": 2,
+                "info": "",
+                "type": "string",
+                "multiplicity": "list"
+              },
+              {
+                "name": "target_table",
+                "number": 3,
+                "info": "",
+                "type": "string"
+              },
+              {
+                "name": "target_keys",
+                "number": 4,
+                "info": "",
+                "type": "string",
+                "multiplicity": "list"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

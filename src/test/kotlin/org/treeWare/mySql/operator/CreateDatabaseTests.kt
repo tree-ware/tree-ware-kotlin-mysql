@@ -1,6 +1,6 @@
 package org.treeWare.mySql.operator
 
-import org.junit.jupiter.api.AfterAll
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
@@ -20,11 +20,10 @@ private const val TEST_DATABASE = "test__address_book"
 class CreateDatabaseTests {
     private val dataSource: DataSource = MySqlTestContainer.getDataSource()
 
-    @AfterAll
-    fun afterAll() {
+    @AfterEach
+    fun afterEach() {
         clearDatabase(dataSource, TEST_DATABASE)
     }
-
 
     @Test
     fun `Database and tables must be created for the specified meta-model`() {
@@ -37,7 +36,7 @@ class CreateDatabaseTests {
 
         val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
-        val delegates = operatorEntityDelegateRegistry.get(GenerateCreateDatabaseCommandsOperatorId)
+        val delegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
         createDatabase(mySqlAddressBookMetaModel, delegates, dataSource)
 
