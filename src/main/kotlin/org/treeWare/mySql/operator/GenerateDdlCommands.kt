@@ -264,8 +264,8 @@ private fun populateKeylessParentUniqueIndex(
 private fun populateForeignKeys(ddlTable: MutableEntityModel, fieldMeta: EntityModel) {
     if (!isAssociationFieldMeta(fieldMeta) || isListFieldMeta(fieldMeta)) return
     val fieldName = getMetaName(fieldMeta)
-    val foreignKeyName = "fk_${getMetaNumber(fieldMeta)}"
     val columns = getAssociationFieldColumns(fieldMeta, true)
+    val foreignKeyName = "${fieldName}__${columns.first().name}"
 
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")

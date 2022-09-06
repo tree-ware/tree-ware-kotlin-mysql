@@ -86,13 +86,15 @@ class GenerateDdlCommandsVisitor : Leader1DdlVisitor<TraversalAction> {
     override fun leaveIndex(leaderIndex1: EntityModel) {}
 
     override fun visitForeignKey(leaderForeignKey1: EntityModel): TraversalAction {
+        val foreignKeyName = getSingleString(leaderForeignKey1, "name")
         val sourceColumns = getPrimitiveValues(getCollectionField(leaderForeignKey1, "source_columns"))
         val targetTable = getSingleString(leaderForeignKey1, "target_table")
         val targetKeys = getPrimitiveValues(getCollectionField(leaderForeignKey1, "target_keys"))
         alterTableCommand
             .appendLine(if (alterTableHasContent) "," else "")
             .append("  ADD FOREIGN KEY ")
-            .append("(")
+            .append(foreignKeyName)
+            .append(" (")
             .append(sourceColumns.joinToString())
             .append(")")
             .append(" REFERENCES ")
