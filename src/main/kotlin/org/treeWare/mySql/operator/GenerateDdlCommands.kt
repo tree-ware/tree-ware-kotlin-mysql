@@ -90,7 +90,7 @@ private fun populateComposition(
     val tableKeys = if (isRoot) getSingletonTableKeys(tableName)
     else getTableKeys(tableName, compositionMeta, entityDelegates)
 
-    populateAncestors(ddlTable, tableKeys != null, createForeignKeyConstraints, ddlState)
+    populateAncestors(ddlTable, createForeignKeyConstraints, ddlState)
     if (tableKeys == null) {
         val keylessTableKeys = populateKeylessParentUniqueIndex(ddlTable, tableName, ddlState)
         ddlState.ancestorStack.addLast(keylessTableKeys)
@@ -157,7 +157,6 @@ private fun populateField(
 
 private fun populateAncestors(
     ddlTable: MutableEntityModel,
-    tableHasKeys: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints,
     ddlState: DdlState
 ) {
@@ -165,13 +164,14 @@ private fun populateAncestors(
     if (stackSize == 0) return
     var ancestorColumnsPopulated = false
     ddlState.ancestorStack.forEachIndexed { index, ancestor ->
-        // TODO(deepak-nulu): Why do keyed descendants not have columns corresponding to the singleton key in the root?
-        if ((tableHasKeys || stackSize > 1) && index == 0) return@forEachIndexed
+        // The root ancestor (index == 0) has a singleton key that is needed only in immediate children (stackSize == 1)
+        // to prevent the single entry in the root table from being deleted (via a foreign-key constraint) while the
+        // root has children. The singleton key is of no use deeper in the tree.
+        if (index == 0 && stackSize > 1) return@forEachIndexed
         if (!ancestor.isRealKeys) return@forEachIndexed
         populateAncestorColumns(ddlTable, ancestor)
         ancestorColumnsPopulated = true
     }
-    if (tableHasKeys && stackSize == 1) return
     val parent = ddlState.ancestorStack.last()
     if (!ancestorColumnsPopulated) populateAncestorColumns(ddlTable, parent)
     if (createForeignKeyConstraints == CreateForeignKeyConstraints.ALL) populateParentForeignKey(ddlTable, parent)

@@ -116,7 +116,7 @@ internal class MySqlSetDelegate(
         insertBuilder.addColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
         insertBuilder.addColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
         val ancestorKeyCount = addAncestorKeys(ancestorKeys, insertBuilder)
-        if (ancestorKeyCount == 0 && keys.isEmpty()) {
+        if (ancestorKeyCount == 0) {
             val isRoot = ancestorKeys.size == 1
             val namePrefix = if (isRoot) null else rootTableName
             insertBuilder.addColumn(SqlColumn(namePrefix, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE))

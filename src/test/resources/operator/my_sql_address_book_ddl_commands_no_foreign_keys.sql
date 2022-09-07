@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   picture BLOB,
   self TEXT,
   self__id BINARY(16),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   main__person_group__id BINARY(16),
   PRIMARY KEY (id),
   UNIQUE INDEX self (self__id)
@@ -119,6 +120,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__person_group (
   field_path_ TEXT,
   id BINARY(16),
   name VARCHAR(64),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   main__person_group__id BINARY(16),
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   self2__name VARCHAR(128),
   self2__state VARCHAR(64),
   self2__country VARCHAR(64),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   PRIMARY KEY (name, state, country),
   UNIQUE INDEX coordinates (latitude, longitude),
   UNIQUE INDEX self (self__name, self__state, self__country)

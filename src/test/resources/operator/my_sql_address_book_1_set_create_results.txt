@@ -22,6 +22,7 @@ self2: null
 self2__name: null
 self2__state: null
 self2__country: null
+main__address_book_root__singleton_key_: 0
 
 * Row 2 *
 created_on_: 2022-04-14 00:40:41.450
@@ -43,6 +44,7 @@ self2: null
 self2__name: null
 self2__state: null
 self2__country: null
+main__address_book_root__singleton_key_: 0
 
 * Row 3 *
 created_on_: 2022-04-14 00:40:41.450
@@ -64,6 +66,7 @@ self2: {"city_info":[{"country":"United States of America","state":"New Jersey",
 self2__name: Princeton
 self2__state: New Jersey
 self2__country: United States of America
+main__address_book_root__singleton_key_: 0
 
 * Row 4 *
 created_on_: 2022-04-14 00:40:41.450
@@ -85,6 +88,7 @@ self2: null
 self2__name: null
 self2__state: null
 self2__country: null
+main__address_book_root__singleton_key_: 0
 
 = Table crypto__password =
 
@@ -146,6 +150,7 @@ email: null
 picture: null
 self: null
 self__id: null
+main__address_book_root__singleton_key_: null
 main__person_group__id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 
 * Row 2 *
@@ -160,6 +165,7 @@ email: [{"value": "lois.lane@dailyplanet.com"}]
 picture: Picture of Lois Lane
 self: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 self__id: a8aacf55-7810-4b43-afe5-4344f25435fd
+main__address_book_root__singleton_key_: 0
 main__person_group__id: null
 
 * Row 3 *
@@ -174,6 +180,7 @@ email: [{"value": "clark.kent@dailyplanet.com"}, {"value": "superman@dc.com"}]
 picture: Picture of Clark Kent
 self: null
 self__id: null
+main__address_book_root__singleton_key_: 0
 main__person_group__id: null
 
 * Row 4 *
@@ -188,6 +195,7 @@ email: null
 picture: null
 self: null
 self__id: null
+main__address_book_root__singleton_key_: null
 main__person_group__id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 
 * Row 5 *
@@ -202,6 +210,7 @@ email: null
 picture: null
 self: null
 self__id: null
+main__address_book_root__singleton_key_: 0
 main__person_group__id: null
 
 = Table main__address_book_relation =
@@ -277,6 +286,7 @@ updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/groups
 id: ad9aaea8-30fe-45ed-93ef-bd368da0c756
 name: Marvel
+main__address_book_root__singleton_key_: 0
 main__person_group__id: null
 
 * Row 2 *
@@ -285,6 +295,7 @@ updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/groups
 id: ca0a22e8-c300-4347-91b0-167a5f6f4f9a
 name: DC
+main__address_book_root__singleton_key_: 0
 main__person_group__id: null
 
 * Row 3 *
@@ -293,4 +304,5 @@ updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups
 id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 name: Superman
+main__address_book_root__singleton_key_: null
 main__person_group__id: ca0a22e8-c300-4347-91b0-167a5f6f4f9a

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   picture BLOB,
   self TEXT,
   self__id BINARY(16),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   main__person_group__id BINARY(16),
   PRIMARY KEY (id),
   UNIQUE INDEX self (self__id)
@@ -119,6 +120,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__person_group (
   field_path_ TEXT,
   id BINARY(16),
   name VARCHAR(64),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   main__person_group__id BINARY(16),
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
@@ -142,6 +144,7 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   self2__name VARCHAR(128),
   self2__state VARCHAR(64),
   self2__country VARCHAR(64),
+  main__address_book_root__singleton_key_ INT UNSIGNED,
   PRIMARY KEY (name, state, country),
   UNIQUE INDEX coordinates (latitude, longitude),
   UNIQUE INDEX self (self__name, self__state, self__country)
@@ -152,6 +155,7 @@ ALTER TABLE test__address_book.main__advanced_settings
   ADD FOREIGN KEY main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_) REFERENCES main__address_book_settings(main__address_book_root__singleton_key_) ON DELETE RESTRICT;
 ALTER TABLE test__address_book.main__address_book_person
   ADD FOREIGN KEY self__id (self__id) REFERENCES main__address_book_person(id) ON DELETE RESTRICT,
+  ADD FOREIGN KEY main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_) REFERENCES main__address_book_root(singleton_key_) ON DELETE RESTRICT,
   ADD FOREIGN KEY main__person_group__id (main__person_group__id) REFERENCES main__person_group(id) ON DELETE RESTRICT;
 ALTER TABLE test__address_book.main__address_book_relation
   ADD FOREIGN KEY person__id (person__id) REFERENCES main__address_book_person(id) ON DELETE RESTRICT,
@@ -170,7 +174,9 @@ ALTER TABLE test__address_book.keyless__keyed_child
   ADD FOREIGN KEY main__address_book_person__id (main__address_book_person__id) REFERENCES keyless__keyless(main__address_book_person__id) ON DELETE RESTRICT,
   ADD FOREIGN KEY city__city_info__name (city__city_info__name, city__city_info__state, city__city_info__country) REFERENCES keyless__keyless(city__city_info__name, city__city_info__state, city__city_info__country) ON DELETE RESTRICT;
 ALTER TABLE test__address_book.main__person_group
+  ADD FOREIGN KEY main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_) REFERENCES main__address_book_root(singleton_key_) ON DELETE RESTRICT,
   ADD FOREIGN KEY main__person_group__id (main__person_group__id) REFERENCES main__person_group(id) ON DELETE RESTRICT;
 ALTER TABLE test__address_book.city__city_info
   ADD FOREIGN KEY self__name (self__name, self__state, self__country) REFERENCES city__city_info(name, state, country) ON DELETE RESTRICT,
-  ADD FOREIGN KEY self2__name (self2__name, self2__state, self2__country) REFERENCES city__city_info(name, state, country) ON DELETE RESTRICT;
+  ADD FOREIGN KEY self2__name (self2__name, self2__state, self2__country) REFERENCES city__city_info(name, state, country) ON DELETE RESTRICT,
+  ADD FOREIGN KEY main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_) REFERENCES main__address_book_root(singleton_key_) ON DELETE RESTRICT;

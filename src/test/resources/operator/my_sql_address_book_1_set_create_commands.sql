@@ -11,9 +11,9 @@ INSERT INTO test__address_book.main__advanced_settings
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings/advanced', 0, 3);
 INSERT INTO test__address_book.main__address_book_person
-  (created_on_, updated_on_, field_path_, id, first_name, last_name, hero_name, email, picture)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, first_name, last_name, hero_name, email, picture)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), 'Clark', 'Kent', 'Superman', '[{"value":"clark.kent@dailyplanet.com"},{"value":"superman@dc.com"}]', 0x50696374757265206f6620436c61726b204b656e74);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), 'Clark', 'Kent', 'Superman', '[{"value":"clark.kent@dailyplanet.com"},{"value":"superman@dc.com"}]', 0x50696374757265206f6620436c61726b204b656e74);
 INSERT INTO test__address_book.main__address_book_relation
   (created_on_, updated_on_, field_path_, main__address_book_person__id, id, relationship)
   VALUES
@@ -31,9 +31,9 @@ INSERT INTO test__address_book.crypto__secret
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), '[{"encrypted":"test-encrypted-secret2","cipher_version":1}]');
 INSERT INTO test__address_book.main__address_book_person
-  (created_on_, updated_on_, field_path_, id, first_name, last_name, email, picture)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, first_name, last_name, email, picture)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), 'Lois', 'Lane', '[{"value":"lois.lane@dailyplanet.com"}]', 0x50696374757265206f66204c6f6973204c616e65);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), 'Lois', 'Lane', '[{"value":"lois.lane@dailyplanet.com"}]', 0x50696374757265206f66204c6f6973204c616e65);
 INSERT INTO test__address_book.main__address_book_relation
   (created_on_, updated_on_, field_path_, main__address_book_person__id, id, relationship)
   VALUES
@@ -47,13 +47,13 @@ INSERT INTO test__address_book.crypto__secret
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret', UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), '{"encrypted":"test-encrypted-main-secret","cipher_version":1}', '[{"encrypted":"test-encrypted-secret2","cipher_version":1}]');
 INSERT INTO test__address_book.main__address_book_person
-  (created_on_, updated_on_, field_path_, id, first_name, last_name)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, first_name, last_name)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), 'Jimmy', 'Olsen');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('ec983c56-320f-4d66-9dde-f180e8ac3807'), 'Jimmy', 'Olsen');
 INSERT INTO test__address_book.main__person_group
-  (created_on_, updated_on_, field_path_, id, name)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, name)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/groups', UUID_TO_BIN('ca0a22e8-c300-4347-91b0-167a5f6f4f9a'), 'DC');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/groups', 0, UUID_TO_BIN('ca0a22e8-c300-4347-91b0-167a5f6f4f9a'), 'DC');
 INSERT INTO test__address_book.main__person_group
   (created_on_, updated_on_, field_path_, main__person_group__id, id, name)
   VALUES
@@ -67,25 +67,25 @@ INSERT INTO test__address_book.main__address_book_person
   VALUES
   ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons', UUID_TO_BIN('fe2aa774-e1fe-4680-a439-8bd1d0eb4abc'), UUID_TO_BIN('e391c509-67d6-4846-bfea-0f7cd9c91bf7'), 'Lois', 'Lane');
 INSERT INTO test__address_book.main__person_group
-  (created_on_, updated_on_, field_path_, id, name)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, name)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/groups', UUID_TO_BIN('ad9aaea8-30fe-45ed-93ef-bd368da0c756'), 'Marvel');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/groups', 0, UUID_TO_BIN('ad9aaea8-30fe-45ed-93ef-bd368da0c756'), 'Marvel');
 INSERT INTO test__address_book.city__city_info
-  (created_on_, updated_on_, field_path_, name, state, country, info, latitude, longitude, city_center)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, name, state, country, info, latitude, longitude, city_center)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 'New York City', 'New York', 'United States of America', 'One of the most populous and most densely populated major city in USA', 40.712982, -74.007205, ST_SRID(Point(-74.007205, 40.712982), 4326));
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 0, 'New York City', 'New York', 'United States of America', 'One of the most populous and most densely populated major city in USA', 40.712982, -74.007205, ST_SRID(Point(-74.007205, 40.712982), 4326));
 INSERT INTO test__address_book.city__city_info
-  (created_on_, updated_on_, field_path_, name, state, country, info, latitude, longitude, city_center)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, name, state, country, info, latitude, longitude, city_center)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 'Albany', 'New York', 'United States of America', 'Capital of New York state', 42.651934, -73.75477, ST_SRID(Point(-73.75477, 42.651934), 4326));
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 0, 'Albany', 'New York', 'United States of America', 'Capital of New York state', 42.651934, -73.75477, ST_SRID(Point(-73.75477, 42.651934), 4326));
 INSERT INTO test__address_book.city__city_info
-  (created_on_, updated_on_, field_path_, name, state, country, info, latitude, longitude, city_center)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, name, state, country, info, latitude, longitude, city_center)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 'Princeton', 'New Jersey', 'United States of America', 'Home of Princeton University', 40.360594, -74.664441, ST_SRID(Point(-74.664441, 40.360594), 4326));
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 0, 'Princeton', 'New Jersey', 'United States of America', 'Home of Princeton University', 40.360594, -74.664441, ST_SRID(Point(-74.664441, 40.360594), 4326));
 INSERT INTO test__address_book.city__city_info
-  (created_on_, updated_on_, field_path_, name, state, country, info, latitude, longitude, city_center)
+  (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, name, state, country, info, latitude, longitude, city_center)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 'San Francisco', 'California', 'United States of America', 'The cultural and financial center of Northern California', 37.779379, -122.418433, ST_SRID(Point(-122.418433, 37.779379), 4326));
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/city_info', 0, 'San Francisco', 'California', 'United States of America', 'The cultural and financial center of Northern California', 37.779379, -122.418433, ST_SRID(Point(-122.418433, 37.779379), 4326));
 UPDATE test__address_book.main__address_book_relation
   SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}'
   WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path_ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';

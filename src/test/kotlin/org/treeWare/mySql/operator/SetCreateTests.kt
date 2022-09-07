@@ -148,6 +148,7 @@ class SetCreateTests {
             |self2__name: Princeton
             |self2__state: New Jersey
             |self2__country: United States of America
+            |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
         val actualRows = getTableRows(dataSource, TEST_DATABASE, "city__city_info")
@@ -319,6 +320,7 @@ class SetCreateTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
         """.trimMargin()

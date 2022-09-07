@@ -36,6 +36,11 @@ COLUMN_TYPE: double
 COLUMN_KEY:
 
 TABLE_NAME: city__city_info
+COLUMN_NAME: main__address_book_root__singleton_key_
+COLUMN_TYPE: int unsigned
+COLUMN_KEY: MUL
+
+TABLE_NAME: city__city_info
 COLUMN_NAME: name
 COLUMN_TYPE: varchar(128)
 COLUMN_KEY: PRI
@@ -341,6 +346,11 @@ COLUMN_TYPE: varchar(64)
 COLUMN_KEY:
 
 TABLE_NAME: main__address_book_person
+COLUMN_NAME: main__address_book_root__singleton_key_
+COLUMN_TYPE: int unsigned
+COLUMN_KEY: MUL
+
+TABLE_NAME: main__address_book_person
 COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: MUL
@@ -514,6 +524,11 @@ TABLE_NAME: main__person_group
 COLUMN_NAME: id
 COLUMN_TYPE: binary(16)
 COLUMN_KEY: PRI
+
+TABLE_NAME: main__person_group
+COLUMN_NAME: main__address_book_root__singleton_key_
+COLUMN_TYPE: int unsigned
+COLUMN_KEY: MUL
 
 TABLE_NAME: main__person_group
 COLUMN_NAME: main__person_group__id
