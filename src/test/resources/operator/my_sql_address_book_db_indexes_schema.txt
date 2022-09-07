@@ -13,6 +13,12 @@ SEQ_IN_INDEX: 2
 NON_UNIQUE: 0
 
 TABLE_NAME: city__city_info
+INDEX_NAME: main__address_book_root__singleton_key_
+COLUMN_NAME: main__address_book_root__singleton_key_
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: city__city_info
 INDEX_NAME: PRIMARY
 COLUMN_NAME: name
 SEQ_IN_INDEX: 1
@@ -157,6 +163,12 @@ SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
 
 TABLE_NAME: main__address_book_person
+INDEX_NAME: main__address_book_root__singleton_key_
+COLUMN_NAME: main__address_book_root__singleton_key_
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
+
+TABLE_NAME: main__address_book_person
 INDEX_NAME: main__person_group__id
 COLUMN_NAME: main__person_group__id
 SEQ_IN_INDEX: 1
@@ -209,6 +221,12 @@ INDEX_NAME: main__address_book_root__singleton_key_
 COLUMN_NAME: main__address_book_root__singleton_key_
 SEQ_IN_INDEX: 1
 NON_UNIQUE: 0
+
+TABLE_NAME: main__person_group
+INDEX_NAME: main__address_book_root__singleton_key_
+COLUMN_NAME: main__address_book_root__singleton_key_
+SEQ_IN_INDEX: 1
+NON_UNIQUE: 1
 
 TABLE_NAME: main__person_group
 INDEX_NAME: main__person_group__id

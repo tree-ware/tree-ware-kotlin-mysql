@@ -115,6 +115,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 2 *
@@ -129,6 +130,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |= Table main__address_book_relation =
@@ -203,6 +205,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 2 *
@@ -217,6 +220,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 3 *
@@ -231,6 +235,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |= Table main__address_book_relation =
@@ -316,6 +321,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 2 *
@@ -330,6 +336,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 3 *
@@ -344,6 +351,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |= Table main__address_book_relation =
@@ -460,6 +468,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |* Row 2 *
@@ -474,6 +483,7 @@ class SetMixedTests {
             |picture: null
             |self: null
             |self__id: null
+            |main__address_book_root__singleton_key_: 0
             |main__person_group__id: null
             |
             |= Table main__address_book_relation =
