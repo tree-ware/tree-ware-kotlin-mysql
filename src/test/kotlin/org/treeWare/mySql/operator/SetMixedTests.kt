@@ -138,7 +138,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -243,7 +243,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-04-04 00:40:41.440
-            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
@@ -359,7 +359,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -404,7 +404,7 @@ class SetMixedTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update: no parent or target entity"
                 )
             )
@@ -526,7 +526,7 @@ class SetMixedTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create association in entity: no parent or target entity"
                 )
             )
@@ -649,15 +649,15 @@ class SetMixedTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
                     "unable to delete: has children or source entity"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
                     "unable to create association in entity: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update: no parent or target entity"
                 ),
             )

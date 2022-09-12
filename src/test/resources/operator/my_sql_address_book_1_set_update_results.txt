@@ -95,7 +95,7 @@ main__address_book_root__singleton_key_: 0
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password
+field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password
 current: null
 previous: [{"hashed": "test-hashed-superman-2", "hash_version": 1}]
 main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
@@ -104,7 +104,7 @@ main__person_group__id: null
 * Row 2 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password
+field_path_: /address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password
 current: {"hashed": "test-hashed-lois-2", "hash_version": 1}
 previous: [{"hashed": "test-hashed-password2-2", "hash_version": 1}]
 main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
@@ -115,7 +115,7 @@ main__person_group__id: null
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret
+field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret
 main: null
 other: [{"encrypted": "test-encrypted-secret2-2", "cipher_version": 1}]
 main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
@@ -124,7 +124,7 @@ main__person_group__id: null
 * Row 2 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret
+field_path_: /address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret
 main: {"encrypted": "test-encrypted-main-secret-2", "cipher_version": 1}
 other: [{"encrypted": "test-encrypted-secret2-2", "cipher_version": 1}]
 main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
@@ -141,7 +141,7 @@ main__person_group__id: null
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
+field_path_: /address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons
 id: 546a4982-b39a-4d01-aeb3-22d60c6963c0
 first_name: Clark 3
 last_name: Kent 3
@@ -186,7 +186,7 @@ main__person_group__id: null
 * Row 4 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons
+field_path_: /address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons
 id: e391c509-67d6-4846-bfea-0f7cd9c91bf7
 first_name: Lois 3
 last_name: Lane 3
@@ -218,7 +218,7 @@ main__person_group__id: null
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: 6
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -229,7 +229,7 @@ main__person_group__id: null
 * Row 2 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation
+field_path_: /address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation
 id: 16634916-8f83-4376-ad42-37038e108a0b
 relationship: 6
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -240,7 +240,7 @@ main__person_group__id: null
 * Row 3 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-03-03 00:30:31.330
-field_path_: /address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation
+field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
 id: 3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce
 relationship: 7
 person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
@@ -301,7 +301,7 @@ main__person_group__id: null
 * Row 3 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-04-04 00:40:41.440
-field_path_: /address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups
+field_path_: /address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups
 id: fe2aa774-e1fe-4680-a439-8bd1d0eb4abc
 name: Superman 2
 main__address_book_root__singleton_key_: null

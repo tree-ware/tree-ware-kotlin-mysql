@@ -12,25 +12,25 @@ UPDATE test__address_book.main__address_book_person
   WHERE id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd') AND field_path_ = '/address_book/person';
 UPDATE test__address_book.main__address_book_relation
   SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = 6
-  WHERE id = UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b') AND field_path_ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation';
+  WHERE id = UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b') AND field_path_ = '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation';
 UPDATE test__address_book.crypto__password
   SET updated_on_ = '2022-04-14T00:40:41.450', current = '{"hashed":"test-hashed-lois-2","hash_version":1}', previous = '[{"hashed":"test-hashed-password2-2","hash_version":1}]'
-  WHERE field_path_ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password';
+  WHERE field_path_ = '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password';
 UPDATE test__address_book.crypto__secret
   SET updated_on_ = '2022-04-14T00:40:41.450', main = '{"encrypted":"test-encrypted-main-secret-2","cipher_version":1}', other = '[{"encrypted":"test-encrypted-secret2-2","cipher_version":1}]'
-  WHERE field_path_ = '/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret';
+  WHERE field_path_ = '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret';
 UPDATE test__address_book.main__address_book_person
   SET updated_on_ = '2022-04-14T00:40:41.450', first_name = 'Clark 2', last_name = 'Kent 2', hero_name = 'Superman 2', email = '[{"value":"clark.kent.2@dailyplanet.com"}]', picture = 0x50696374757265206f6620436c61726b204b656e742032
   WHERE id = UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f') AND field_path_ = '/address_book/person';
 UPDATE test__address_book.main__address_book_relation
   SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = 6
-  WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path_ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation';
+  WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path_ = '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation';
 UPDATE test__address_book.crypto__password
   SET updated_on_ = '2022-04-14T00:40:41.450', previous = '[{"hashed":"test-hashed-superman-2","hash_version":1}]'
-  WHERE field_path_ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password';
+  WHERE field_path_ = '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password';
 UPDATE test__address_book.crypto__secret
   SET updated_on_ = '2022-04-14T00:40:41.450', other = '[{"encrypted":"test-encrypted-secret2-2","cipher_version":1}]'
-  WHERE field_path_ = '/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret';
+  WHERE field_path_ = '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret';
 UPDATE test__address_book.main__person_group
   SET updated_on_ = '2022-04-14T00:40:41.450', name = 'Marvel 2'
   WHERE id = UUID_TO_BIN('ad9aaea8-30fe-45ed-93ef-bd368da0c756') AND field_path_ = '/address_book/groups';
@@ -39,13 +39,13 @@ UPDATE test__address_book.main__person_group
   WHERE id = UUID_TO_BIN('ca0a22e8-c300-4347-91b0-167a5f6f4f9a') AND field_path_ = '/address_book/groups';
 UPDATE test__address_book.main__person_group
   SET updated_on_ = '2022-04-14T00:40:41.450', name = 'Superman 2'
-  WHERE id = UUID_TO_BIN('fe2aa774-e1fe-4680-a439-8bd1d0eb4abc') AND field_path_ = '/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups';
+  WHERE id = UUID_TO_BIN('fe2aa774-e1fe-4680-a439-8bd1d0eb4abc') AND field_path_ = '/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups';
 UPDATE test__address_book.main__address_book_person
   SET updated_on_ = '2022-04-14T00:40:41.450', first_name = 'Clark 3', last_name = 'Kent 3', hero_name = 'Superman 3'
-  WHERE id = UUID_TO_BIN('546a4982-b39a-4d01-aeb3-22d60c6963c0') AND field_path_ = '/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons';
+  WHERE id = UUID_TO_BIN('546a4982-b39a-4d01-aeb3-22d60c6963c0') AND field_path_ = '/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons';
 UPDATE test__address_book.main__address_book_person
   SET updated_on_ = '2022-04-14T00:40:41.450', first_name = 'Lois 3', last_name = 'Lane 3', hero_name = 'n/a'
-  WHERE id = UUID_TO_BIN('e391c509-67d6-4846-bfea-0f7cd9c91bf7') AND field_path_ = '/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons';
+  WHERE id = UUID_TO_BIN('e391c509-67d6-4846-bfea-0f7cd9c91bf7') AND field_path_ = '/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons';
 UPDATE test__address_book.city__city_info
   SET updated_on_ = '2022-04-14T00:40:41.450', related_city_info = '[{"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}]', info = 'Capital of New York state 2', latitude = 42.651935, longitude = -73.75478, city_center = ST_SRID(Point(-73.75478, 42.651935), 4326)
   WHERE name = 'Albany' AND state = 'New York' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';

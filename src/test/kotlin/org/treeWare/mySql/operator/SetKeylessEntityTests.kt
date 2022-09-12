@@ -94,32 +94,31 @@ class SetKeylessEntityTests {
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyless_child",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyed_child/Clark keyed child",
                     "unable to create: duplicate"
                 ),
-                ElementModelError("/address_book/city_info[Fremont,California,USA]", "unable to create: duplicate"),
+                ElementModelError("/address_book/city_info/Fremont/California/USA", "unable to create: duplicate"),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "/address_book/city_info/Fremont/California/USA/keyless", "unable to create: duplicate"
+                ),
+                ElementModelError(
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyless_child",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
-                    "unable to create: duplicate"
-                ),
-                ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyed_child/Fremont keyed child",
                     "unable to create: duplicate"
                 ),
             )
@@ -168,27 +167,27 @@ class SetKeylessEntityTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
-                ElementModelError("/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]", "unable to update"),
+                ElementModelError("/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f", "unable to update"),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyless_child",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyed_child/Clark keyed child",
                     "unable to update"
                 ),
-                ElementModelError("/address_book/city_info[Fremont,California,USA]", "unable to update"),
-                ElementModelError("/address_book/city_info[Fremont,California,USA]/keyless", "unable to update"),
+                ElementModelError("/address_book/city_info/Fremont/California/USA", "unable to update"),
+                ElementModelError("/address_book/city_info/Fremont/California/USA/keyless", "unable to update"),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyless_child",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyed_child/Fremont keyed child",
                     "unable to update"
                 ),
             )
@@ -249,27 +248,27 @@ class SetKeylessEntityTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless",
                     "unable to create: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyless_child",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyless_child",
                     "unable to create: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless/keyed_child[Clark keyed child]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless/keyed_child/Clark keyed child",
                     "unable to create: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "/address_book/city_info/Fremont/California/USA/keyless",
                     "unable to create: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyless_child",
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyless_child",
                     "unable to create: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless/keyed_child[Fremont keyed child]",
+                    "/address_book/city_info/Fremont/California/USA/keyless/keyed_child/Fremont keyed child",
                     "unable to create: no parent or target entity"
                 ),
             )
@@ -327,11 +326,11 @@ class SetKeylessEntityTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/city_info[Fremont,California,USA]/keyless",
+                    "/address_book/city_info/Fremont/California/USA/keyless",
                     "unable to delete: has children or source entity"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/keyless",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/keyless",
                     "unable to delete: has children or source entity"
                 ),
             )

@@ -353,79 +353,79 @@ class SetCreateTests {
                 ElementModelError("/address_book/settings", "unable to create: duplicate"),
                 ElementModelError("/address_book/settings/advanced", "unable to create: duplicate"),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/password",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/secret",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[16634916-8f83-4376-ad42-37038e108a0b]",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/16634916-8f83-4376-ad42-37038e108a0b",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/password",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/secret",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person[ec983c56-320f-4d66-9dde-f180e8ac3807]",
+                    "/address_book/person/ec983c56-320f-4d66-9dde-f180e8ac3807",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]",
+                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]",
+                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[546a4982-b39a-4d01-aeb3-22d60c6963c0]",
+                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/546a4982-b39a-4d01-aeb3-22d60c6963c0",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups[ca0a22e8-c300-4347-91b0-167a5f6f4f9a]/sub_groups[fe2aa774-e1fe-4680-a439-8bd1d0eb4abc]/persons[e391c509-67d6-4846-bfea-0f7cd9c91bf7]",
+                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/e391c509-67d6-4846-bfea-0f7cd9c91bf7",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups[ad9aaea8-30fe-45ed-93ef-bd368da0c756]",
+                    "/address_book/groups/ad9aaea8-30fe-45ed-93ef-bd368da0c756",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[New York City,New York,United States of America]",
+                    "/address_book/city_info/New York City/New York/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Albany,New York,United States of America]",
+                    "/address_book/city_info/Albany/New York/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[Princeton,New Jersey,United States of America]",
+                    "/address_book/city_info/Princeton/New Jersey/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info[San Francisco,California,United States of America]",
+                    "/address_book/city_info/San Francisco/California/United States of America",
                     "unable to create: duplicate"
                 ),
             )
@@ -462,7 +462,7 @@ class SetCreateTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: no parent or target entity"
                 )
             )
@@ -539,7 +539,7 @@ class SetCreateTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]/relation[05ade278-4b44-43da-a0cc-14463854e397]",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: duplicate"
                 )
             )

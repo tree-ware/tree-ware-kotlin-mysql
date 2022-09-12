@@ -100,7 +100,7 @@ class SetDeleteTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[cc477201-48ec-4367-83a4-7fdbd92f8a6f]",
+                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f",
                     "unable to delete: has children or source entity"
                 )
             )
@@ -189,7 +189,7 @@ class SetDeleteTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person[a8aacf55-7810-4b43-afe5-4344f25435fd]",
+                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
                     "unable to delete: has children or source entity"
                 )
             )
