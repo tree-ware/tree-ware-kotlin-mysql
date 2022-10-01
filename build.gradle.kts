@@ -35,7 +35,6 @@ dependencies {
     testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
     testImplementation(kotlin("test"))
 
-
     testFixturesImplementation("com.zaxxer:HikariCP:$hikariCpVersion")
     testFixturesImplementation("org.testcontainers:mysql:$testContainerVersion")
 }
@@ -43,4 +42,3 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-
