@@ -12,10 +12,17 @@ object MySqlTestContainer {
         dbServer.start()
     }
 
-    fun getDataSource(): DataSource = HikariDataSource().apply {
-        this.jdbcUrl = dbServer.jdbcUrl
-        this.username = "root"
-        this.password = dbServer.password
-        this.isAutoCommit = false
-    }
+    fun getDataSource(
+        autoCommit: Boolean = false,
+        useServerPreparedStatements: Boolean = false,
+        allowMultiQueries: Boolean = false
+    ): DataSource =
+        HikariDataSource().apply {
+            this.jdbcUrl = dbServer.jdbcUrl
+            this.username = "root"
+            this.password = dbServer.password
+            this.isAutoCommit = autoCommit
+            this.addDataSourceProperty("useServerPrepStmts", useServerPreparedStatements)
+            this.addDataSourceProperty("allowMultiQueries", allowMultiQueries)
+        }
 }
