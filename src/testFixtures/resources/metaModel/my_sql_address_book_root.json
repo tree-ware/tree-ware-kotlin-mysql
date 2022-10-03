@@ -1,5 +1,8 @@
 {
   "meta_model": {
+    "version": {
+      "semantic": "1.0.0"
+    },
     "root": {
       "name": "address_book",
       "type": "composition",
