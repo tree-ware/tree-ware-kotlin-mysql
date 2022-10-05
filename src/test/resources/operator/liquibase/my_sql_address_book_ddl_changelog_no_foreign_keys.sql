@@ -1,4 +1,14 @@
+-- liquibase formatted sql
+
+-- AUTO-GENERATED FILE. DO NOT EDIT.
+
+-- Meta-model version: address_book 1.0.0 pacific-ocean
+
+-- changeset address_book-1.0.0:1
 CREATE DATABASE IF NOT EXISTS test__address_book;
+-- rollback DROP DATABASE IF EXISTS test__address_book;
+
+-- changeset address_book-1.0.0:2
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_root (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -8,6 +18,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_root (
   last_updated TIMESTAMP(3),
   PRIMARY KEY (singleton_key_)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__address_book_root;
+
+-- changeset address_book-1.0.0:3
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -18,6 +31,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
   main__address_book_root__singleton_key_ INT UNSIGNED,
   UNIQUE INDEX main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__address_book_settings;
+
+-- changeset address_book-1.0.0:4
 CREATE TABLE IF NOT EXISTS test__address_book.main__advanced_settings (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -26,6 +42,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__advanced_settings (
   main__address_book_root__singleton_key_ INT UNSIGNED,
   UNIQUE INDEX main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__advanced_settings;
+
+-- changeset address_book-1.0.0:5
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -43,6 +62,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   PRIMARY KEY (id),
   UNIQUE INDEX self (self__id)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__address_book_person;
+
+-- changeset address_book-1.0.0:6
 CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_relation (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -55,6 +77,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_relation (
   main__person_group__id BINARY(16),
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__address_book_relation;
+
+-- changeset address_book-1.0.0:7
 CREATE TABLE IF NOT EXISTS test__address_book.crypto__password (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -65,6 +90,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__password (
   main__person_group__id BINARY(16),
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.crypto__password;
+
+-- changeset address_book-1.0.0:8
 CREATE TABLE IF NOT EXISTS test__address_book.crypto__secret (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -75,6 +103,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__secret (
   main__person_group__id BINARY(16),
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.crypto__secret;
+
+-- changeset address_book-1.0.0:9
 CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyless (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -88,6 +119,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyless (
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id),
   UNIQUE INDEX city__city_info__name (city__city_info__name, city__city_info__state, city__city_info__country)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.keyless__keyless;
+
+-- changeset address_book-1.0.0:10
 CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyless_child (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -101,6 +135,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyless_child (
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id),
   UNIQUE INDEX city__city_info__name (city__city_info__name, city__city_info__state, city__city_info__country)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.keyless__keyless_child;
+
+-- changeset address_book-1.0.0:11
 CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyed_child (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -114,6 +151,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyed_child (
   city__city_info__country VARCHAR(64),
   PRIMARY KEY (name)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.keyless__keyed_child;
+
+-- changeset address_book-1.0.0:12
 CREATE TABLE IF NOT EXISTS test__address_book.main__person_group (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -124,6 +164,9 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__person_group (
   main__person_group__id BINARY(16),
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.main__person_group;
+
+-- changeset address_book-1.0.0:13
 CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   created_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
@@ -149,3 +192,4 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   UNIQUE INDEX coordinates (latitude, longitude),
   UNIQUE INDEX self (self__name, self__state, self__country)
 ) ENGINE = InnoDB;
+-- rollback DROP TABLE IF EXISTS test__address_book.city__city_info;

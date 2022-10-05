@@ -13,20 +13,19 @@ fun createDatabase(
     dataSource: DataSource,
     logCommands: Boolean = false,
     foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
-) {
-    val connection = dataSource.connection
-    val commands = generateDdlCommands(mainMeta, delegates, foreignKeyConstraints)
-    commands.forEach { command ->
-        if (logCommands) logger.info { command }
-        val statement = connection.createStatement()
-        try {
-            statement.executeUpdate(command)
-        } catch (e: Exception) {
-            logger.error { "Exception for SQL command: $command" }
-            throw e
-        } finally {
-            statement.close()
+) = dataSource.connection.use { connection ->
+    val changeSets = generateDdlChangeSets(mainMeta, delegates, true, foreignKeyConstraints)
+    changeSets.forEach { changeSet ->
+        changeSet.commands.forEach { command ->
+            if (logCommands) logger.info { command }
+            connection.createStatement().use { statement ->
+                try {
+                    statement.executeUpdate(command)
+                } catch (e: Exception) {
+                    logger.error { "Exception for SQL command: $command" }
+                    throw e
+                }
+            }
         }
     }
-    connection.close()
 }

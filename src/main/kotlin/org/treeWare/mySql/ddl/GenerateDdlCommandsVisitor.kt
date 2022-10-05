@@ -1,47 +1,82 @@
 package org.treeWare.mySql.ddl
 
+import org.treeWare.metaModel.aux.getResolvedVersionAux
+import org.treeWare.metaModel.getMainMetaName
 import org.treeWare.model.core.*
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.ddl.traversal.Leader1DdlVisitor
+import org.treeWare.mySql.operator.liquibase.ChangeSet
+import org.treeWare.mySql.operator.liquibase.MutableChangeSet
 import java.io.StringWriter
 
-class GenerateDdlCommandsVisitor : Leader1DdlVisitor<TraversalAction> {
-    val commands: List<String> get() = createCommands + alterCommands
+class GenerateDdlCommandsVisitor(
+    mainMeta: MainModel,
+    private val createDatabase: Boolean
+) : Leader1DdlVisitor<TraversalAction> {
+    val changeSets: List<ChangeSet>
+        get() = (createChangeSets + alterChangeSets).also { changeSets ->
+            changeSets.forEachIndexed { index, changeSet ->
+                changeSet.sequenceNumber = index + 1
+            }
+        }
 
-    private val createCommands = mutableListOf<String>()
-    private val alterCommands = mutableListOf<String>()
+    private val liquibaseAuthor = getLiquibaseAuthor(mainMeta)
+
+    private val createChangeSets = mutableListOf<MutableChangeSet>()
+    private val alterChangeSets = mutableListOf<MutableChangeSet>()
 
     private var createTableCommand = StringWriter()
     private var createTableHasContent = false
+    private var createTableRollbackCommand = StringWriter()
     private var alterTableCommand = StringWriter()
     private var alterTableHasContent = false
+    private var alterTableRollbackCommand = StringWriter()
+
+    private fun resetCommandState() {
+        createTableCommand = StringWriter()
+        createTableHasContent = false
+        createTableRollbackCommand = StringWriter()
+        alterTableCommand = StringWriter()
+        alterTableHasContent = false
+        alterTableRollbackCommand = StringWriter()
+    }
 
     override fun visitDatabase(leaderDatabase1: EntityModel): TraversalAction {
-        val databaseName = getSingleString(leaderDatabase1, "name")
-        val command = "CREATE DATABASE IF NOT EXISTS $databaseName;"
-        createCommands.add(command)
+        if (createDatabase) {
+            val databaseName = getSingleString(leaderDatabase1, "name")
+            val command = "CREATE DATABASE IF NOT EXISTS $databaseName;"
+            val rollbackCommand = "DROP DATABASE IF EXISTS $databaseName;"
+            val createChangeSet = MutableChangeSet(liquibaseAuthor).add(command, rollbackCommand)
+            createChangeSets.add(createChangeSet)
+        }
         return TraversalAction.CONTINUE
     }
 
     override fun leaveDatabase(leaderDatabase1: EntityModel) {}
 
     override fun visitTable(leaderTable1: EntityModel): TraversalAction {
+        resetCommandState()
         val tableName = getSingleString(leaderTable1, "name")
-        createTableCommand = StringWriter()
-        createTableHasContent = false
         createTableCommand.append("CREATE TABLE IF NOT EXISTS $tableName (")
-        alterTableCommand = StringWriter()
-        alterTableHasContent = false
+        createTableRollbackCommand.append("DROP TABLE IF EXISTS $tableName;")
         alterTableCommand.append("ALTER TABLE $tableName")
+        alterTableRollbackCommand.append("ALTER TABLE $tableName")
         return TraversalAction.CONTINUE
     }
 
     override fun leaveTable(leaderTable1: EntityModel) {
         createTableCommand.appendLine().append(") ENGINE = InnoDB;")
-        createCommands.add(createTableCommand.toString())
+        val createChangeSet =
+            MutableChangeSet(liquibaseAuthor).add(createTableCommand.toString(), createTableRollbackCommand.toString())
+        createChangeSets.add(createChangeSet)
         if (alterTableHasContent) {
             alterTableCommand.append(";")
-            alterCommands.add(alterTableCommand.toString())
+            alterTableRollbackCommand.append(";")
+            val alterChangeSet = MutableChangeSet(liquibaseAuthor).add(
+                alterTableCommand.toString(),
+                alterTableRollbackCommand.toString()
+            )
+            alterChangeSets.add(alterChangeSet)
         }
     }
 
@@ -102,12 +137,19 @@ class GenerateDdlCommandsVisitor : Leader1DdlVisitor<TraversalAction> {
             .append("(")
             .append(targetKeys.joinToString())
             .append(") ON DELETE RESTRICT")
+        alterTableRollbackCommand
+            .appendLine(if (alterTableHasContent) "," else "")
+            .append("  DROP FOREIGN KEY ")
+            .append(foreignKeyName)
         alterTableHasContent = true
         return TraversalAction.CONTINUE
     }
 
     override fun leaveForeignKey(leaderForeignKey1: EntityModel) {}
 }
+
+private fun getLiquibaseAuthor(mainMeta: MainModel): String =
+    "${getMainMetaName(mainMeta)}-${getResolvedVersionAux(mainMeta).semantic}"
 
 private fun getPrimitiveValues(stringListField: CollectionFieldModel): List<Any> = stringListField.values
     .filterIsInstance<PrimitiveModel>()

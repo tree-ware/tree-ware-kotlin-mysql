@@ -11,6 +11,7 @@ import org.treeWare.mySql.ddlMetaModel
 import org.treeWare.mySql.operator.ddl.Column
 import org.treeWare.mySql.operator.ddl.getAssociationFieldColumns
 import org.treeWare.mySql.operator.ddl.getFieldColumns
+import org.treeWare.mySql.operator.liquibase.ChangeSet
 import org.treeWare.util.assertInDevMode
 
 interface GenerateDdlCommandsEntityDelegate {
@@ -20,18 +21,19 @@ interface GenerateDdlCommandsEntityDelegate {
 
 object GenerateDdlCommandsOperatorId : OperatorId<GenerateDdlCommandsEntityDelegate>
 
-fun generateDdlCommands(
+fun generateDdlChangeSets(
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
+    createDatabase: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
-): List<String> {
+): List<ChangeSet> {
     val ddlModel = MutableMainModel(ddlMetaModel)
     val ddlRoot = ddlModel.getOrNewRoot()
     populateMain(ddlRoot, mainMeta, entityDelegates, createForeignKeyConstraints)
 
-    val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor()
+    val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor(mainMeta, createDatabase)
     leader1DdlForEach(ddlModel, generateDdlCommandsVisitor)
-    return generateDdlCommandsVisitor.commands
+    return generateDdlCommandsVisitor.changeSets
 }
 
 private class DdlState {

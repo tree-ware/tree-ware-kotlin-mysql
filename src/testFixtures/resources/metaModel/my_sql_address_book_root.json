@@ -1,7 +1,8 @@
 {
   "meta_model": {
     "version": {
-      "semantic": "1.0.0"
+      "semantic": "1.0.0",
+      "name": "pacific-ocean"
     },
     "root": {
       "name": "address_book",
