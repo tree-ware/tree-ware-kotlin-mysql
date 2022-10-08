@@ -12,14 +12,13 @@ import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
-import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
+import org.treeWare.mySql.testDataSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -38,7 +37,6 @@ class SetMixedTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
 
-    private val dataSource: DataSource = MySqlTestContainer.getDataSource()
     private val emptyDatabaseRows: String
 
     init {
@@ -46,13 +44,13 @@ class SetMixedTests {
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
-        emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
+        emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
     }
 
     @AfterEach
     fun afterEach() {
-        clearDatabase(dataSource, TEST_DATABASE)
+        clearDatabase(testDataSource, TEST_DATABASE)
     }
 
 
@@ -98,7 +96,7 @@ class SetMixedTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main__address_book_person =
@@ -148,7 +146,7 @@ class SetMixedTests {
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -188,7 +186,7 @@ class SetMixedTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedMixedResponse = SetResponse.Success
-        val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
+        val actualMixedResponse = set(mixed, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRowsExpected = """
             |= Table main__address_book_person =
@@ -253,7 +251,7 @@ class SetMixedTests {
             |
         """.trimMargin()
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterMixedRowsExpected, afterMixedRows)
     }
 
@@ -304,7 +302,7 @@ class SetMixedTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main__address_book_person =
@@ -369,7 +367,7 @@ class SetMixedTests {
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -415,10 +413,10 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
+        val actualMixedResponse = set(mixed, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
     }
 
@@ -451,7 +449,7 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
             |= Table main__address_book_person =
@@ -490,7 +488,7 @@ class SetMixedTests {
             |
         """.trimMargin()
         val afterCreateRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val mixedJson = """
@@ -537,10 +535,10 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
+        val actualMixedResponse = set(mixed, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person", "main__address_book_relation")
         assertEquals(afterCreateRowsExpected, afterMixedRows)
     }
 
@@ -599,9 +597,9 @@ class SetMixedTests {
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
         val expectedCreateResponse = SetResponse.Success
-        val actualCreateResponse = set(create, setEntityDelegates, dataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
-        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val mixedJson = """
@@ -668,9 +666,9 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualMixedResponse = set(mixed, setEntityDelegates, dataSource, clock = updateClock)
+        val actualMixedResponse = set(mixed, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
-        val afterMixedRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val afterMixedRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterMixedRows)
     }
 }

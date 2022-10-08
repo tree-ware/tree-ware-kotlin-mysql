@@ -14,14 +14,13 @@ import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
-import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
+import org.treeWare.mySql.testDataSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import javax.sql.DataSource
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 
@@ -37,19 +36,17 @@ class SetCreateTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
 
-    private val dataSource: DataSource = MySqlTestContainer.getDataSource()
-
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, dataSource)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
     }
 
     @AfterEach
     fun afterEach() {
-        clearDatabase(dataSource, TEST_DATABASE)
+        clearDatabase(testDataSource, TEST_DATABASE)
     }
 
     @Test
@@ -60,10 +57,10 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
-        val actualRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val actualRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(expectedRows, actualRows)
     }
 
@@ -75,10 +72,10 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/forward_referencing_association_set_create_results.txt")
-        val actualRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val actualRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(expectedRows, actualRows)
     }
 
@@ -123,7 +120,7 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table city__city_info =
@@ -151,7 +148,7 @@ class SetCreateTests {
             |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "city__city_info")
+        val actualRows = getTableRows(testDataSource, TEST_DATABASE, "city__city_info")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -170,7 +167,7 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main__address_book_root =
@@ -184,7 +181,7 @@ class SetCreateTests {
             |last_updated: null
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main__address_book_root")
+        val actualRows = getTableRows(testDataSource, TEST_DATABASE, "main__address_book_root")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -206,7 +203,7 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main__address_book_root =
@@ -232,7 +229,7 @@ class SetCreateTests {
             |
         """.trimMargin()
         val actualRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -253,7 +250,7 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main__address_book_root =
@@ -279,7 +276,7 @@ class SetCreateTests {
             |
         """.trimMargin()
         val actualRows =
-            getTableRows(dataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
+            getTableRows(testDataSource, TEST_DATABASE, "main__address_book_root", "main__address_book_settings")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -303,7 +300,7 @@ class SetCreateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedResponse = SetResponse.Success
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
             |= Table main__address_book_person =
@@ -324,7 +321,7 @@ class SetCreateTests {
             |main__person_group__id: null
             |
         """.trimMargin()
-        val actualRows = getTableRows(dataSource, TEST_DATABASE, "main__address_book_person")
+        val actualRows = getTableRows(testDataSource, TEST_DATABASE, "main__address_book_person")
         assertEquals(expectedRows, actualRows)
     }
 
@@ -339,13 +336,13 @@ class SetCreateTests {
 
         // Create the model the first time.
         val expectedResponse1 = SetResponse.Success
-        val actualResponse1 = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse1 = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse1, actualResponse1)
-        val actualRows1 = getDatabaseRows(dataSource, TEST_DATABASE)
+        val actualRows1 = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(expectedRows, actualRows1)
 
         // Try to create the same model again. It should fail.
-        val actualResponse2 = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse2 = set(create, setEntityDelegates, testDataSource, clock = clock)
         val expectedResponse2 = SetResponse.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
@@ -431,13 +428,13 @@ class SetCreateTests {
             )
         )
         assertSetResponse(expectedResponse2, actualResponse2)
-        val actualRows2 = getDatabaseRows(dataSource, TEST_DATABASE)
+        val actualRows2 = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(expectedRows, actualRows2)
     }
 
     @Test
     fun `Set-create must fail when creating a child without a parent`() {
-        val emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val modelJson = """
             |{
             |  "address_book": {
@@ -473,15 +470,15 @@ class SetCreateTests {
                 modelJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualResponse = set(create, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
-        val afterCreateRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
     }
 
     @Test
     fun `Set-create must fail when creating an entity with existing keys but different entity path`() {
-        val emptyDatabaseRows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val create1Json = """
             |{
             |  "address_book": {
@@ -509,9 +506,9 @@ class SetCreateTests {
                 create1Json,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualResponse1 = set(create1, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse1 = set(create1, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse1, actualResponse1)
-        val afterCreate1Rows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val afterCreate1Rows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreate1Rows)
 
         // Attempt to recreate the relation entity but under a different person entity.
@@ -550,9 +547,9 @@ class SetCreateTests {
                 create2Json,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val actualResponse2 = set(create2, setEntityDelegates, dataSource, clock = clock)
+        val actualResponse2 = set(create2, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse2, actualResponse2)
-        val afterCreate2Rows = getDatabaseRows(dataSource, TEST_DATABASE)
+        val afterCreate2Rows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreate1Rows, afterCreate2Rows)
     }
 }
