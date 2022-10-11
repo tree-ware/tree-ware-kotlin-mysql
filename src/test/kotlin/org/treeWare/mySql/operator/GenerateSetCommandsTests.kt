@@ -8,9 +8,9 @@ import org.treeWare.model.operator.set.SetResponse
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
-import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.MySqlSetDelegate
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
+import org.treeWare.util.readFile
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset

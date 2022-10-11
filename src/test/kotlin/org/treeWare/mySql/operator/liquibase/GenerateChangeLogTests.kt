@@ -2,10 +2,10 @@ package org.treeWare.mySql.operator.liquibase
 
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.CreateForeignKeyConstraints
 import org.treeWare.mySql.operator.GenerateDdlCommandsOperatorId
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
+import org.treeWare.util.readFile
 import java.io.StringWriter
 import kotlin.test.Test
 import kotlin.test.assertEquals
