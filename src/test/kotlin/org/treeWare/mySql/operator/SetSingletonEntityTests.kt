@@ -12,12 +12,12 @@ import org.treeWare.model.operator.set.SetResponse
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
-import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
 import org.treeWare.mySql.testDataSource
+import org.treeWare.util.readFile
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset

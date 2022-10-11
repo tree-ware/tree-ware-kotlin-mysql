@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
-import org.treeWare.model.readFile
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getColumnsSchema
 import org.treeWare.mySql.test.getIndexesSchema
 import org.treeWare.mySql.testDataSource
+import org.treeWare.util.readFile
 import kotlin.test.assertEquals
 
 private const val TEST_DATABASE = "test__address_book"

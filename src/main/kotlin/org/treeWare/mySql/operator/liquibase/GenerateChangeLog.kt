@@ -7,7 +7,23 @@ import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.mySql.operator.CreateForeignKeyConstraints
 import org.treeWare.mySql.operator.GenerateDdlCommandsEntityDelegate
 import org.treeWare.mySql.operator.generateDdlChangeSets
+import java.io.File
 import java.io.Writer
+
+
+fun generateChangeLog(
+    mainMeta: MainModel,
+    entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
+    createDatabase: Boolean,
+    createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
+) {
+    val directoryPath = getReleaseChangeLogDirectoryPath(mainMeta, GENERATED_ROOT_DIRECTORY)
+    File(directoryPath).mkdirs()
+    val fileName = getReleaseChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY, false)
+    File(fileName).bufferedWriter().use { writer ->
+        generateChangeLog(writer, mainMeta, entityDelegates, createDatabase, createForeignKeyConstraints)
+    }
+}
 
 fun generateChangeLog(
     writer: Writer,
