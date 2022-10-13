@@ -18,7 +18,7 @@ class GenerateChangeLogTests {
         val entityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
         val writer = StringWriter()
-        generateChangeLog(writer, mySqlAddressBookMetaModel, entityDelegates, true)
+        generateChangeLog(writer, mySqlAddressBookMetaModel, entityDelegates, true, false)
 
         val expected = readFile("operator/liquibase/my_sql_address_book_ddl_changelog.sql")
         val actual = writer.toString()
@@ -32,7 +32,14 @@ class GenerateChangeLogTests {
         val entityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
         val writer = StringWriter()
-        generateChangeLog(writer, mySqlAddressBookMetaModel, entityDelegates, true, CreateForeignKeyConstraints.NONE)
+        generateChangeLog(
+            writer,
+            mySqlAddressBookMetaModel,
+            entityDelegates,
+            true,
+            true,
+            CreateForeignKeyConstraints.NONE
+        )
 
         val expected = readFile("operator/liquibase/my_sql_address_book_ddl_changelog_no_foreign_keys.sql")
         val actual = writer.toString()

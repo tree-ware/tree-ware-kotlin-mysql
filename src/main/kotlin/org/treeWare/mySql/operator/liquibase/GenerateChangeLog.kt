@@ -15,13 +15,21 @@ fun generateChangeLog(
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
+    fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val directoryPath = getReleaseChangeLogDirectoryPath(mainMeta, GENERATED_ROOT_DIRECTORY)
     File(directoryPath).mkdirs()
     val fileName = getReleaseChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY, false)
     File(fileName).bufferedWriter().use { writer ->
-        generateChangeLog(writer, mainMeta, entityDelegates, createDatabase, createForeignKeyConstraints)
+        generateChangeLog(
+            writer,
+            mainMeta,
+            entityDelegates,
+            createDatabase,
+            fullyQualifyTableNames,
+            createForeignKeyConstraints
+        )
     }
 }
 
@@ -30,6 +38,7 @@ fun generateChangeLog(
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
+    fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     writer.appendLine("-- liquibase formatted sql")
@@ -38,7 +47,13 @@ fun generateChangeLog(
     writer.appendLine()
     writer.appendLine(getMetaModelInfoComment(mainMeta))
 
-    val changeSets = generateDdlChangeSets(mainMeta, entityDelegates, createDatabase, createForeignKeyConstraints)
+    val changeSets = generateDdlChangeSets(
+        mainMeta,
+        entityDelegates,
+        createDatabase,
+        fullyQualifyTableNames,
+        createForeignKeyConstraints
+    )
     changeSets.forEach { it.writeTo(writer) }
 }
 

@@ -20,8 +20,9 @@ internal fun getReleaseChangeLogDirectoryPath(mainMeta: MainModel, basePath: Str
 }
 
 internal fun getReleaseChangeLogPath(mainMeta: MainModel, basePath: String, relativeToRootChangeLog: Boolean): String {
+    val metaModelName = getMainMetaName(mainMeta)
     val version = getResolvedVersionAux(mainMeta)
     val directory =
         if (relativeToRootChangeLog) RELEASE_SUBDIRECTORY else getReleaseChangeLogDirectoryPath(mainMeta, basePath)
-    return "$directory/${version.semantic}.sql"
+    return "$directory/$metaModelName-${version.semantic}.sql"
 }
