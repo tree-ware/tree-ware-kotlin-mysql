@@ -25,11 +25,12 @@ fun generateDdlChangeSets(
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
+    fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ): List<ChangeSet> {
     val ddlModel = MutableMainModel(ddlMetaModel)
     val ddlRoot = ddlModel.getOrNewRoot()
-    populateMain(ddlRoot, mainMeta, entityDelegates, createForeignKeyConstraints)
+    populateMain(ddlRoot, mainMeta, entityDelegates, fullyQualifyTableNames, createForeignKeyConstraints)
 
     val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor(mainMeta, createDatabase)
     leader1DdlForEach(ddlModel, generateDdlCommandsVisitor)
@@ -47,6 +48,7 @@ private fun populateMain(
     ddlRoot: MutableEntityModel,
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
+    fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val databaseName = getMySqlMetaModelMap(mainMeta)?.validated?.fullName ?: return
@@ -60,6 +62,7 @@ private fun populateMain(
         rootCompositionMeta,
         true,
         entityDelegates,
+        fullyQualifyTableNames,
         createForeignKeyConstraints,
         ddlState
     )
@@ -72,12 +75,14 @@ private fun populateComposition(
     compositionMeta: EntityModel,
     isRoot: Boolean,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
+    fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints,
     ddlState: DdlState
 ) {
-    val tableName = getMySqlMetaModelMap(compositionMeta)?.validated?.tableName ?: return
-    val tableFullName = getMySqlMetaModelMap(compositionMeta)?.validated?.fullName ?: return
-    val ddlTable = getDdlTable(ddlRoot, databaseName, tableFullName)
+    val validated = getMySqlMetaModelMap(compositionMeta)?.validated ?: return
+    val tableName = validated.tableName
+    val tableFullName = validated.fullName
+    val ddlTable = getDdlTable(ddlRoot, databaseName, if (fullyQualifyTableNames) tableFullName else tableName)
 
     val fieldsMeta = getFieldsMeta(compositionMeta).values.filterIsInstance<EntityModel>()
     if (!ddlState.visitedTables.contains(tableFullName)) {
@@ -115,6 +120,7 @@ private fun populateComposition(
             fieldCompositionMeta,
             false,
             entityDelegates,
+            fullyQualifyTableNames,
             createForeignKeyConstraints,
             ddlState
         )
@@ -286,11 +292,11 @@ private fun populateForeignKeys(ddlTable: MutableEntityModel, fieldMeta: EntityM
     }
 }
 
-private fun getDdlTable(ddlRoot: MutableEntityModel, databaseName: String, tableFullName: String): MutableEntityModel {
+private fun getDdlTable(ddlRoot: MutableEntityModel, databaseName: String, tableName: String): MutableEntityModel {
     val ddlDatabases = getOrNewMutableSetField(ddlRoot, "databases")
     val ddlDatabase = getOrNewNamedEntity(ddlDatabases, databaseName)
     val ddlTables = getOrNewMutableSetField(ddlDatabase, "tables")
-    val ddlTable = getOrNewNamedEntity(ddlTables, tableFullName)
+    val ddlTable = getOrNewNamedEntity(ddlTables, tableName)
     populateTreeWareColumns(ddlTable)
     return ddlTable
 }
