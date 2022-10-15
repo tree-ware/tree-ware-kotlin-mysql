@@ -1,6 +1,7 @@
 package org.treeWare.mySql.operator
 
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
@@ -34,6 +35,7 @@ private val createClock = Clock.fixed(Instant.parse(CREATE_TIME), ZoneOffset.UTC
 private const val UPDATE_TIME = "2022-04-04T00:40:41.440Z"
 private val updateClock = Clock.fixed(Instant.parse(UPDATE_TIME), ZoneOffset.UTC)
 
+@Tag("integrationTest")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SetSingletonEntityTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
