@@ -1,6 +1,7 @@
 package org.treeWare.mySql.operator
 
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
@@ -31,6 +32,7 @@ private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAM
 private const val NOW = "2022-04-14T00:40:41.450Z"
 private val clock = Clock.fixed(Instant.parse(NOW), ZoneOffset.UTC)
 
+@Tag("integrationTest")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SetCreateTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()

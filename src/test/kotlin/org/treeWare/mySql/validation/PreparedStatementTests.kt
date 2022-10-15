@@ -1,5 +1,6 @@
 package org.treeWare.mySql.validation
 
+import org.junit.jupiter.api.Tag
 import org.treeWare.mySql.test.MySqlTestContainer
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
@@ -15,6 +16,7 @@ private fun getInjectionName(databaseName: String): String = "user3'); DROP TABL
  * is no documentation of any sorts that explains whether client-side prepared-statements prevent SQL-injection by
  * escaping the values bound to the statement. These tests were created to answer that question.
  */
+@Tag("integrationTest")
 class PreparedStatementTests {
     @Test
     fun `SQL injection must be possible if the query is built with string concatenation`() {

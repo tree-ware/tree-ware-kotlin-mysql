@@ -1,9 +1,6 @@
 package org.treeWare.mySql.operator
 
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
+import org.junit.jupiter.api.*
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.assertMatchesJson
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
@@ -27,6 +24,7 @@ private const val TEST_DATABASE = "test__address_book"
 
 private val auxDecodingFactory = MultiAuxDecodingStateMachineFactory(SET_AUX_NAME to { SetAuxStateMachine(it) })
 
+@Tag("integrationTest")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GetTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
