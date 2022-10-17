@@ -1,11 +1,14 @@
 package org.treeWare.mySql.operator.delegate
 
+import java.sql.Connection
+import java.sql.PreparedStatement
+
 internal class SelectCommandBuilder(private val tableName: String) {
     fun addSelectColumns(columns: List<SqlColumn>) {
         columns.forEach { addSelectColumn(it) }
     }
 
-    fun addSelectColumn(column: SqlColumn) {
+    private fun addSelectColumn(column: SqlColumn) {
         if (selectBuilder.isNotEmpty()) selectBuilder.append(COMMA)
         addSqlColumnName(column, selectBuilder)
     }
@@ -15,21 +18,25 @@ internal class SelectCommandBuilder(private val tableName: String) {
     }
 
     fun addWhereColumn(column: SqlColumn) {
-        if (whereBuilder.isNotEmpty()) whereBuilder.append(AND)
-        val nameValueSeparator = if (column.value == null) IS else EQUALS
-        addSqlColumn(column, nameValueSeparator, whereBuilder)
+        if (whereColumns.isNotEmpty()) whereBuilder.append(AND)
+        val nameValueSeparator = if (column.isNull()) IS else EQUALS
+        addSqlColumnPlaceholder(column, nameValueSeparator, whereBuilder)
+        whereColumns.add(column)
     }
 
-    fun build(): String {
+    fun prepareStatement(connection: Connection): PreparedStatement {
         val command = StringBuilder("SELECT ")
             .append(selectBuilder)
             .append(" FROM ")
             .append(tableName)
-        if (whereBuilder.isNotEmpty()) command.appendLine().append("  WHERE ").append(whereBuilder)
+        if (whereColumns.isNotEmpty()) command.appendLine().append("  WHERE ").append(whereBuilder)
         command.append(";")
-        return command.toString()
+        val statement = connection.prepareStatement(command.toString())
+        whereColumns.fold(1) { index, column -> column.bindValues(statement, index) }
+        return statement
     }
 
     private val selectBuilder = StringBuilder()
     private val whereBuilder = StringBuilder()
+    private val whereColumns = mutableListOf<SqlColumn>()
 }

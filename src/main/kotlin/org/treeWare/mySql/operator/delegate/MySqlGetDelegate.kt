@@ -9,21 +9,26 @@ import org.treeWare.model.operator.*
 import org.treeWare.model.operator.get.GetCompositionResult
 import org.treeWare.model.operator.get.GetCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
-import org.treeWare.mySql.operator.FIELD_PATH_COLUMN_NAME
-import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_NAME
-import org.treeWare.mySql.operator.SINGLETON_KEY_COLUMN_VALUE
+import org.treeWare.mySql.getBoundSql
+import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableFullName
 import org.treeWare.mySql.util.getEntityMetaTableName
 import java.io.StringReader
 import java.nio.ByteBuffer
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.time.ZoneOffset
 import java.util.*
 
 private val UTC_TIMEZONE = TimeZone.getTimeZone(ZoneOffset.UTC)
 
-private val SINGLETON_SQL_COLUMN = SqlColumn(null, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE)
+private val SINGLETON_SQL_COLUMN =
+    SingleValuedSqlColumn(
+        null,
+        SINGLETON_KEY_COLUMN_NAME,
+        TypedValue(SINGLETON_KEY_COLUMN_SQL_TYPE, SINGLETON_KEY_COLUMN_VALUE)
+    )
 
 private data class SetResponseFieldResult(val errors: List<String>, val columnsConsumed: Int)
 
@@ -46,7 +51,13 @@ class MySqlGetDelegate(
         val select = SelectCommandBuilder(tableName)
         if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
         else getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
-        select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
+        select.addWhereColumn(
+            SingleValuedSqlColumn(
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
         requestFields.forEach {
             select.addSelectColumns(
                 getSqlColumns(
@@ -58,11 +69,10 @@ class MySqlGetDelegate(
                 )
             )
         }
-        val query = select.build()
-        if (logCommands) logger.info { query }
-        val statement = connection.createStatement()
+        val statement: PreparedStatement = select.prepareStatement(connection)
+        if (logCommands) logger.info { statement.getBoundSql() }
         return try {
-            val result = statement.executeQuery(query)
+            val result = statement.executeQuery()
             val errors = mutableListOf<String>()
             while (result.next()) {
                 var columnIndex = 1
@@ -102,7 +112,13 @@ class MySqlGetDelegate(
             if (requestKey.value != null) select.addWhereColumns(columns)
         }
         getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
-        select.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.QUOTE))
+        select.addWhereColumn(
+            SingleValuedSqlColumn(
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
         requestFields.forEach {
             select.addSelectColumns(
                 getSqlColumns(
@@ -114,11 +130,10 @@ class MySqlGetDelegate(
                 )
             )
         }
-        val query = select.build()
-        if (logCommands) logger.info { query }
-        val statement = connection.createStatement()
+        val statement = select.prepareStatement(connection)
+        if (logCommands) logger.info { statement.getBoundSql() }
         return try {
-            val result = statement.executeQuery(query)
+            val result = statement.executeQuery()
             val responseEntities = mutableListOf<MutableEntityModel>()
             val errors = mutableListOf<String>()
             while (result.next()) {

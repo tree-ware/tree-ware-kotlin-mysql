@@ -1,5 +1,8 @@
 package org.treeWare.mySql.operator.delegate
 
+import java.sql.Connection
+import java.sql.PreparedStatement
+
 internal class InsertCommandBuilder(private val tableName: String) {
     fun addColumns(columns: List<SqlColumn>) {
         columns.forEach { addColumn(it) }
@@ -8,26 +11,30 @@ internal class InsertCommandBuilder(private val tableName: String) {
     fun addColumn(column: SqlColumn) {
         if (nameBuilder.length > BEGIN_LENGTH) {
             nameBuilder.append(COMMA)
-            valueBuilder.append(COMMA)
+            valuePlaceholderBuilder.append(COMMA)
         }
         addSqlColumnName(column, nameBuilder)
-        addSqlColumnValue(column, valueBuilder)
+        valuePlaceholderBuilder.append(column.placeholder)
+        columns.add(column)
     }
 
-    fun build(): String {
+    fun prepareStatement(connection: Connection): PreparedStatement {
         nameBuilder.append(")")
-        valueBuilder.append(")")
-        return StringBuilder("INSERT INTO ")
+        valuePlaceholderBuilder.append(")")
+        val command = StringBuilder("INSERT INTO ")
             .appendLine(tableName)
             .appendLine(nameBuilder)
             .appendLine("  VALUES")
-            .append(valueBuilder)
+            .append(valuePlaceholderBuilder)
             .append(";")
-            .toString()
+        val statement = connection.prepareStatement(command.toString())
+        columns.fold(1) { index, column -> column.bindValues(statement, index) }
+        return statement
     }
 
     private val nameBuilder = StringBuilder(BEGIN)
-    private val valueBuilder = StringBuilder(BEGIN)
+    private val valuePlaceholderBuilder = StringBuilder(BEGIN)
+    private val columns = mutableListOf<SqlColumn>()
 }
 
 internal class UpdateCommandBuilder(private val tableName: String) {
@@ -36,8 +43,9 @@ internal class UpdateCommandBuilder(private val tableName: String) {
     }
 
     fun addUpdateColumn(column: SqlColumn) {
-        if (updateBuilder.isNotEmpty()) updateBuilder.append(COMMA)
-        addSqlColumn(column, EQUALS, updateBuilder)
+        if (updatePlaceholderBuilder.isNotEmpty()) updatePlaceholderBuilder.append(COMMA)
+        addSqlColumnPlaceholder(column, EQUALS, updatePlaceholderBuilder)
+        updateColumns.add(column)
     }
 
     fun addWhereColumns(columns: List<SqlColumn>) {
@@ -45,21 +53,29 @@ internal class UpdateCommandBuilder(private val tableName: String) {
     }
 
     fun addWhereColumn(column: SqlColumn) {
-        if (whereBuilder.isNotEmpty()) whereBuilder.append(AND)
-        addSqlColumn(column, EQUALS, whereBuilder)
+        if (wherePlaceholderBuilder.isNotEmpty()) wherePlaceholderBuilder.append(AND)
+        addSqlColumnPlaceholder(column, EQUALS, wherePlaceholderBuilder)
+        whereColumns.add(column)
     }
 
-    fun build(): String = StringBuilder("UPDATE ")
-        .appendLine(tableName)
-        .append("  SET ")
-        .appendLine(updateBuilder)
-        .append("  WHERE ")
-        .append(whereBuilder)
-        .append(";")
-        .toString()
+    fun prepareStatement(connection: Connection): PreparedStatement {
+        val command = StringBuilder("UPDATE ")
+            .appendLine(tableName)
+            .append("  SET ")
+            .appendLine(updatePlaceholderBuilder)
+            .append("  WHERE ")
+            .append(wherePlaceholderBuilder)
+            .append(";")
+        val statement = connection.prepareStatement(command.toString())
+        val indexAfterUpdate = updateColumns.fold(1) { index, column -> column.bindValues(statement, index) }
+        whereColumns.fold(indexAfterUpdate) { index, column -> column.bindValues(statement, index) }
+        return statement
+    }
 
-    private val updateBuilder = StringBuilder()
-    private val whereBuilder = StringBuilder()
+    private val updatePlaceholderBuilder = StringBuilder()
+    private val updateColumns = mutableListOf<SqlColumn>()
+    private val wherePlaceholderBuilder = StringBuilder()
+    private val whereColumns = mutableListOf<SqlColumn>()
 }
 
 internal class DeleteCommandBuilder(private val tableName: String) {
@@ -68,16 +84,22 @@ internal class DeleteCommandBuilder(private val tableName: String) {
     }
 
     fun addWhereColumn(column: SqlColumn) {
-        if (whereBuilder.isNotEmpty()) whereBuilder.append(AND)
-        addSqlColumn(column, EQUALS, whereBuilder)
+        if (wherePlaceholderBuilder.isNotEmpty()) wherePlaceholderBuilder.append(AND)
+        addSqlColumnPlaceholder(column, EQUALS, wherePlaceholderBuilder)
+        whereColumns.add(column)
     }
 
-    fun build(): String = StringBuilder("DELETE FROM ")
-        .appendLine(tableName)
-        .append("  WHERE ")
-        .append(whereBuilder)
-        .append(";")
-        .toString()
+    fun prepareStatement(connection: Connection): PreparedStatement {
+        val command = StringBuilder("DELETE FROM ")
+            .appendLine(tableName)
+            .append("  WHERE ")
+            .append(wherePlaceholderBuilder)
+            .append(";")
+        val statement = connection.prepareStatement(command.toString())
+        whereColumns.fold(1) { index, column -> column.bindValues(statement, index) }
+        return statement
+    }
 
-    private val whereBuilder = StringBuilder()
+    private val wherePlaceholderBuilder = StringBuilder()
+    private val whereColumns = mutableListOf<SqlColumn>()
 }

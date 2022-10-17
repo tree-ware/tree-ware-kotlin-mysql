@@ -15,6 +15,7 @@ import org.treeWare.mySql.util.getEntityMetaTableName
 import org.treeWare.mySql.util.getEntityTableFullName
 import org.treeWare.mySql.util.getEntityTableName
 import java.sql.Connection
+import java.sql.PreparedStatement
 import java.sql.SQLException
 import java.time.Clock
 import java.time.Instant
@@ -22,7 +23,7 @@ import java.time.Instant
 internal data class EntitySqlCommand(
     val action: String,
     val entityPath: String,
-    val sql: String,
+    val statement: PreparedStatement,
     val rowCount: Int? = 1 // not checked if null
 )
 
@@ -35,7 +36,8 @@ internal class MySqlSetDelegate(
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val connection: Connection?,
     private val logCommands: Boolean = false,
-    private val clock: Clock = Clock.systemUTC()
+    private val clock: Clock = Clock.systemUTC(),
+    private val issueCommands: Boolean = true
 ) : SetDelegate {
     // NOTE: the order of commands is important since MySQL does not support deferring constraint checks
     // to the end of the transaction.
@@ -110,28 +112,71 @@ internal class MySqlSetDelegate(
         associations: List<FieldModel>,
         other: List<FieldModel>
     ) {
+        if (connection == null) return
         val insertBuilder = InsertCommandBuilder(tableName)
         val updateBuilder = UpdateCommandBuilder(tableName)
-        insertBuilder.addColumn(SqlColumn(null, CREATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
-        insertBuilder.addColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
-        insertBuilder.addColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
+        insertBuilder.addColumn(
+            SingleValuedSqlColumn(
+                null,
+                CREATED_ON_COLUMN_NAME,
+                TypedValue(CREATED_ON_COLUMN_SQL_TYPE, now)
+            )
+        )
+        insertBuilder.addColumn(
+            SingleValuedSqlColumn(
+                null,
+                UPDATED_ON_COLUMN_NAME,
+                TypedValue(UPDATED_ON_COLUMN_SQL_TYPE, now)
+            )
+        )
+        insertBuilder.addColumn(
+            SingleValuedSqlColumn(
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
         val ancestorKeyCount = addAncestorKeys(ancestorKeys, insertBuilder)
         if (ancestorKeyCount == 0) {
             val isRoot = ancestorKeys.size == 1
             val namePrefix = if (isRoot) null else rootTableName
-            insertBuilder.addColumn(SqlColumn(namePrefix, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_VALUE))
+            insertBuilder.addColumn(
+                SingleValuedSqlColumn(
+                    namePrefix,
+                    SINGLETON_KEY_COLUMN_NAME,
+                    TypedValue(SINGLETON_KEY_COLUMN_SQL_TYPE, SINGLETON_KEY_COLUMN_VALUE)
+                )
+            )
         }
         keys.forEach { insertBuilder.addColumns(getSqlColumns(null, it, entityDelegates)) }
         other.forEach { insertBuilder.addColumns(getSqlColumns(null, it, entityDelegates)) }
-        createCompositionCommands.add(EntitySqlCommand("create", entityPath, insertBuilder.build()))
+        createCompositionCommands.add(
+            EntitySqlCommand(
+                "create",
+                entityPath,
+                insertBuilder.prepareStatement(connection)
+            )
+        )
         if (associations.isNotEmpty()) {
             // TODO(performance): set updated-on & keys in updateBuilder at the same time as insertBuilder.
-            updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+            updateBuilder.addUpdateColumn(
+                SingleValuedSqlColumn(
+                    null,
+                    UPDATED_ON_COLUMN_NAME,
+                    TypedValue(UPDATED_ON_COLUMN_SQL_TYPE, now)
+                )
+            )
             keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-            updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
+            updateBuilder.addWhereColumn(
+                SingleValuedSqlColumn(
+                    null,
+                    FIELD_PATH_COLUMN_NAME,
+                    TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+                )
+            )
             associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
             createAssociationCommands.add(
-                EntitySqlCommand("create association in entity", entityPath, updateBuilder.build())
+                EntitySqlCommand("create association in entity", entityPath, updateBuilder.prepareStatement(connection))
             )
         }
     }
@@ -144,13 +189,33 @@ internal class MySqlSetDelegate(
         associations: List<FieldModel>,
         other: List<FieldModel>
     ) {
+        if (connection == null) return
         val updateBuilder = UpdateCommandBuilder(tableName)
-        updateBuilder.addUpdateColumn(SqlColumn(null, UPDATED_ON_COLUMN_NAME, now, Preprocess.QUOTE))
+        updateBuilder.addUpdateColumn(
+            SingleValuedSqlColumn(
+                null,
+                UPDATED_ON_COLUMN_NAME,
+                TypedValue(UPDATED_ON_COLUMN_SQL_TYPE, now)
+            )
+        )
         keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-        updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
+        updateBuilder.addWhereColumn(
+            SingleValuedSqlColumn(
+
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
         associations.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
         other.forEach { updateBuilder.addUpdateColumns(getSqlColumns(null, it, entityDelegates)) }
-        updateCompositionCommands.add(EntitySqlCommand("update", entityPath, updateBuilder.build()))
+        updateCompositionCommands.add(
+            EntitySqlCommand(
+                "update",
+                entityPath,
+                updateBuilder.prepareStatement(connection)
+            )
+        )
     }
 
     private fun addDeleteCommands(
@@ -160,6 +225,7 @@ internal class MySqlSetDelegate(
         keys: List<SingleFieldModel>,
         entity: EntityModel
     ) {
+        if (connection == null) return
         // Associations can prevent deletion, so they need to be cleared first.
         val entityMeta = entity.meta ?: throw IllegalStateException("Meta is missing for entity $fieldPath")
         val associationFieldsMeta =
@@ -167,21 +233,40 @@ internal class MySqlSetDelegate(
         if (associationFieldsMeta.isNotEmpty()) {
             val updateBuilder = UpdateCommandBuilder(tableName)
             keys.forEach { updateBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-            updateBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
+            updateBuilder.addWhereColumn(
+                SingleValuedSqlColumn(
+                    null,
+                    FIELD_PATH_COLUMN_NAME,
+                    TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+                )
+            )
             associationFieldsMeta.forEach { clearAssociationColumns(it as EntityModel, updateBuilder) }
             // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.
             deleteAssociationCommands.add(
-                EntitySqlCommand("clear associations in", entityPath, updateBuilder.build(), null)
+                EntitySqlCommand("clear associations in", entityPath, updateBuilder.prepareStatement(connection), null)
             )
         }
 
         val deleteBuilder = DeleteCommandBuilder(tableName)
         keys.forEach { deleteBuilder.addWhereColumns(getSqlColumns(null, it, entityDelegates)) }
-        deleteBuilder.addWhereColumn(SqlColumn(null, FIELD_PATH_COLUMN_NAME, fieldPath, Preprocess.ESCAPE))
+        deleteBuilder.addWhereColumn(
+            SingleValuedSqlColumn(
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
         // Issue delete commands in reverse order (by using addFirst() to add new delete commands) so that leaf entities
         // get deleted before their ancestors. i.e. bottoms-up. Top-down will not work due to foreign-key constraints.
         // `rowCount` is `null` to allow delete-related commands to pass even if they don't match any rows.
-        deleteCompositionCommands.addFirst(EntitySqlCommand("delete", entityPath, deleteBuilder.build(), null))
+        deleteCompositionCommands.addFirst(
+            EntitySqlCommand(
+                "delete",
+                entityPath,
+                deleteBuilder.prepareStatement(connection),
+                null
+            )
+        )
     }
 
     /** Adds ancestor keys and returns the number of ancestor keys added. */
@@ -209,13 +294,12 @@ internal class MySqlSetDelegate(
     }
 
     private fun issueCommands(): SetResponse {
-        if (connection == null) return SetResponse.Success
+        if (connection == null || !issueCommands) return SetResponse.Success
         val errors = mutableListOf<ElementModelError>()
-        val statement = connection.createStatement()
         commands.forEach { command ->
             if (logCommands) logger.info { command }
             try {
-                val rowCount = statement.executeUpdate(command.sql)
+                val rowCount = command.statement.use { it.executeUpdate() }
                 if (command.rowCount != null && rowCount != command.rowCount) {
                     errors.add(ElementModelError(command.entityPath, "unable to ${command.action}"))
                 }
@@ -224,7 +308,6 @@ internal class MySqlSetDelegate(
                 errors.add(ElementModelError(command.entityPath, "unable to ${command.action}: $reason"))
             }
         }
-        statement.close()
         return if (errors.isEmpty()) {
             if (logCommands) logger.info { "commit" }
             connection.commit()
@@ -247,7 +330,7 @@ internal class MySqlSetDelegate(
 private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateCommandBuilder) {
     val fieldName = getMetaName(fieldMeta)
     if (isListFieldMeta(fieldMeta)) {
-        builder.addUpdateColumn(SqlColumn(null, fieldName, null))
+        builder.addUpdateColumn(SingleValuedSqlColumn(null, fieldName, null))
         return
     }
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
@@ -255,7 +338,7 @@ private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateComma
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
     targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
         val targetKeyName = getMetaName(targetKeyFieldMeta)
-        builder.addUpdateColumn(SqlColumn(fieldName, targetKeyName, null))
+        builder.addUpdateColumn(SingleValuedSqlColumn(fieldName, targetKeyName, null))
     }
 }
 

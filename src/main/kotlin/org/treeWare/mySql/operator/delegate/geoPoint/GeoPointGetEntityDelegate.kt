@@ -6,6 +6,7 @@ import org.treeWare.model.core.MutableEntityModel
 import org.treeWare.model.core.setDoubleSingleField
 import org.treeWare.model.operator.GetEntityDelegate
 import org.treeWare.mySql.operator.delegate.MySqlGetEntityDelegate
+import org.treeWare.mySql.operator.delegate.SingleValuedSqlColumn
 import org.treeWare.mySql.operator.delegate.SqlColumn
 import java.sql.ResultSet
 
@@ -13,8 +14,8 @@ internal class GeoPointGetEntityDelegate : GetEntityDelegate, MySqlGetEntityDele
     override fun getSelectColumns(fieldMeta: EntityModel): List<SqlColumn> {
         val columnName = getMetaName(fieldMeta)
         return listOf(
-            SqlColumn(null, "ST_Longitude($columnName) AS ${columnName}__lng", null),
-            SqlColumn(null, "ST_Latitude($columnName) AS ${columnName}__lat", null),
+            SingleValuedSqlColumn(null, "ST_Longitude($columnName) AS ${columnName}__lng", null),
+            SingleValuedSqlColumn(null, "ST_Latitude($columnName) AS ${columnName}__lat", null)
         )
     }
 

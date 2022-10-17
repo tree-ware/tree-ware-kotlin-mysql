@@ -5,23 +5,23 @@ INSERT INTO test__address_book.main__address_book_root
 INSERT INTO test__address_book.main__address_book_settings
   (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, last_name_first, encrypt_hero_name, card_colors)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings', 0, true, false, '[{"value":"orange"},{"value":"green"},{"value":"blue"}]');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings', 0, 1, 0, '[{"value":"orange"},{"value":"green"},{"value":"blue"}]');
 INSERT INTO test__address_book.main__advanced_settings
   (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, background_color)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings/advanced', 0, 3);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/settings/advanced', 0, '3');
 INSERT INTO test__address_book.main__address_book_person
   (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, first_name, last_name, hero_name, email, picture)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), 'Clark', 'Kent', 'Superman', '[{"value":"clark.kent@dailyplanet.com"},{"value":"superman@dc.com"}]', 0x50696374757265206f6620436c61726b204b656e74);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), 'Clark', 'Kent', 'Superman', '[{"value":"clark.kent@dailyplanet.com"},{"value":"superman@dc.com"}]', ** BYTE ARRAY DATA **);
 INSERT INTO test__address_book.main__address_book_relation
   (created_on_, updated_on_, field_path_, main__address_book_person__id, id, relationship)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'), 7);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397'), '7');
 INSERT INTO test__address_book.main__address_book_relation
   (created_on_, updated_on_, field_path_, main__address_book_person__id, id, relationship)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce'), 7);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation', UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f'), UUID_TO_BIN('3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce'), '7');
 INSERT INTO test__address_book.crypto__password
   (created_on_, updated_on_, field_path_, main__address_book_person__id, previous)
   VALUES
@@ -33,11 +33,11 @@ INSERT INTO test__address_book.crypto__secret
 INSERT INTO test__address_book.main__address_book_person
   (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, id, first_name, last_name, email, picture)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), 'Lois', 'Lane', '[{"value":"lois.lane@dailyplanet.com"}]', 0x50696374757265206f66204c6f6973204c616e65);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person', 0, UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), 'Lois', 'Lane', '[{"value":"lois.lane@dailyplanet.com"}]', ** BYTE ARRAY DATA **);
 INSERT INTO test__address_book.main__address_book_relation
   (created_on_, updated_on_, field_path_, main__address_book_person__id, id, relationship)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation', UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b'), 7);
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation', UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b'), '7');
 INSERT INTO test__address_book.crypto__password
   (created_on_, updated_on_, field_path_, main__address_book_person__id, current, previous)
   VALUES
