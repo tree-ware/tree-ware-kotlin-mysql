@@ -2,16 +2,16 @@ UPDATE test__address_book.main__address_book_root
   SET updated_on_ = '2022-04-14T00:40:41.450', name = 'Super Heroes 2', last_updated = '2022-04-19T17:52:57.222'
   WHERE field_path_ = '/address_book';
 UPDATE test__address_book.main__address_book_settings
-  SET updated_on_ = '2022-04-14T00:40:41.450', last_name_first = false, encrypt_hero_name = true, card_colors = '[{"value":"blue"},{"value":"red"}]'
+  SET updated_on_ = '2022-04-14T00:40:41.450', last_name_first = 0, encrypt_hero_name = 1, card_colors = '[{"value":"blue"},{"value":"red"}]'
   WHERE field_path_ = '/address_book/settings';
 UPDATE test__address_book.main__advanced_settings
-  SET updated_on_ = '2022-04-14T00:40:41.450', background_color = 4
+  SET updated_on_ = '2022-04-14T00:40:41.450', background_color = '4'
   WHERE field_path_ = '/address_book/settings/advanced';
 UPDATE test__address_book.main__address_book_person
-  SET updated_on_ = '2022-04-14T00:40:41.450', self__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), self = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', first_name = 'Lois 2', last_name = 'Lane 2', email = '[{"value":"lois.lane.2@dailyplanet.com"}]', picture = 0x50696374757265206f66204c6f6973204c616e652032
+  SET updated_on_ = '2022-04-14T00:40:41.450', self__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), self = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', first_name = 'Lois 2', last_name = 'Lane 2', email = '[{"value":"lois.lane.2@dailyplanet.com"}]', picture = ** BYTE ARRAY DATA **
   WHERE id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd') AND field_path_ = '/address_book/person';
 UPDATE test__address_book.main__address_book_relation
-  SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = 6
+  SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = '6'
   WHERE id = UUID_TO_BIN('16634916-8f83-4376-ad42-37038e108a0b') AND field_path_ = '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation';
 UPDATE test__address_book.crypto__password
   SET updated_on_ = '2022-04-14T00:40:41.450', current = '{"hashed":"test-hashed-lois-2","hash_version":1}', previous = '[{"hashed":"test-hashed-password2-2","hash_version":1}]'
@@ -20,10 +20,10 @@ UPDATE test__address_book.crypto__secret
   SET updated_on_ = '2022-04-14T00:40:41.450', main = '{"encrypted":"test-encrypted-main-secret-2","cipher_version":1}', other = '[{"encrypted":"test-encrypted-secret2-2","cipher_version":1}]'
   WHERE field_path_ = '/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret';
 UPDATE test__address_book.main__address_book_person
-  SET updated_on_ = '2022-04-14T00:40:41.450', first_name = 'Clark 2', last_name = 'Kent 2', hero_name = 'Superman 2', email = '[{"value":"clark.kent.2@dailyplanet.com"}]', picture = 0x50696374757265206f6620436c61726b204b656e742032
+  SET updated_on_ = '2022-04-14T00:40:41.450', first_name = 'Clark 2', last_name = 'Kent 2', hero_name = 'Superman 2', email = '[{"value":"clark.kent.2@dailyplanet.com"}]', picture = ** BYTE ARRAY DATA **
   WHERE id = UUID_TO_BIN('cc477201-48ec-4367-83a4-7fdbd92f8a6f') AND field_path_ = '/address_book/person';
 UPDATE test__address_book.main__address_book_relation
-  SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = 6
+  SET updated_on_ = '2022-04-14T00:40:41.450', person__id = UUID_TO_BIN('a8aacf55-7810-4b43-afe5-4344f25435fd'), person = '{"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}', relationship = '6'
   WHERE id = UUID_TO_BIN('05ade278-4b44-43da-a0cc-14463854e397') AND field_path_ = '/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation';
 UPDATE test__address_book.crypto__password
   SET updated_on_ = '2022-04-14T00:40:41.450', previous = '[{"hashed":"test-hashed-superman-2","hash_version":1}]'

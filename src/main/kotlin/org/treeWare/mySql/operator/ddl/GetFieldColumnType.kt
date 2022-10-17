@@ -1,4 +1,4 @@
-package org.treeWare.mySql.ddl
+package org.treeWare.mySql.operator.ddl
 
 import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getFieldTypeMeta

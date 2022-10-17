@@ -5,7 +5,6 @@ import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.getMetaModelResolved
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
-import org.treeWare.mySql.ddl.getFieldColumnType
 import org.treeWare.mySql.operator.GenerateDdlCommandsEntityDelegate
 
 data class Column(val name: String, val type: String) {
