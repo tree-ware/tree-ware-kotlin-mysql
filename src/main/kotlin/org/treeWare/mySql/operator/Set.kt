@@ -14,11 +14,8 @@ fun set(
     dataSource: DataSource,
     logCommands: Boolean = false,
     clock: Clock = Clock.systemUTC()
-): SetResponse {
+): SetResponse = dataSource.connection.use { connection ->
     val mainMeta = main.mainMeta ?: throw IllegalStateException("No mainMeta for main model being set")
-    val connection = dataSource.connection
     val setDelegate = MySqlSetDelegate(mainMeta, entityDelegates, connection, logCommands, clock)
-    val setResponse = org.treeWare.model.operator.set(main, setDelegate, entityDelegates)
-    connection.close()
-    return setResponse
+    org.treeWare.model.operator.set(main, setDelegate, entityDelegates)
 }
