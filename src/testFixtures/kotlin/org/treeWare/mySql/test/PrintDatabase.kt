@@ -15,12 +15,12 @@ fun printDatabase(dataSource: DataSource, database: String, writer: Writer) {
 }
 
 fun printTable(dataSource: DataSource, database: String, table: String, writer: Writer) {
-    val connection = dataSource.connection
-    val statement = connection.createStatement()
-    val resultSet = statement.executeQuery("SELECT * FROM $database.$table")
-    printResultSet(resultSet, writer)
-    statement.close()
-    connection.close()
+    dataSource.connection.use { connection ->
+        connection.createStatement().use { statement ->
+            val resultSet = statement.executeQuery("SELECT * FROM $database.$table")
+            printResultSet(resultSet, writer)
+        }
+    }
 }
 
 fun printResultSet(result: ResultSet, writer: Writer, withoutRowNumbers: Boolean = false) {

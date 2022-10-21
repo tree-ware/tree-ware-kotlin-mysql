@@ -14,10 +14,7 @@ fun get(
     getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?,
     dataSource: DataSource,
     logCommands: Boolean = false
-): GetResponse {
-    val connection = dataSource.connection
+): GetResponse = dataSource.connection.use { connection ->
     val getDelegate = MySqlGetDelegate(setEntityDelegates, getEntityDelegates, connection, logCommands)
-    val getResponse = org.treeWare.model.operator.get(request, getDelegate, setEntityDelegates, getEntityDelegates)
-    connection.close()
-    return getResponse
+    org.treeWare.model.operator.get(request, getDelegate, setEntityDelegates, getEntityDelegates)
 }
