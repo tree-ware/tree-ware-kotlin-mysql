@@ -1,7 +1,8 @@
 package org.treeWare.mySql.operator.liquibase
 
+import okio.FileSystem
+import okio.Path.Companion.toPath
 import org.treeWare.model.core.MainModel
-import java.io.File
 
 private val changeLogXmlHeader = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -23,13 +24,13 @@ fun generateRootChangeLog(mainMeta: MainModel, officialDirectoryPath: String) {
     // TODO(deepak-nulu): convert set to list and sort in ascending semantic-version order.
 
     val rootChangeLog = getRootChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY)
-    File(rootChangeLog).bufferedWriter().use { writer ->
-        writer.appendLine(changeLogXmlHeader)
+    FileSystem.SYSTEM.write(rootChangeLog.toPath()) {
+        this.writeUtf8(changeLogXmlHeader).writeUtf8("\n")
         changeLogs.forEach { changeLogRelativePath ->
-            writer.append("    <include file='")
-            writer.append(changeLogRelativePath)
-            writer.appendLine("' relativeToChangelogFile='true'/>")
+            this.writeUtf8("    <include file='")
+            this.writeUtf8(changeLogRelativePath)
+            this.writeUtf8("' relativeToChangelogFile='true'/>").writeUtf8("\n")
         }
-        writer.append(changeLogXmlFooter)
+        this.writeUtf8(changeLogXmlFooter)
     }
 }

@@ -1,7 +1,7 @@
 package org.treeWare.mySql.operator.liquibase
 
+import okio.BufferedSink
 import org.treeWare.mySql.util.SQL_COMMENT_START
-import java.io.Writer
 
 interface ChangeSet {
     val author: String
@@ -11,7 +11,7 @@ interface ChangeSet {
     val rollbackCommands: List<String>
 
     fun add(command: String, rollbackCommand: String): ChangeSet
-    fun writeTo(writer: Writer)
+    fun writeTo(bufferedSink: BufferedSink)
 }
 
 internal class MutableChangeSet(override val author: String) : ChangeSet {
@@ -28,14 +28,20 @@ internal class MutableChangeSet(override val author: String) : ChangeSet {
         return this
     }
 
-    override fun writeTo(writer: Writer) {
-        writer.appendLine()
-        writer.append(SQL_COMMENT_START).append("changeset ").append(author).append(":").appendLine(id)
-        commands.forEach { writer.appendLine(it) }
+    override fun writeTo(bufferedSink: BufferedSink) {
+        bufferedSink
+            .writeUtf8("\n")
+            .writeUtf8(SQL_COMMENT_START)
+            .writeUtf8("changeset ")
+            .writeUtf8(author)
+            .writeUtf8(":")
+            .writeUtf8(id)
+            .writeUtf8("\n")
+        commands.forEach { bufferedSink.writeUtf8(it).writeUtf8("\n") }
         rollbackCommands.forEach { rollbackCommand ->
             // Every line in a multi-line rollback command must start with `-- rollback `
             rollbackCommand.split("\n").forEach {
-                writer.append(SQL_COMMENT_START).append("rollback ").appendLine(it)
+                bufferedSink.writeUtf8(SQL_COMMENT_START).writeUtf8("rollback ").writeUtf8(it).writeUtf8("\n")
             }
         }
     }

@@ -1,12 +1,12 @@
 package org.treeWare.mySql.operator.liquibase
 
+import okio.Buffer
 import org.treeWare.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.mySql.operator.CreateForeignKeyConstraints
 import org.treeWare.mySql.operator.GenerateDdlCommandsOperatorId
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.util.readFile
-import java.io.StringWriter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -17,11 +17,11 @@ class GenerateChangeLogTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         val entityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
-        val writer = StringWriter()
-        generateChangeLog(writer, mySqlAddressBookMetaModel, entityDelegates, true, false)
+        val buffer = Buffer()
+        generateChangeLog(buffer, mySqlAddressBookMetaModel, entityDelegates, true, false)
 
         val expected = readFile("operator/liquibase/my_sql_address_book_ddl_changelog.sql")
-        val actual = writer.toString()
+        val actual = buffer.readUtf8()
         assertEquals(expected, actual)
     }
 
@@ -31,9 +31,9 @@ class GenerateChangeLogTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         val entityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
-        val writer = StringWriter()
+        val buffer = Buffer()
         generateChangeLog(
-            writer,
+            buffer,
             mySqlAddressBookMetaModel,
             entityDelegates,
             true,
@@ -42,7 +42,7 @@ class GenerateChangeLogTests {
         )
 
         val expected = readFile("operator/liquibase/my_sql_address_book_ddl_changelog_no_foreign_keys.sql")
-        val actual = writer.toString()
+        val actual = buffer.readUtf8()
         assertEquals(expected, actual)
     }
 }
