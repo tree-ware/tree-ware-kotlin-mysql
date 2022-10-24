@@ -1,7 +1,8 @@
 package org.treeWare.mySql.operator.liquibase
 
+import okio.FileSystem
+import okio.Path.Companion.toPath
 import org.treeWare.model.core.MainModel
-import java.io.File
 
 /**
  * Verify that the change-logs in the generated directory match those in the official directory.
@@ -16,7 +17,7 @@ import java.io.File
  * @return a list of errors, if any.
  */
 fun validateChangeLogs(mainMeta: MainModel, officialDirectoryPath: String): List<String> {
-    if (!File(officialDirectoryPath).exists()) return listOf("Official directory `$officialDirectoryPath` does not exist")
+    if (!FileSystem.SYSTEM.exists(officialDirectoryPath.toPath())) return listOf("Official directory `$officialDirectoryPath` does not exist")
 
     val errors = mutableListOf<String>()
 
@@ -40,10 +41,9 @@ private fun validateChangeLog(generatedPath: String, officialPath: String): List
     return errors
 }
 
-private fun getFileContents(path: String, errors: MutableList<String>): String? {
-    val file = File(path)
-    return if (file.exists()) file.bufferedReader().use { it.readText() } else {
+private fun getFileContents(path: String, errors: MutableList<String>): String? =
+    if (FileSystem.SYSTEM.exists(path.toPath())) FileSystem.SYSTEM.read(path.toPath()) { this.readUtf8() }
+    else {
         errors.add("File `$path` not found")
         null
     }
-}

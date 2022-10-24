@@ -1,10 +1,10 @@
 package org.treeWare.mySql.test
 
-import java.io.StringWriter
+import okio.Buffer
 import javax.sql.DataSource
 
 fun getColumnsSchema(dataSource: DataSource, database: String): String {
-    val writer = StringWriter()
+    val buffer = Buffer()
     dataSource.connection.use { connection ->
         connection.createStatement().use { statement ->
             val resultSet = statement.executeQuery(
@@ -15,8 +15,8 @@ fun getColumnsSchema(dataSource: DataSource, database: String): String {
                 ORDER BY TABLE_NAME, COLUMN_NAME
                 """.trimIndent()
             )
-            printResultSet(resultSet, writer, true)
+            printResultSet(resultSet, buffer, true)
         }
     }
-    return writer.toString()
+    return buffer.readUtf8()
 }

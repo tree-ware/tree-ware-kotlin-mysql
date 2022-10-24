@@ -7,7 +7,6 @@ import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.ddl.traversal.Leader1DdlVisitor
 import org.treeWare.mySql.operator.liquibase.ChangeSet
 import org.treeWare.mySql.operator.liquibase.MutableChangeSet
-import java.io.StringWriter
 
 class GenerateDdlCommandsVisitor(
     mainMeta: MainModel,
@@ -25,20 +24,20 @@ class GenerateDdlCommandsVisitor(
     private val createChangeSets = mutableListOf<MutableChangeSet>()
     private val alterChangeSets = mutableListOf<MutableChangeSet>()
 
-    private var createTableCommand = StringWriter()
+    private var createTableCommand = StringBuilder()
     private var createTableHasContent = false
-    private var createTableRollbackCommand = StringWriter()
-    private var alterTableCommand = StringWriter()
+    private var createTableRollbackCommand = StringBuilder()
+    private var alterTableCommand = StringBuilder()
     private var alterTableHasContent = false
-    private var alterTableRollbackCommand = StringWriter()
+    private var alterTableRollbackCommand = StringBuilder()
 
     private fun resetCommandState() {
-        createTableCommand = StringWriter()
+        createTableCommand = StringBuilder()
         createTableHasContent = false
-        createTableRollbackCommand = StringWriter()
-        alterTableCommand = StringWriter()
+        createTableRollbackCommand = StringBuilder()
+        alterTableCommand = StringBuilder()
         alterTableHasContent = false
-        alterTableRollbackCommand = StringWriter()
+        alterTableRollbackCommand = StringBuilder()
     }
 
     override fun visitDatabase(leaderDatabase1: EntityModel): TraversalAction {

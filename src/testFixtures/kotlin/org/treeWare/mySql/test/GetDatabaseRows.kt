@@ -1,19 +1,19 @@
 package org.treeWare.mySql.test
 
-import java.io.StringWriter
+import okio.Buffer
 import javax.sql.DataSource
 
 fun getDatabaseRows(dataSource: DataSource, database: String): String {
-    val writer = StringWriter()
-    printDatabase(dataSource, database, writer)
-    return writer.toString()
+    val buffer = Buffer()
+    printDatabase(dataSource, database, buffer)
+    return buffer.readUtf8()
 }
 
 fun getTableRows(dataSource: DataSource, database: String, vararg tables: String): String {
-    val writer = StringWriter()
+    val buffer = Buffer()
     tables.forEachIndexed { index, table ->
-        if (index > 0) writer.appendLine()
-        printTable(dataSource, database, table, writer)
+        if (index > 0) buffer.writeUtf8("\n")
+        printTable(dataSource, database, table, buffer)
     }
-    return writer.toString()
+    return buffer.readUtf8()
 }

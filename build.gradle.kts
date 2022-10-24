@@ -5,6 +5,7 @@ version = "1.0-SNAPSHOT"
 
 val hikariCpVersion = "5.0.1"
 val mySqlConnectorVersion = "8.0.29"
+val okioVersion = "3.2.0"
 val testContainerVersion = "1.17.2"
 
 plugins {
@@ -35,6 +36,7 @@ dependencies {
     testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
     testImplementation(kotlin("test"))
 
+    testFixturesImplementation(project(":tree-ware-kotlin-core"))
     testFixturesImplementation("com.zaxxer:HikariCP:$hikariCpVersion")
     testFixturesImplementation("org.testcontainers:mysql:$testContainerVersion")
 }

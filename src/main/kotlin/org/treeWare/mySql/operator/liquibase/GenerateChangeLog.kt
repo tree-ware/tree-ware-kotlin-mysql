@@ -1,5 +1,8 @@
 package org.treeWare.mySql.operator.liquibase
 
+import okio.BufferedSink
+import okio.FileSystem
+import okio.Path.Companion.toPath
 import org.treeWare.metaModel.aux.getResolvedVersionAux
 import org.treeWare.metaModel.getMainMetaName
 import org.treeWare.model.core.MainModel
@@ -7,9 +10,6 @@ import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.mySql.operator.CreateForeignKeyConstraints
 import org.treeWare.mySql.operator.GenerateDdlCommandsEntityDelegate
 import org.treeWare.mySql.operator.generateDdlChangeSets
-import java.io.File
-import java.io.Writer
-
 
 fun generateChangeLog(
     mainMeta: MainModel,
@@ -19,11 +19,11 @@ fun generateChangeLog(
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val directoryPath = getReleaseChangeLogDirectoryPath(mainMeta, GENERATED_ROOT_DIRECTORY)
-    File(directoryPath).mkdirs()
+    FileSystem.SYSTEM.createDirectories(directoryPath.toPath())
     val fileName = getReleaseChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY, false)
-    File(fileName).bufferedWriter().use { writer ->
+    FileSystem.SYSTEM.write(fileName.toPath()) {
         generateChangeLog(
-            writer,
+            this,
             mainMeta,
             entityDelegates,
             createDatabase,
@@ -34,18 +34,16 @@ fun generateChangeLog(
 }
 
 fun generateChangeLog(
-    writer: Writer,
+    bufferedSink: BufferedSink,
     mainMeta: MainModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
     fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
-    writer.appendLine("-- liquibase formatted sql")
-    writer.appendLine()
-    writer.appendLine("-- AUTO-GENERATED FILE. DO NOT EDIT.")
-    writer.appendLine()
-    writer.appendLine(getMetaModelInfoComment(mainMeta))
+    bufferedSink.writeUtf8("-- liquibase formatted sql\n\n")
+    bufferedSink.writeUtf8("-- AUTO-GENERATED FILE. DO NOT EDIT.\n\n")
+    bufferedSink.writeUtf8(getMetaModelInfoComment(mainMeta)).writeUtf8("\n")
 
     val changeSets = generateDdlChangeSets(
         mainMeta,
@@ -54,7 +52,7 @@ fun generateChangeLog(
         fullyQualifyTableNames,
         createForeignKeyConstraints
     )
-    changeSets.forEach { it.writeTo(writer) }
+    changeSets.forEach { it.writeTo(bufferedSink) }
 }
 
 private fun getMetaModelInfoComment(mainMeta: MainModel): String {

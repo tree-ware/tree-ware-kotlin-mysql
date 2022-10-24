@@ -1,41 +1,45 @@
 package org.treeWare.mySql.test
 
-import java.io.Writer
+import okio.BufferedSink
+import okio.Sink
+import org.treeWare.util.buffered
 import java.nio.ByteBuffer
 import java.sql.ResultSet
 import javax.sql.DataSource
 
-fun printDatabase(dataSource: DataSource, database: String, writer: Writer) {
-    writer.appendLine("+ Database $database +")
-    val tables = getTableNames(dataSource, database)
-    tables.forEach {
-        writer.appendLine()
-        printTable(dataSource, database, it, writer)
-    }
-}
-
-fun printTable(dataSource: DataSource, database: String, table: String, writer: Writer) {
-    dataSource.connection.use { connection ->
-        connection.createStatement().use { statement ->
-            val resultSet = statement.executeQuery("SELECT * FROM $database.$table")
-            printResultSet(resultSet, writer)
+fun printDatabase(dataSource: DataSource, database: String, sink: Sink) {
+    sink.buffered().use { bufferedSink ->
+        bufferedSink.writeUtf8("+ Database $database +\n")
+        val tables = getTableNames(dataSource, database)
+        tables.forEach {
+            bufferedSink.writeUtf8("\n")
+            printTable(dataSource, database, it, bufferedSink)
         }
     }
 }
 
-fun printResultSet(result: ResultSet, writer: Writer, withoutRowNumbers: Boolean = false) {
+fun printTable(dataSource: DataSource, database: String, table: String, bufferedSink: BufferedSink) {
+    dataSource.connection.use { connection ->
+        connection.createStatement().use { statement ->
+            val resultSet = statement.executeQuery("SELECT * FROM $database.$table")
+            printResultSet(resultSet, bufferedSink)
+        }
+    }
+}
+
+fun printResultSet(result: ResultSet, bufferedSink: BufferedSink, withoutRowNumbers: Boolean = false) {
     val metaData = result.metaData
     val tableName = metaData.getTableName(1)
-    if (tableName.isNotEmpty()) writer.appendLine("= Table $tableName =")
+    if (tableName.isNotEmpty()) bufferedSink.writeUtf8("= Table $tableName =\n")
     while (result.next()) {
-        writer.appendLine()
-        if (!withoutRowNumbers) writer.appendLine("* Row ${result.row} *")
+        bufferedSink.writeUtf8("\n")
+        if (!withoutRowNumbers) bufferedSink.writeUtf8("* Row ${result.row} *\n")
         for (i in 1..metaData.columnCount) {
-            writer.append(metaData.getColumnName(i))
-            writer.append(":")
+            bufferedSink.writeUtf8(metaData.getColumnName(i))
+            bufferedSink.writeUtf8(":")
             val value = getValue(result, i)
-            if (value.isNotBlank()) writer.append(" ")
-            writer.appendLine(value)
+            if (value.isNotBlank()) bufferedSink.writeUtf8(" ")
+            bufferedSink.writeUtf8(value).writeUtf8("\n")
         }
     }
 }

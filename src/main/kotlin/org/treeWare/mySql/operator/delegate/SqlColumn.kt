@@ -1,5 +1,6 @@
 package org.treeWare.mySql.operator.delegate
 
+import okio.Buffer
 import org.treeWare.metaModel.*
 import org.treeWare.model.core.*
 import org.treeWare.model.encoder.EncodePasswords
@@ -9,7 +10,6 @@ import org.treeWare.model.operator.GetEntityDelegate
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.getAssociationTargetEntity
 import org.treeWare.util.assertInDevMode
-import java.io.StringWriter
 import java.sql.PreparedStatement
 import java.time.Instant
 
@@ -103,9 +103,9 @@ private fun getSqlJsonListColumn(
     fieldMeta: EntityModel,
     fieldValue: List<ElementModel>
 ): SqlColumn {
-    val writer = StringWriter()
-    encodeJson(fieldValue, writer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
-    val jsonValue = writer.toString()
+    val buffer = Buffer()
+    encodeJson(fieldValue, buffer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
+    val jsonValue = buffer.readUtf8()
     return SingleValuedSqlColumn(
         null,
         getMetaName(fieldMeta),
@@ -117,9 +117,9 @@ private fun getSqlJsonColumn(
     fieldMeta: EntityModel,
     fieldValue: ElementModel
 ): SqlColumn? {
-    val writer = StringWriter()
-    encodeJson(fieldValue, writer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
-    val jsonValue = writer.toString()
+    val buffer = Buffer()
+    encodeJson(fieldValue, buffer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
+    val jsonValue = buffer.readUtf8()
     return if (jsonValue.isEmpty()) null
     else SingleValuedSqlColumn(
         null,
@@ -148,9 +148,9 @@ private fun getAssociationSqlColumns(
     } else {
         val fieldName = getMetaName(fieldMeta)
         val association = fieldValue as AssociationModel
-        val writer = StringWriter()
-        encodeJson(association, writer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
-        val jsonValue = writer.toString()
+        val buffer = Buffer()
+        encodeJson(association, buffer, encodePasswords = EncodePasswords.HASHED_AND_ENCRYPTED)
+        val jsonValue = buffer.readUtf8()
         val jsonColumn = SingleValuedSqlColumn(
             null,
             fieldName,
