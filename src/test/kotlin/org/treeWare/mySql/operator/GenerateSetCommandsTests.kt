@@ -29,7 +29,6 @@ private val clock = Clock.fixed(Instant.parse(NOW), ZoneOffset.UTC)
 class GenerateSetCommandsTests {
     private val operatorEntityDelegateRegistry = OperatorEntityDelegateRegistry()
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?
-    private val connection = testDataSource.connection
 
     init {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
@@ -45,16 +44,19 @@ class GenerateSetCommandsTests {
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_create_commands.sql")
         val expectedResponse = SetResponse.Success
-        val setDelegate = MySqlSetDelegate(
-            mySqlAddressBookMetaModel,
-            entityDelegates,
-            connection,
-            clock = clock,
-            issueCommands = false
-        )
-        val actualResponse = set(addressBook1Create, setDelegate, entityDelegates)
-        assertSetResponse(expectedResponse, actualResponse)
-        assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+
+        testDataSource.connection.use { connection ->
+            val setDelegate = MySqlSetDelegate(
+                mySqlAddressBookMetaModel,
+                entityDelegates,
+                connection,
+                clock = clock,
+                issueCommands = false
+            )
+            val actualResponse = set(addressBook1Create, setDelegate, entityDelegates)
+            assertSetResponse(expectedResponse, actualResponse)
+            assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+        }
     }
 
     @Test
@@ -66,16 +68,19 @@ class GenerateSetCommandsTests {
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_update_commands.sql")
         val expectedResponse = SetResponse.Success
-        val setDelegate = MySqlSetDelegate(
-            mySqlAddressBookMetaModel,
-            entityDelegates,
-            connection,
-            clock = clock,
-            issueCommands = false
-        )
-        val actualResponse = set(addressBook1Create, setDelegate, entityDelegates)
-        assertSetResponse(expectedResponse, actualResponse)
-        assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+
+        testDataSource.connection.use { connection ->
+            val setDelegate = MySqlSetDelegate(
+                mySqlAddressBookMetaModel,
+                entityDelegates,
+                connection,
+                clock = clock,
+                issueCommands = false
+            )
+            val actualResponse = set(addressBook1Create, setDelegate, entityDelegates)
+            assertSetResponse(expectedResponse, actualResponse)
+            assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+        }
     }
 
     @Test
@@ -87,16 +92,19 @@ class GenerateSetCommandsTests {
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_delete_bottoms_up_commands.sql")
         val expectedResponse = SetResponse.Success
-        val setDelegate = MySqlSetDelegate(
-            mySqlAddressBookMetaModel,
-            entityDelegates,
-            connection,
-            clock = clock,
-            issueCommands = false
-        )
-        val actualResponse = set(delete, setDelegate, entityDelegates)
-        assertSetResponse(expectedResponse, actualResponse)
-        assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+
+        testDataSource.connection.use { connection ->
+            val setDelegate = MySqlSetDelegate(
+                mySqlAddressBookMetaModel,
+                entityDelegates,
+                connection,
+                clock = clock,
+                issueCommands = false
+            )
+            val actualResponse = set(delete, setDelegate, entityDelegates)
+            assertSetResponse(expectedResponse, actualResponse)
+            assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+        }
     }
 
     @Test
@@ -108,15 +116,18 @@ class GenerateSetCommandsTests {
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_mixed_commands.sql")
         val expectedResponse = SetResponse.Success
-        val setDelegate = MySqlSetDelegate(
-            mySqlAddressBookMetaModel,
-            entityDelegates,
-            connection,
-            clock = clock,
-            issueCommands = false
-        )
-        val actualResponse = set(mixed, setDelegate, entityDelegates)
-        assertSetResponse(expectedResponse, actualResponse)
-        assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+
+        testDataSource.connection.use { connection ->
+            val setDelegate = MySqlSetDelegate(
+                mySqlAddressBookMetaModel,
+                entityDelegates,
+                connection,
+                clock = clock,
+                issueCommands = false
+            )
+            val actualResponse = set(mixed, setDelegate, entityDelegates)
+            assertSetResponse(expectedResponse, actualResponse)
+            assertEquals(expectedCommands, setDelegate.commands.joinToString("\n") { it.statement.getBoundSql() })
+        }
     }
 }
