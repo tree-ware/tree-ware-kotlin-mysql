@@ -47,10 +47,12 @@ class PreparedStatementTests {
         val databaseName = "test2"
         createUsersTable(dataSource, databaseName)
 
-        val statement = dataSource.connection.prepareStatement("INSERT INTO $databaseName.users (name) VALUES (?)")
         val injectionName = getInjectionName(databaseName)
-        statement.setString(1, injectionName)
-        statement.execute()
+        dataSource.connection.use { connection ->
+            val statement = connection.prepareStatement("INSERT INTO $databaseName.users (name) VALUES (?)")
+            statement.setString(1, injectionName)
+            statement.execute()
+        }
 
         val expectedDatabaseRows = """
             + Database $databaseName +
@@ -79,10 +81,12 @@ class PreparedStatementTests {
         val databaseName = "test3"
         createUsersTable(dataSource, databaseName)
 
-        val statement = dataSource.connection.prepareStatement("INSERT INTO $databaseName.users (name) VALUES (?)")
         val injectionName = getInjectionName(databaseName)
-        statement.setString(1, injectionName)
-        statement.execute()
+        dataSource.connection.use { connection ->
+            val statement = connection.prepareStatement("INSERT INTO $databaseName.users (name) VALUES (?)")
+            statement.setString(1, injectionName)
+            statement.execute()
+        }
 
         val expectedDatabaseRows = """
             + Database $databaseName +
