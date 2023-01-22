@@ -1,5 +1,6 @@
 package org.treeWare.mySql.operator.delegate
 
+import okio.Buffer
 import org.lighthousegames.logging.logging
 import org.treeWare.metaModel.FieldType
 import org.treeWare.metaModel.getParentEntityMeta
@@ -13,7 +14,6 @@ import org.treeWare.mySql.getBoundSql
 import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableFullName
 import org.treeWare.mySql.util.getEntityMetaTableName
-import java.io.StringReader
 import java.nio.ByteBuffer
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -201,8 +201,8 @@ class MySqlGetDelegate(
         responseListField: MutableListFieldModel
     ): SetResponseFieldResult {
         val json = result.getString(columnIndex) ?: return SetResponseFieldResult(emptyList(), 1)
-        val reader = StringReader(json)
-        val decodeErrors = decodeJsonField(reader, responseListField)
+        val buffer = Buffer().writeUtf8(json)
+        val decodeErrors = decodeJsonField(buffer, responseListField)
         return SetResponseFieldResult(decodeErrors, 1)
     }
 
@@ -212,8 +212,8 @@ class MySqlGetDelegate(
         responseAssociationField: MutableSingleFieldModel
     ): SetResponseFieldResult {
         val json = result.getString(columnIndex) ?: return SetResponseFieldResult(emptyList(), 1)
-        val reader = StringReader(json)
-        val decodeErrors = decodeJsonField(reader, responseAssociationField)
+        val buffer = Buffer().writeUtf8(json)
+        val decodeErrors = decodeJsonField(buffer, responseAssociationField)
         return SetResponseFieldResult(decodeErrors, 1)
     }
 
@@ -333,8 +333,8 @@ class MySqlGetDelegate(
         }
         FieldType.PASSWORD1WAY,
         FieldType.PASSWORD2WAY -> result.getString(columnIndex)?.let { string ->
-            val reader = StringReader(string)
-            decodeJsonField(reader, responseSingleField)
+            val buffer = Buffer().writeUtf8(string)
+            decodeJsonField(buffer, responseSingleField)
             responseSingleField.value
         }
         FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")

@@ -7,6 +7,8 @@ val hikariCpVersion = "5.0.1"
 val mySqlConnectorVersion = "8.0.29"
 val okioVersion = "3.2.0"
 val testContainerVersion = "1.17.2"
+val treeWareCoreVersion = "0.1.0.1"
+val treeWareCoreTestFixturesVersion = "0.1.0.0"
 
 plugins {
     id("org.jetbrains.kotlin.jvm").version("1.7.0")
@@ -18,6 +20,7 @@ plugins {
 repositories {
     jcenter()
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 tasks.withType<KotlinCompile> {
@@ -26,17 +29,17 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation(project(":tree-ware-kotlin-core"))
+    implementation("org.tree-ware.tree-ware-kotlin-core:core:$treeWareCoreVersion")
     implementation(kotlin("stdlib"))
 
     implementation("mysql:mysql-connector-java:$mySqlConnectorVersion") {
         exclude("com.google.protobuf", "protobuf-java") // only needed for unused X DevAPI
     }
 
-    testImplementation(project(":tree-ware-kotlin-core:test-fixtures"))
+    testImplementation("org.tree-ware.tree-ware-kotlin-core:test-fixtures:$treeWareCoreTestFixturesVersion")
     testImplementation(kotlin("test"))
 
-    testFixturesImplementation(project(":tree-ware-kotlin-core"))
+    testFixturesImplementation("org.tree-ware.tree-ware-kotlin-core:core:$treeWareCoreVersion")
     testFixturesImplementation("com.zaxxer:HikariCP:$hikariCpVersion")
     testFixturesImplementation("org.testcontainers:mysql:$testContainerVersion")
 }
