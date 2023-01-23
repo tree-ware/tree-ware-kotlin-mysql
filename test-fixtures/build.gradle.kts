@@ -1,16 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "org.tree-ware"
-version = "1.0-SNAPSHOT"
+group = "org.tree-ware.tree-ware-kotlin-mysql"
+version = "0.1.0.0"
 
 val hikariCpVersion = "5.0.1"
 val testContainerVersion = "1.17.2"
 val treeWareCoreVersion = "0.1.0.1"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.7.0")
+    kotlin("jvm") version "1.7.0"
     id("idea")
     id("java-library")
+    id("maven-publish")
 }
 
 repositories {
@@ -27,4 +28,12 @@ dependencies {
     implementation("org.tree-ware.tree-ware-kotlin-core:core:$treeWareCoreVersion")
     implementation("com.zaxxer:HikariCP:$hikariCpVersion")
     implementation("org.testcontainers:mysql:$testContainerVersion")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+        }
+    }
 }

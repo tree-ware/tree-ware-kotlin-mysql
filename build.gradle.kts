@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "org.tree-ware"
-version = "1.0-SNAPSHOT"
+group = "org.tree-ware.tree-ware-kotlin-mysql"
+version = "0.1.0.0"
 
 val mySqlConnectorVersion = "8.0.29"
 val okioVersion = "3.2.0"
@@ -9,9 +9,10 @@ val treeWareCoreVersion = "0.1.0.1"
 val treeWareCoreTestFixturesVersion = "0.1.0.0"
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.7.0")
+    kotlin("jvm") version "1.7.0"
     id("idea")
     id("java-library")
+    id("maven-publish")
 }
 
 repositories {
@@ -43,6 +44,14 @@ tasks.test {
             "include" -> includeTags("integrationTest")
             "exclude" -> excludeTags("integrationTest")
             else -> {}
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
         }
     }
 }
