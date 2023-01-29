@@ -1,8 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-group = "org.tree-ware.tree-ware-kotlin-mysql"
-version = "0.1.0.0"
-
 val hikariCpVersion = "5.0.1"
 val testContainerVersion = "1.17.2"
 val treeWareCoreVersion = "0.1.0.1"
