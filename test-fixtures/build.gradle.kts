@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val hikariCpVersion = "5.0.1"
 val testContainerVersion = "1.17.2"
-val treeWareCoreVersion = "0.1.0.1"
 
 plugins {
     kotlin("jvm") version "1.7.0"
@@ -22,7 +21,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation("org.tree-ware.tree-ware-kotlin-core:core:$treeWareCoreVersion")
+    implementation(libs.treeWareKotlinCore)
     implementation("com.zaxxer:HikariCP:$hikariCpVersion")
     implementation("org.testcontainers:mysql:$testContainerVersion")
 }

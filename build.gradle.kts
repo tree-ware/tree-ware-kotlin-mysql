@@ -11,7 +11,6 @@ allprojects {
 
 val mySqlConnectorVersion = "8.0.29"
 val okioVersion = "3.2.0"
-val treeWareCoreVersion = "0.1.0.2"
 
 plugins {
     kotlin("jvm") version "1.7.0"
@@ -31,7 +30,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation("org.tree-ware.tree-ware-kotlin-core:core:$treeWareCoreVersion")
+    implementation(libs.treeWareKotlinCore)
     implementation(kotlin("stdlib"))
 
     implementation("mysql:mysql-connector-java:$mySqlConnectorVersion") {
@@ -39,7 +38,7 @@ dependencies {
     }
 
     testImplementation(project(":test-fixtures"))
-    testImplementation("org.tree-ware.tree-ware-kotlin-core:test-fixtures:$treeWareCoreVersion")
+    testImplementation(libs.treeWareKotlinCoreTestFixtures)
     testImplementation(kotlin("test"))
 }
 
