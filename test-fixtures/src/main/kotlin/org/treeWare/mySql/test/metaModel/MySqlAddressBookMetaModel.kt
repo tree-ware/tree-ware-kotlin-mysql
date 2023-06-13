@@ -1,5 +1,7 @@
-package org.treeWare.metaModel
+package org.treeWare.mySql.test.metaModel
 
+import org.treeWare.metaModel.ValidatedMetaModel
+import org.treeWare.metaModel.newMetaModelFromJsonFiles
 import org.treeWare.model.core.Cipher
 import org.treeWare.model.core.Hasher
 import org.treeWare.mySql.aux.MySqlMetaModelMapAuxPlugin

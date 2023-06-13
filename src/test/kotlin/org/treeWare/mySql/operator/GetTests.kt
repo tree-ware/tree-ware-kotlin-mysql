@@ -1,7 +1,7 @@
 package org.treeWare.mySql.operator
 
 import org.junit.jupiter.api.*
-import org.treeWare.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.assertMatchesJson
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.EncodePasswords
@@ -14,7 +14,7 @@ import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
-import org.treeWare.mySql.testDataSource
+import org.treeWare.mySql.test.testDataSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
@@ -16,7 +16,7 @@ import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
-import org.treeWare.mySql.testDataSource
+import org.treeWare.mySql.test.testDataSource
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset

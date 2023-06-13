@@ -1,7 +1,7 @@
 package org.treeWare.mySql.operator.liquibase
 
 import okio.Buffer
-import org.treeWare.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.operator.OperatorEntityDelegateRegistry
 import org.treeWare.mySql.operator.CreateForeignKeyConstraints
 import org.treeWare.mySql.operator.GenerateDdlCommandsOperatorId
