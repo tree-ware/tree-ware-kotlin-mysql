@@ -1,6 +1,6 @@
 package org.treeWare.mySql.aux
 
-import org.treeWare.metaModel.MY_SQL_ADDRESS_BOOK_META_MODEL_FILES
+import org.treeWare.mySql.test.metaModel.MY_SQL_ADDRESS_BOOK_META_MODEL_FILES
 import org.treeWare.metaModel.newMainMetaMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.MultiAuxEncoder

@@ -21,6 +21,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
+    implementation(project(":"))
     implementation(libs.treeWareKotlinCore)
     implementation("com.zaxxer:HikariCP:$hikariCpVersion")
     implementation("org.testcontainers:mysql:$testContainerVersion")

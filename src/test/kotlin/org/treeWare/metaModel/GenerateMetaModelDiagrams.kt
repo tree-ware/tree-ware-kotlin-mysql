@@ -2,6 +2,7 @@ package org.treeWare.metaModel
 
 import org.treeWare.metaModel.encoder.encodeDot
 import org.treeWare.mySql.ddlMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import kotlin.test.Test
 
 // TODO(deepak-nulu): make doc generation a gradle task
