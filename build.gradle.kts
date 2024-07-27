@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 // conveys this.
 allprojects {
     group = "org.tree-ware.tree-ware-kotlin-mysql"
-    version = "0.1.0.2"
+    version = "0.2.0.0"
 }
 
 val mySqlConnectorVersion = "8.0.29"
@@ -15,6 +15,7 @@ val okioVersion = "3.2.0"
 plugins {
     kotlin("jvm") version "1.7.0"
     id("idea")
+    id("org.tree-ware.core") version "0.1.0.0"
     id("java-library")
     id("maven-publish")
 }

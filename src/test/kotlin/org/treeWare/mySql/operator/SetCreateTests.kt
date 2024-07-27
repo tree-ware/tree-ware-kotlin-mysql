@@ -9,7 +9,7 @@ import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFacto
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -58,7 +58,7 @@ class SetCreateTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
@@ -73,7 +73,7 @@ class SetCreateTests {
             "operator/forward_referencing_association_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = readFile("operator/forward_referencing_association_set_create_results.txt")
@@ -121,7 +121,7 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
@@ -168,7 +168,7 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
@@ -204,7 +204,7 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
@@ -251,7 +251,7 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
@@ -301,7 +301,7 @@ class SetCreateTests {
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val expectedRows = """
@@ -337,7 +337,7 @@ class SetCreateTests {
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
 
         // Create the model the first time.
-        val expectedResponse1 = SetResponse.Success
+        val expectedResponse1 = Response.Success
         val actualResponse1 = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse1, actualResponse1)
         val actualRows1 = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -345,7 +345,7 @@ class SetCreateTests {
 
         // Try to create the same model again. It should fail.
         val actualResponse2 = set(create, setEntityDelegates, testDataSource, clock = clock)
-        val expectedResponse2 = SetResponse.ErrorList(
+        val expectedResponse2 = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
@@ -457,7 +457,7 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val expectedResponse = SetResponse.ErrorList(
+        val expectedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
@@ -501,7 +501,7 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val expectedResponse1 = SetResponse.Success
+        val expectedResponse1 = Response.Success
         val create1 =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
@@ -534,7 +534,7 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val expectedResponse2 = SetResponse.ErrorList(
+        val expectedResponse2 = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(

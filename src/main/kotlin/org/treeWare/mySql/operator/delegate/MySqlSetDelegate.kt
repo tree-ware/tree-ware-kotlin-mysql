@@ -8,7 +8,7 @@ import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.ErrorCode
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.set.SetDelegate
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.aux.SetAux
 import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableName
@@ -68,10 +68,10 @@ internal class MySqlSetDelegate(
         rootTableName = getEntityMetaTableName(rootEntityMeta)
     }
 
-    override fun begin(): SetResponse {
+    override fun begin(): Response {
         // Use the same value of now for all entities in the model.
         now = nowAsIso8601(clock)
-        return SetResponse.Success
+        return Response.Success
     }
 
     override fun setEntity(
@@ -83,7 +83,7 @@ internal class MySqlSetDelegate(
         keys: List<SingleFieldModel>,
         associations: List<FieldModel>,
         other: List<FieldModel>
-    ): SetResponse {
+    ): Response {
         val tableName = getEntityTableFullName(entity)
         when (setAux) {
             SetAux.CREATE -> addCreateCommands(
@@ -98,10 +98,10 @@ internal class MySqlSetDelegate(
             SetAux.UPDATE -> addUpdateCommands(tableName, fieldPath, entityPath, keys, associations, other)
             SetAux.DELETE -> addDeleteCommands(tableName, fieldPath, entityPath, keys, entity)
         }
-        return SetResponse.Success
+        return Response.Success
     }
 
-    override fun end(): SetResponse = issueCommands()
+    override fun end(): Response = issueCommands()
 
     private fun addCreateCommands(
         tableName: String,
@@ -293,8 +293,8 @@ internal class MySqlSetDelegate(
         return ancestorKeyCount
     }
 
-    private fun issueCommands(): SetResponse {
-        if (connection == null || !issueCommands) return SetResponse.Success
+    private fun issueCommands(): Response {
+        if (connection == null || !issueCommands) return Response.Success
         val errors = mutableListOf<ElementModelError>()
         commands.forEach { command ->
             if (logCommands) logger.info { command }
@@ -311,11 +311,11 @@ internal class MySqlSetDelegate(
         return if (errors.isEmpty()) {
             if (logCommands) logger.info { "commit" }
             connection.commit()
-            SetResponse.Success
+            Response.Success
         } else {
             if (logCommands) logger.info { "rollback" }
             connection.rollback()
-            SetResponse.ErrorList(ErrorCode.CLIENT_ERROR, errors)
+            Response.ErrorList(ErrorCode.CLIENT_ERROR, errors)
         }
     }
 
@@ -344,7 +344,7 @@ private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateComma
 
 private fun nowAsIso8601(clock: Clock): String =
     // Convert to milliseconds first so that microseconds are not in the resulting string.
-    timestampMillisecondsAsIso8601(Instant.now(clock).toEpochMilli())
+    timestampMillisecondsAsIso8601(Instant.now(clock).toEpochMilli().toULong())
 
 private fun getReadableReason(e: SQLException): String = when (e.errorCode) {
     1062 -> "duplicate"

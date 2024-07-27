@@ -8,7 +8,7 @@ import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -97,7 +97,7 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
@@ -187,7 +187,7 @@ class SetMixedTests {
                 mixedJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedMixedResponse = SetResponse.Success
+        val expectedMixedResponse = Response.Success
         val actualMixedResponse = set(mixed, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedMixedResponse, actualMixedResponse)
         val afterMixedRowsExpected = """
@@ -303,7 +303,7 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = """
@@ -400,7 +400,7 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val expectedMixedResponse = SetResponse.ErrorList(
+        val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
@@ -444,7 +444,7 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val create =
             getMainModelFromJsonString(
                 mySqlAddressBookMetaModel,
@@ -522,7 +522,7 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val expectedMixedResponse = SetResponse.ErrorList(
+        val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
@@ -598,7 +598,7 @@ class SetMixedTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -645,7 +645,7 @@ class SetMixedTests {
             |  }
             |}
         """.trimMargin()
-        val expectedMixedResponse = SetResponse.ErrorList(
+        val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(

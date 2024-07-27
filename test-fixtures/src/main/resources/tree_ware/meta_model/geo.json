@@ -1,0 +1,26 @@
+{
+  "meta_model": {
+    "packages": [
+      {
+        "name": "org.tree_ware.meta_model.geo",
+        "entities": [
+          {
+            "name": "point",
+            "fields": [
+              {
+                "name": "latitude",
+                "number": 1,
+                "type": "double"
+              },
+              {
+                "name": "longitude",
+                "number": 2,
+                "type": "double"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -222,7 +222,7 @@ private fun getSingleSqlColumn(
         FieldType.TIMESTAMP -> SingleValuedSqlColumn(
             namePrefix,
             columnName,
-            TypedValue(fieldType, timestampMillisecondsAsIso8601((fieldValue as PrimitiveModel).value as Long))
+            TypedValue(fieldType, timestampMillisecondsAsIso8601((fieldValue as PrimitiveModel).value as ULong))
         )
         FieldType.STRING -> getPrimitiveSqlColumn(namePrefix, columnName, fieldType, fieldValue)
         FieldType.UUID -> getPrimitiveSqlColumn(namePrefix, columnName, fieldType, fieldValue, "UUID_TO_BIN(?)")
@@ -253,8 +253,8 @@ private fun getPrimitiveSqlColumn(
     placeholder
 )
 
-internal fun timestampMillisecondsAsIso8601(timestampMilliseconds: Long): String =
-    instantAsIso8601(Instant.ofEpochMilli(timestampMilliseconds))
+internal fun timestampMillisecondsAsIso8601(timestampMilliseconds: ULong): String =
+    instantAsIso8601(Instant.ofEpochMilli(timestampMilliseconds.toLong()))
 
 private fun instantAsIso8601(instant: Instant): String =
     // TODO(deepak-nulu): Timezone offsets are supported only in MySQL 8.0.19

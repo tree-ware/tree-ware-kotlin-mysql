@@ -1,9 +1,10 @@
-package org.treeWare.mySql
+package org.treeWare.mySql.ddl
 
 import org.treeWare.metaModel.newMetaModelFromJsonFiles
+import org.treeWare.model.core.defaultRootEntityFactory
 
 private val DDL_META_MODEL_FILES = listOf(
-    "org/treeWare/sql/ddl.json"
+    "tree_ware/meta_model/ddl.json"
 )
 
 val ddlMetaModel = requireNotNull(
@@ -12,6 +13,7 @@ val ddlMetaModel = requireNotNull(
         false,
         null,
         null,
+        ::defaultRootEntityFactory,
         emptyList(),
         true
     ).metaModel

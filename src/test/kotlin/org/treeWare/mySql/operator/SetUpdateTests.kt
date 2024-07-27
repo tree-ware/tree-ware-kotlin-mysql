@@ -9,7 +9,7 @@ import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFacto
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -61,7 +61,7 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedUpdateResponse = SetResponse.ErrorList(
+        val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
@@ -144,7 +144,7 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val createdRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -155,7 +155,7 @@ class SetUpdateTests {
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedUpdateResponse = SetResponse.Success
+        val expectedUpdateResponse = Response.Success
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val updatedRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -191,7 +191,7 @@ class SetUpdateTests {
                 createJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -218,7 +218,7 @@ class SetUpdateTests {
             |  }
             |}
         """.trimMargin()
-        val expectedUpdateResponse = SetResponse.ErrorList(
+        val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(

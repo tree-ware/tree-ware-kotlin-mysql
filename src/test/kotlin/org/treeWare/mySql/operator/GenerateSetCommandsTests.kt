@@ -5,7 +5,7 @@ import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -43,7 +43,7 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_create_commands.sql")
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
@@ -67,7 +67,7 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_update_commands.sql")
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
@@ -91,7 +91,7 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_delete_bottoms_up_commands.sql")
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
@@ -115,7 +115,7 @@ class GenerateSetCommandsTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
         val expectedCommands = readFile("operator/my_sql_address_book_1_set_mixed_commands.sql")
-        val expectedResponse = SetResponse.Success
+        val expectedResponse = Response.Success
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(

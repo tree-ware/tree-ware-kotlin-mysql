@@ -7,7 +7,7 @@ import org.treeWare.model.operator.OperatorId
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 import org.treeWare.mySql.ddl.GenerateDdlCommandsVisitor
 import org.treeWare.mySql.ddl.traversal.leader1DdlForEach
-import org.treeWare.mySql.ddlMetaModel
+import org.treeWare.mySql.ddl.ddlMetaModel
 import org.treeWare.mySql.operator.ddl.Column
 import org.treeWare.mySql.operator.ddl.getAssociationFieldColumns
 import org.treeWare.mySql.operator.ddl.getFieldColumns

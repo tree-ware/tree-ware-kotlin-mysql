@@ -9,7 +9,7 @@ import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFacto
 import org.treeWare.model.getMainModelFromJsonFile
 import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.set.SetResponse
+import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -74,7 +74,7 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
@@ -89,13 +89,13 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val expectedRecreateResponse = SetResponse.ErrorList(
+        val expectedRecreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to create: duplicate"),
@@ -116,7 +116,7 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
@@ -128,7 +128,7 @@ class SetSingletonEntityTests {
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedUpdateResponse = SetResponse.Success
+        val expectedUpdateResponse = Response.Success
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRowsExpected = readFile("operator/my_sql_update_singleton_entities_results.txt")
@@ -143,7 +143,7 @@ class SetSingletonEntityTests {
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedUpdateResponse = SetResponse.ErrorList(
+        val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book", "unable to update"),
@@ -164,7 +164,7 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -175,7 +175,7 @@ class SetSingletonEntityTests {
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedDeleteResponse = SetResponse.Success
+        val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -189,7 +189,7 @@ class SetSingletonEntityTests {
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedDeleteResponse = SetResponse.Success
+        val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -203,7 +203,7 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.ErrorList(
+        val expectedCreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError("/address_book/settings", "unable to create: no parent or target entity"),
@@ -223,7 +223,7 @@ class SetSingletonEntityTests {
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateResponse = SetResponse.Success
+        val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -242,7 +242,7 @@ class SetSingletonEntityTests {
                 deleteJson,
                 multiAuxDecodingStateMachineFactory = auxDecodingFactory
             )
-        val expectedDeleteResponse = SetResponse.ErrorList(
+        val expectedDeleteResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
@@ -272,7 +272,7 @@ class SetSingletonEntityTests {
             createRootJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateRootResponse = SetResponse.Success
+        val expectedCreateRootResponse = Response.Success
         val actualCreateRootResponse = set(createRoot, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateRootResponse, actualCreateRootResponse)
         val afterCreateRootRowsExpected = """
@@ -313,7 +313,7 @@ class SetSingletonEntityTests {
             createChildrenJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory
         )
-        val expectedCreateChildrenResponse = SetResponse.Success
+        val expectedCreateChildrenResponse = Response.Success
         val actualCreateChildrenResponse = set(createChildren, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedCreateChildrenResponse, actualCreateChildrenResponse)
         val afterCreateChildrenRowsExpected = """

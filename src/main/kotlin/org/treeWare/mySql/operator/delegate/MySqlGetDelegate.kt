@@ -226,7 +226,7 @@ class MySqlGetDelegate(
         val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
         val entityDelegate = getEntityDelegates?.get(entityFullName) as MySqlGetEntityDelegate?
             ?: throw IllegalStateException("Setting composition as a single SQL value")
-        val entity = newMutableValueModel(responseCompositionField.meta, responseCompositionField) as MutableEntityModel
+        val entity = responseCompositionField.getOrNewValue() as MutableEntityModel
         responseCompositionField.setValue(entity)
         val columnsConsumed = entityDelegate.setValueFromResult(entity, result, columnIndex)
         return SetResponseFieldResult(emptyList(), columnsConsumed)
@@ -247,87 +247,87 @@ class MySqlGetDelegate(
         columnIndex: Int
     ): MutableElementModel? = when (getFieldType(responseSingleField)) {
         FieldType.BOOLEAN -> result.getBoolean(columnIndex).let { boolean ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = boolean
             }
         }
         FieldType.UINT8 -> result.getByte(columnIndex).toUByte().let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.UINT16 -> result.getShort(columnIndex).toUShort().let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.UINT32 -> result.getInt(columnIndex).toUInt().let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.UINT64 -> result.getLong(columnIndex).toULong().let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.INT8 -> result.getByte(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.INT16 -> result.getShort(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.INT32 -> result.getInt(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.INT64 -> result.getLong(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.FLOAT -> result.getFloat(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.DOUBLE -> result.getDouble(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.BIG_INTEGER -> result.getBigDecimal(columnIndex)?.toBigInteger()?.let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.BIG_DECIMAL -> result.getBigDecimal(columnIndex)?.let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
         FieldType.TIMESTAMP -> result.getTimestamp(columnIndex, Calendar.getInstance(UTC_TIMEZONE))?.time?.let { time ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = time
             }
         }
         FieldType.STRING -> result.getString(columnIndex)?.let { string ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = string
             }
         }
         FieldType.UUID -> getUuidString(result, columnIndex)?.let { uuid ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = uuid
             }
         }
         FieldType.BLOB -> result.getBytes(columnIndex)?.let { bytes ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = bytes
             }
         }
@@ -339,7 +339,7 @@ class MySqlGetDelegate(
         }
         FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")
         FieldType.ENUMERATION -> result.getInt(columnIndex).let { number ->
-            newMutableValueModel(responseSingleField.meta, responseSingleField).also {
+            responseSingleField.getOrNewValue().also {
                 (it as MutableEnumerationModel).setNumber(number.toUInt())
             }
         }
