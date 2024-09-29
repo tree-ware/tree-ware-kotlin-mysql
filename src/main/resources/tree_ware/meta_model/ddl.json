@@ -82,13 +82,6 @@
                 "multiplicity": "set"
               },
               {
-                "name": "primary_key",
-                "number": 3,
-                "info": "",
-                "type": "string",
-                "multiplicity": "list"
-              },
-              {
                 "name": "indexes",
                 "number": 4,
                 "info": "",
@@ -128,6 +121,12 @@
                 "number": 2,
                 "info": "",
                 "type": "string"
+              },
+              {
+                "name": "is_primary_key",
+                "number": 3,
+                "info": "",
+                "type": "boolean"
               }
             ]
           },
@@ -152,8 +151,12 @@
                 "name": "columns",
                 "number": 3,
                 "info": "",
-                "type": "string",
-                "multiplicity": "list"
+                "type": "composition",
+                "composition": {
+                  "entity": "index_column",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
               }
             ]
           },
@@ -169,24 +172,59 @@
                 "is_key": true
               },
               {
-                "name": "source_columns",
-                "number": 2,
-                "info": "",
-                "type": "string",
-                "multiplicity": "list"
-              },
-              {
                 "name": "target_table",
-                "number": 3,
+                "number": 2,
                 "info": "",
                 "type": "string"
               },
               {
-                "name": "target_keys",
-                "number": 4,
+                "name": "key_mappings",
+                "number": 3,
+                "info": "",
+                "type": "composition",
+                "composition": {
+                  "entity": "key_mapping",
+                  "package": "org.tree_ware.sql.ddl"
+                },
+                "multiplicity": "set"
+              }
+            ]
+          },
+          {
+            "name": "index_column",
+            "info": "",
+            "fields": [
+              {
+                "name": "order",
+                "number": 1,
+                "info": "",
+                "type": "uint16",
+                "is_key": true
+              },
+              {
+                "name": "name",
+                "number": 2,
+                "info": "",
+                "type": "string"
+              }
+            ]
+          },
+          {
+            "name": "key_mapping",
+            "info": "",
+            "fields": [
+              {
+                "name": "source_key",
+                "number": 1,
                 "info": "",
                 "type": "string",
-                "multiplicity": "list"
+                "is_key": true
+              },
+              {
+                "name": "target_key",
+                "number": 2,
+                "info": "",
+                "type": "string"
               }
             ]
           }

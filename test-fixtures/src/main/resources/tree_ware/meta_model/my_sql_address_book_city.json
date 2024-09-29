@@ -65,16 +65,6 @@
                 }
               },
               {
-                "name": "related_city_info",
-                "number": 31,
-                "type": "association",
-                "association": {
-                  "entity": "address_book_city_info",
-                  "package": "address_book.city"
-                },
-                "multiplicity": "list"
-              },
-              {
                 "name": "keyless",
                 "number": 41,
                 "info": "For testing keyless compositions",

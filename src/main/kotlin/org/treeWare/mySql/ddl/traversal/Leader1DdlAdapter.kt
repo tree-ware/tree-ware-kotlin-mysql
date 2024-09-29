@@ -7,9 +7,6 @@ class Leader1DdlAdapter<Return>(
     private val adaptee: Leader1DdlVisitor<Return>,
     private val defaultVisitReturn: Return
 ) : IllegalStateLeader1ModelVisitor<Return>() {
-    override fun visitMain(leaderMain1: MainModel): Return = defaultVisitReturn
-    override fun leaveMain(leaderMain1: MainModel) {}
-
     override fun visitEntity(leaderEntity1: EntityModel): Return =
         when (val entityMetaName = leaderEntity1.getMetaResolved()?.fullName) {
             "/org.tree_ware.sql.ddl/ddl" -> defaultVisitReturn

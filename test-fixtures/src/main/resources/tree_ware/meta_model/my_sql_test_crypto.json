@@ -16,13 +16,6 @@
                 "number": 1,
                 "info": "",
                 "type": "password1way"
-              },
-              {
-                "name": "previous",
-                "number": 2,
-                "info": "",
-                "type": "password1way",
-                "multiplicity": "list"
               }
             ]
           },
@@ -35,13 +28,6 @@
                 "number": 1,
                 "info": "",
                 "type": "password2way"
-              },
-              {
-                "name": "other",
-                "number": 2,
-                "info": "",
-                "type": "password2way",
-                "multiplicity": "list"
               }
             ]
           }
