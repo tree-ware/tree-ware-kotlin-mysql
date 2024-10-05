@@ -5,7 +5,6 @@
     "settings": {
       "last_name_first": null,
       "encrypt_hero_name": null,
-      "card_colors": [],
       "advanced": {
         "background_color": null
       }
@@ -25,12 +24,10 @@
           }
         ],
         "password": {
-          "current": null,
-          "previous": []
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": []
+          "main": null
         }
       },
       {
@@ -44,12 +41,10 @@
         "hero_name": null,
         "picture": null,
         "password": {
-          "current": null,
-          "previous": []
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": []
+          "main": null
         }
       }
     ],
@@ -63,7 +58,6 @@
           "latitude": null,
           "longitude": null
         },
-        "related_city_info": [],
         "self": null,
         "keyless": {
           "name": null
@@ -85,7 +79,6 @@
         "state": null,
         "country": null,
         "self2": null,
-        "related_city_info": [],
         "city_center": {
           "latitude": null,
           "longitude": null

@@ -13,7 +13,6 @@ info: Capital of New York state
 latitude: 42.651934
 longitude: -73.75477
 city_center: Point(latitude: 42.651934, longitude: -73.75477, SRID: 4326)
-related_city_info: [{"city_info": [{"name": "New York City", "state": "New York", "country": "United States of America"}]}]
 self: null
 self__name: null
 self__state: null
@@ -35,7 +34,6 @@ info: One of the most populous and most densely populated major city in USA
 latitude: 40.712982
 longitude: -74.007205
 city_center: Point(latitude: 40.712982, longitude: -74.007205, SRID: 4326)
-related_city_info: [{"city_info": [{"name": "Albany", "state": "New York", "country": "United States of America"}]}, {"city_info": [{"name": "Princeton", "state": "New Jersey", "country": "United States of America"}]}]
 self: null
 self__name: null
 self__state: null
@@ -57,7 +55,6 @@ info: Home of Princeton University
 latitude: 40.360594
 longitude: -74.664441
 city_center: Point(latitude: 40.360594, longitude: -74.664441, SRID: 4326)
-related_city_info: []
 self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
 self__name: Princeton
 self__state: New Jersey
@@ -79,7 +76,6 @@ info: The cultural and financial center of Northern California
 latitude: 37.779379
 longitude: -122.418433
 city_center: Point(latitude: 37.779379, longitude: -122.418433, SRID: 4326)
-related_city_info: null
 self: null
 self__name: null
 self__state: null
@@ -97,7 +93,6 @@ created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password
 current: null
-previous: [{"hashed": "test-hashed-superman", "hash_version": 1}]
 main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 main__person_group__id: null
 
@@ -106,7 +101,6 @@ created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password
 current: {"hashed": "test-hashed-lois", "hash_version": 1}
-previous: [{"hashed": "test-hashed-password2", "hash_version": 1}]
 main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 main__person_group__id: null
 
@@ -117,7 +111,6 @@ created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret
 main: null
-other: [{"encrypted": "test-encrypted-secret2", "cipher_version": 1}]
 main__address_book_person__id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 main__person_group__id: null
 
@@ -126,7 +119,6 @@ created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret
 main: {"encrypted": "test-encrypted-main-secret", "cipher_version": 1}
-other: [{"encrypted": "test-encrypted-secret2", "cipher_version": 1}]
 main__address_book_person__id: a8aacf55-7810-4b43-afe5-4344f25435fd
 main__person_group__id: null
 
@@ -146,7 +138,6 @@ id: 546a4982-b39a-4d01-aeb3-22d60c6963c0
 first_name: Clark
 last_name: Kent
 hero_name: Superman
-email: null
 picture: null
 self: null
 self__id: null
@@ -161,7 +152,6 @@ id: a8aacf55-7810-4b43-afe5-4344f25435fd
 first_name: Lois
 last_name: Lane
 hero_name: null
-email: [{"value": "lois.lane@dailyplanet.com"}]
 picture: Picture of Lois Lane
 self: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
 self__id: a8aacf55-7810-4b43-afe5-4344f25435fd
@@ -176,7 +166,6 @@ id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 first_name: Clark
 last_name: Kent
 hero_name: Superman
-email: [{"value": "clark.kent@dailyplanet.com"}, {"value": "superman@dc.com"}]
 picture: Picture of Clark Kent
 self: null
 self__id: null
@@ -191,7 +180,6 @@ id: e391c509-67d6-4846-bfea-0f7cd9c91bf7
 first_name: Lois
 last_name: Lane
 hero_name: null
-email: null
 picture: null
 self: null
 self__id: null
@@ -206,7 +194,6 @@ id: ec983c56-320f-4d66-9dde-f180e8ac3807
 first_name: Jimmy
 last_name: Olsen
 hero_name: null
-email: null
 picture: null
 self: null
 self__id: null
@@ -266,7 +253,6 @@ updated_on_: 2022-04-14 00:40:41.450
 field_path_: /address_book/settings
 last_name_first: 1
 encrypt_hero_name: 0
-card_colors: [{"value": "orange"}, {"value": "green"}, {"value": "blue"}]
 main__address_book_root__singleton_key_: 0
 
 = Table main__advanced_settings =

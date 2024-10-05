@@ -46,11 +46,6 @@ COLUMN_TYPE: varchar(128)
 COLUMN_KEY: PRI
 
 TABLE_NAME: city__city_info
-COLUMN_NAME: related_city_info
-COLUMN_TYPE: json
-COLUMN_KEY:
-
-TABLE_NAME: city__city_info
 COLUMN_NAME: self
 COLUMN_TYPE: text
 COLUMN_KEY:
@@ -126,11 +121,6 @@ COLUMN_TYPE: binary(16)
 COLUMN_KEY:
 
 TABLE_NAME: crypto__password
-COLUMN_NAME: previous
-COLUMN_TYPE: json
-COLUMN_KEY:
-
-TABLE_NAME: crypto__password
 COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
@@ -158,11 +148,6 @@ COLUMN_KEY: UNI
 TABLE_NAME: crypto__secret
 COLUMN_NAME: main__person_group__id
 COLUMN_TYPE: binary(16)
-COLUMN_KEY:
-
-TABLE_NAME: crypto__secret
-COLUMN_NAME: other
-COLUMN_TYPE: json
 COLUMN_KEY:
 
 TABLE_NAME: crypto__secret
@@ -316,11 +301,6 @@ COLUMN_TYPE: timestamp(3)
 COLUMN_KEY:
 
 TABLE_NAME: main__address_book_person
-COLUMN_NAME: email
-COLUMN_TYPE: json
-COLUMN_KEY:
-
-TABLE_NAME: main__address_book_person
 COLUMN_NAME: field_path_
 COLUMN_TYPE: text
 COLUMN_KEY:
@@ -448,11 +428,6 @@ COLUMN_KEY: PRI
 TABLE_NAME: main__address_book_root
 COLUMN_NAME: updated_on_
 COLUMN_TYPE: timestamp(3)
-COLUMN_KEY:
-
-TABLE_NAME: main__address_book_settings
-COLUMN_NAME: card_colors
-COLUMN_TYPE: json
 COLUMN_KEY:
 
 TABLE_NAME: main__address_book_settings

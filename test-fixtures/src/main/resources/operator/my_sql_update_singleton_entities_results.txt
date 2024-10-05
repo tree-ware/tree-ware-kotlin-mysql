@@ -16,7 +16,6 @@ updated_on_: 2022-04-04 00:40:41.440
 field_path_: /address_book/settings
 last_name_first: 0
 encrypt_hero_name: 1
-card_colors: [{"value": "red"}]
 main__address_book_root__singleton_key_: 0
 
 = Table main__advanced_settings =

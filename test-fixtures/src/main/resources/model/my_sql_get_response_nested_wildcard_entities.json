@@ -10,25 +10,13 @@
           "current": {
             "hashed": "test-hashed-lois",
             "hash_version": 1
-          },
-          "previous": [
-            {
-              "hashed": "test-hashed-password2",
-              "hash_version": 1
-            }
-          ]
+          }
         },
         "secret": {
           "main": {
             "encrypted": "test-encrypted-main-secret",
             "cipher_version": 1
-          },
-          "other": [
-            {
-              "encrypted": "test-encrypted-secret2",
-              "cipher_version": 1
-            }
-          ]
+          }
         }
       },
       {
@@ -36,22 +24,10 @@
         "last_name": "Kent",
         "hero_name": "Superman",
         "password": {
-          "current": null,
-          "previous": [
-            {
-              "hashed": "test-hashed-superman",
-              "hash_version": 1
-            }
-          ]
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": [
-            {
-              "encrypted": "test-encrypted-secret2",
-              "cipher_version": 1
-            }
-          ]
+          "main": null
         }
       },
       {

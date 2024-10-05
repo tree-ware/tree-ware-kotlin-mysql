@@ -335,7 +335,6 @@ class SetSingletonEntityTests {
             |field_path_: /address_book/settings
             |last_name_first: 1
             |encrypt_hero_name: null
-            |card_colors: null
             |main__address_book_root__singleton_key_: 0
             |
             |= Table main__advanced_settings =

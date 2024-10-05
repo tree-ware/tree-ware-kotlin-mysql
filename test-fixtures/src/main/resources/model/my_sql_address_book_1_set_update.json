@@ -6,14 +6,6 @@
     "settings": {
       "last_name_first": false,
       "encrypt_hero_name": true,
-      "card_colors": [
-        {
-          "value": "blue"
-        },
-        {
-          "value": "red"
-        }
-      ],
       "advanced": {
         "background_color": "green"
       }
@@ -30,11 +22,6 @@
             }
           ]
         },
-        "email": [
-          {
-            "value": "lois.lane.2@dailyplanet.com"
-          }
-        ],
         "picture": "UGljdHVyZSBvZiBMb2lzIExhbmUgMg==",
         "relation": [
           {
@@ -53,31 +40,13 @@
           "current": {
             "hashed": "test-hashed-lois-2",
             "hash_version": 1
-          },
-          "previous": [
-            {
-              "unhashed": "password1-2"
-            },
-            {
-              "hashed": "test-hashed-password2-2",
-              "hash_version": 1
-            }
-          ]
+          }
         },
         "secret": {
           "main": {
             "encrypted": "test-encrypted-main-secret-2",
             "cipher_version": 1
-          },
-          "other": [
-            {
-              "unencrypted": "secret1-2"
-            },
-            {
-              "encrypted": "test-encrypted-secret2-2",
-              "cipher_version": 1
-            }
-          ]
+          }
         }
       },
       {
@@ -85,11 +54,6 @@
         "first_name": "Clark 2",
         "last_name": "Kent 2",
         "hero_name": "Superman 2",
-        "email": [
-          {
-            "value": "clark.kent.2@dailyplanet.com"
-          }
-        ],
         "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50IDI=",
         "relation": [
           {
@@ -107,30 +71,12 @@
         "password": {
           "current": {
             "unhashed": "kryptonite-2"
-          },
-          "previous": [
-            {
-              "unhashed": "hello123-2"
-            },
-            {
-              "hashed": "test-hashed-superman-2",
-              "hash_version": 1
-            }
-          ]
+          }
         },
         "secret": {
           "main": {
             "unencrypted": "Alien from Krypton 2"
-          },
-          "other": [
-            {
-              "unencrypted": "secret1-2"
-            },
-            {
-              "encrypted": "test-encrypted-secret2-2",
-              "cipher_version": 1
-            }
-          ]
+          }
         }
       }
     ],
@@ -170,17 +116,6 @@
         "name": "Albany",
         "state": "New York",
         "country": "United States of America",
-        "related_city_info": [
-          {
-            "city_info": [
-              {
-                "name": "Princeton",
-                "state": "New Jersey",
-                "country": "United States of America"
-              }
-            ]
-          }
-        ],
         "latitude": 42.651935,
         "longitude": -73.75478,
         "city_center": {
@@ -193,26 +128,6 @@
         "state": "New York",
         "country": "United States of America",
         "info": "One of the most populous and most densely populated major city in USA 2",
-        "related_city_info": [
-          {
-            "city_info": [
-              {
-                "name": "San Francisco",
-                "state": "California",
-                "country": "United States of America"
-              }
-            ]
-          },
-          {
-            "city_info": [
-              {
-                "name": "Albany",
-                "state": "New York",
-                "country": "United States of America"
-              }
-            ]
-          }
-        ],
         "latitude": 40.712983,
         "longitude": -74.007206,
         "city_center": {
@@ -230,22 +145,10 @@
         "city_center": {
           "latitude": 37.779380,
           "longitude": -122.418434
-        },
-        "related_city_info": [
-          {
-            "city_info": [
-              {
-                "name": "Princeton",
-                "state": "New Jersey",
-                "country": "United States of America"
-              }
-            ]
-          }
-        ]
+        }
       },
       {
         "info": "Home of Princeton University 2",
-        "related_city_info": [],
         "name": "Princeton",
         "state": "New Jersey",
         "country": "United States of America",

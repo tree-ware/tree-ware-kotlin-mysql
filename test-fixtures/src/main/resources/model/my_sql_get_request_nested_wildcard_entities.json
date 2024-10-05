@@ -7,12 +7,10 @@
         "last_name": null,
         "hero_name": null,
         "password": {
-          "current": null,
-          "previous": []
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": []
+          "main": null
         }
       }
     ],

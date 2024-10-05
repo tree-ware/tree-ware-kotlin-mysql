@@ -6,11 +6,6 @@
       "set_": "create",
       "last_name_first": true,
       "encrypt_hero_name": false,
-      "card_colors": [
-        {
-          "value": "orange"
-        }
-      ],
       "advanced": {
         "background_color": "blue"
       }

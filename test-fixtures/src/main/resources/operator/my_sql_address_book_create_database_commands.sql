@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
   main__address_book_root__singleton_key_ INT UNSIGNED,
   last_name_first BOOLEAN,
   encrypt_hero_name BOOLEAN,
-  card_colors JSON,
   UNIQUE INDEX main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_)
 ) ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS test__address_book.main__advanced_settings (
@@ -44,7 +43,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   first_name VARCHAR(64),
   last_name VARCHAR(64),
   hero_name VARCHAR(64),
-  email JSON,
   picture BLOB,
   self TEXT,
   self__id BINARY(16),
@@ -74,7 +72,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   latitude DOUBLE,
   longitude DOUBLE,
   city_center POINT SRID 4326,
-  related_city_info JSON,
   self TEXT,
   self__name VARCHAR(128),
   self__state VARCHAR(64),
@@ -94,7 +91,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__password (
   main__person_group__id BINARY(16),
   main__address_book_person__id BINARY(16),
   current JSON,
-  previous JSON,
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
 ) ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS test__address_book.crypto__secret (
@@ -104,7 +100,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__secret (
   main__person_group__id BINARY(16),
   main__address_book_person__id BINARY(16),
   main JSON,
-  other JSON,
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
 ) ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS test__address_book.keyless__keyless (

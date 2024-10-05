@@ -19,23 +19,19 @@
           }
         ],
         "password": {
-          "current": null,
-          "previous": []
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": []
+          "main": null
         }
       },
       {
         "id": null,
         "password": {
-          "current": null,
-          "previous": []
+          "current": null
         },
         "secret": {
-          "main": null,
-          "other": []
+          "main": null
         }
       }
     ],

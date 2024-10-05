@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_settings (
   field_path_ TEXT,
   last_name_first BOOLEAN,
   encrypt_hero_name BOOLEAN,
-  card_colors JSON,
   main__address_book_root__singleton_key_ INT UNSIGNED,
   UNIQUE INDEX main__address_book_root__singleton_key_ (main__address_book_root__singleton_key_)
 ) ENGINE = InnoDB;
@@ -53,7 +52,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   first_name VARCHAR(64),
   last_name VARCHAR(64),
   hero_name VARCHAR(64),
-  email JSON,
   picture BLOB,
   self TEXT,
   self__id BINARY(16),
@@ -85,7 +83,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__password (
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   field_path_ TEXT,
   current JSON,
-  previous JSON,
   main__address_book_person__id BINARY(16),
   main__person_group__id BINARY(16),
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
@@ -98,7 +95,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.crypto__secret (
   updated_on_ TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
   field_path_ TEXT,
   main JSON,
-  other JSON,
   main__address_book_person__id BINARY(16),
   main__person_group__id BINARY(16),
   UNIQUE INDEX main__address_book_person__id (main__address_book_person__id)
@@ -178,7 +174,6 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   latitude DOUBLE,
   longitude DOUBLE,
   city_center POINT SRID 4326,
-  related_city_info JSON,
   self TEXT,
   self__name VARCHAR(128),
   self__state VARCHAR(64),

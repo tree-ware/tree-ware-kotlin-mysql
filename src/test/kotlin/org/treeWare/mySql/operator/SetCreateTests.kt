@@ -89,7 +89,6 @@ class SetCreateTests {
             |  "address_book": {
             |    "city_info": [
             |      {
-            |        "related_city_info": [],
             |        "name": "Princeton",
             |        "state": "New Jersey",
             |        "country": "United States of America",
@@ -138,7 +137,6 @@ class SetCreateTests {
             |latitude: null
             |longitude: null
             |city_center: null
-            |related_city_info: []
             |self: {"city_info":[{"name":"Princeton","state":"New Jersey","country":"United States of America"}]}
             |self__name: Princeton
             |self__state: New Jersey
@@ -226,7 +224,6 @@ class SetCreateTests {
             |field_path_: /address_book/settings
             |last_name_first: 1
             |encrypt_hero_name: null
-            |card_colors: null
             |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
@@ -273,7 +270,6 @@ class SetCreateTests {
             |field_path_: /address_book/settings
             |last_name_first: null
             |encrypt_hero_name: null
-            |card_colors: null
             |main__address_book_root__singleton_key_: 0
             |
         """.trimMargin()
@@ -315,7 +311,6 @@ class SetCreateTests {
             |first_name: null
             |last_name: null
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null

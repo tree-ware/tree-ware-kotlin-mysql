@@ -23,16 +23,16 @@ UPDATE test__address_book.main__address_book_person
   SET self__id = NULL
   WHERE id = UUID_TO_BIN('e391c509-67d6-4846-bfea-0f7cd9c91bf7') AND field_path_ = '/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons';
 UPDATE test__address_book.city__city_info
-  SET related_city_info = NULL, self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
+  SET self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
   WHERE name = 'New York City' AND state = 'New York' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';
 UPDATE test__address_book.city__city_info
-  SET related_city_info = NULL, self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
+  SET self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
   WHERE name = 'Albany' AND state = 'New York' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';
 UPDATE test__address_book.city__city_info
-  SET related_city_info = NULL, self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
+  SET self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
   WHERE name = 'Princeton' AND state = 'New Jersey' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';
 UPDATE test__address_book.city__city_info
-  SET related_city_info = NULL, self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
+  SET self__name = NULL, self__state = NULL, self__country = NULL, self2__name = NULL, self2__state = NULL, self2__country = NULL
   WHERE name = 'San Francisco' AND state = 'California' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';
 DELETE FROM test__address_book.city__city_info
   WHERE name = 'San Francisco' AND state = 'California' AND country = 'United States of America' AND field_path_ = '/address_book/city_info';

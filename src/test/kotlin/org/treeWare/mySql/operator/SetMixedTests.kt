@@ -111,7 +111,6 @@ class SetMixedTests {
             |first_name: Lois
             |last_name: Lane
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -126,7 +125,6 @@ class SetMixedTests {
             |first_name: Clark
             |last_name: Kent
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -201,7 +199,6 @@ class SetMixedTests {
             |first_name: Lois
             |last_name: Lane
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -216,7 +213,6 @@ class SetMixedTests {
             |first_name: Clark
             |last_name: Kent
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -231,7 +227,6 @@ class SetMixedTests {
             |first_name: Jimmy
             |last_name: Olsen
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -317,7 +312,6 @@ class SetMixedTests {
             |first_name: Lois
             |last_name: Lane
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -332,7 +326,6 @@ class SetMixedTests {
             |first_name: Clark
             |last_name: Kent
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -347,7 +340,6 @@ class SetMixedTests {
             |first_name: Jimmy
             |last_name: Olsen
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -464,7 +456,6 @@ class SetMixedTests {
             |first_name: Lois
             |last_name: Lane
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null
@@ -479,7 +470,6 @@ class SetMixedTests {
             |first_name: Clark
             |last_name: Kent
             |hero_name: null
-            |email: null
             |picture: null
             |self: null
             |self__id: null

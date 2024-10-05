@@ -6,11 +6,6 @@
     "settings": {
       "last_name_first": false,
       "encrypt_hero_name": true,
-      "card_colors": [
-        {
-          "value": "red"
-        }
-      ],
       "advanced": {
         "background_color": "green"
       }
