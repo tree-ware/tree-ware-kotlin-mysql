@@ -7,6 +7,7 @@ import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.ddl.traversal.Leader1DdlVisitor
 import org.treeWare.mySql.operator.liquibase.ChangeSet
 import org.treeWare.mySql.operator.liquibase.MutableChangeSet
+import org.treeWare.sql.ddl.*
 
 class GenerateDdlCommandsVisitor(
     meta: EntityModel,
@@ -27,6 +28,7 @@ class GenerateDdlCommandsVisitor(
     private var createTableCommand = StringBuilder()
     private var createTableHasContent = false
     private var createTableRollbackCommand = StringBuilder()
+    private var primaryKeyColumnNames = mutableListOf<String>()
     private var alterTableCommand = StringBuilder()
     private var alterTableHasContent = false
     private var alterTableRollbackCommand = StringBuilder()
@@ -35,14 +37,15 @@ class GenerateDdlCommandsVisitor(
         createTableCommand = StringBuilder()
         createTableHasContent = false
         createTableRollbackCommand = StringBuilder()
+        primaryKeyColumnNames.clear()
         alterTableCommand = StringBuilder()
         alterTableHasContent = false
         alterTableRollbackCommand = StringBuilder()
     }
 
-    override fun visitDatabase(leaderDatabase1: EntityModel): TraversalAction {
+    override fun visitDatabase(leaderDatabase1: Database): TraversalAction {
         if (createDatabase) {
-            val databaseName = getSingleString(leaderDatabase1, "name")
+            val databaseName = leaderDatabase1.name ?: throw IllegalStateException()
             val command = "CREATE DATABASE IF NOT EXISTS $databaseName;"
             val rollbackCommand = "DROP DATABASE IF EXISTS $databaseName;"
             val createChangeSet = MutableChangeSet(liquibaseAuthor).add(command, rollbackCommand)
@@ -51,11 +54,11 @@ class GenerateDdlCommandsVisitor(
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveDatabase(leaderDatabase1: EntityModel) {}
+    override fun leaveDatabase(leaderDatabase1: Database) {}
 
-    override fun visitTable(leaderTable1: EntityModel): TraversalAction {
+    override fun visitTable(leaderTable1: Table): TraversalAction {
         resetCommandState()
-        val tableName = getSingleString(leaderTable1, "name")
+        val tableName = leaderTable1.name ?: throw IllegalStateException()
         createTableCommand.append("CREATE TABLE IF NOT EXISTS $tableName (")
         createTableRollbackCommand.append("DROP TABLE IF EXISTS $tableName;")
         alterTableCommand.append("ALTER TABLE $tableName")
@@ -63,7 +66,11 @@ class GenerateDdlCommandsVisitor(
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveTable(leaderTable1: EntityModel) {
+    override fun leaveTable(leaderTable1: Table) {
+        createTableCommand.appendLine(",")
+            .append("  PRIMARY KEY (")
+            .append(primaryKeyColumnNames.joinToString())
+            .append(")")
         createTableCommand.appendLine().append(") ENGINE = InnoDB;")
         val createChangeSet =
             MutableChangeSet(liquibaseAuthor).add(createTableCommand.toString(), createTableRollbackCommand.toString())
@@ -79,51 +86,50 @@ class GenerateDdlCommandsVisitor(
         }
     }
 
-    override fun visitColumn(leaderColumn1: EntityModel): TraversalAction {
-        val columnName = getSingleString(leaderColumn1, "name")
-        val columnType = getSingleString(leaderColumn1, "type")
+    override fun visitColumn(leaderColumn1: Column): TraversalAction {
+        val columnName = leaderColumn1.name ?: throw IllegalStateException()
+        val columnType = leaderColumn1.type ?: throw IllegalStateException()
         createTableCommand
             .appendLine(if (createTableHasContent) "," else "")
             .append("  $columnName $columnType")
         createTableHasContent = true
+        if (leaderColumn1.isPrimaryKey == true) primaryKeyColumnNames.add(columnName)
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveColumn(leaderColumn1: EntityModel) {}
+    override fun leaveColumn(leaderColumn1: Column) {}
 
-    override fun visitPrimaryKey(leaderField1: ListFieldModel): TraversalAction {
-        val columnNames = getPrimitiveValues(leaderField1)
-        createTableCommand.appendLine(",")
-            .append("  PRIMARY KEY (")
-            .append(columnNames.joinToString())
-            .append(")")
-        return TraversalAction.CONTINUE
-    }
-
-    override fun leavePrimaryKey(leaderField1: ListFieldModel) {}
-
-    override fun visitIndex(leaderIndex1: EntityModel): TraversalAction {
-        val indexName = getSingleString(leaderIndex1, "name")
-        val isUnique = getSingleBoolean(leaderIndex1, "is_unique")
-        val columns = getPrimitiveValues(getCollectionField(leaderIndex1, "columns"))
+    override fun visitIndex(leaderIndex1: Index): TraversalAction {
+        val indexName = leaderIndex1.name ?: throw IllegalStateException()
+        val isUnique = leaderIndex1.isUnique ?: throw IllegalStateException()
+        val columns = leaderIndex1.columns ?: throw IllegalStateException()
+        val columnNames = columns.map { it.name ?: throw IllegalStateException() }
         createTableCommand
             .appendLine(",").append("  ")
             .append(if (isUnique) "UNIQUE " else "")
             .append("INDEX ")
             .append(indexName)
             .append(" (")
-            .append(columns.joinToString())
+            .append(columnNames.joinToString())
             .append(")")
+        return TraversalAction.ABORT_SUB_TREE // children (index-columns) are handled above
+    }
+
+    override fun leaveIndex(leaderIndex1: Index) {}
+
+    override fun visitIndexColumn(leaderIndexColumn1: IndexColumn): TraversalAction {
+        // Nothing to do here since index-columns are handled when the parent (index) is visited.
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveIndex(leaderIndex1: EntityModel) {}
+    override fun leaveIndexColumn(leaderIndexColumn1: IndexColumn) {}
 
-    override fun visitForeignKey(leaderForeignKey1: EntityModel): TraversalAction {
-        val foreignKeyName = getSingleString(leaderForeignKey1, "name")
-        val sourceColumns = getPrimitiveValues(getCollectionField(leaderForeignKey1, "source_columns"))
-        val targetTable = getSingleString(leaderForeignKey1, "target_table")
-        val targetKeys = getPrimitiveValues(getCollectionField(leaderForeignKey1, "target_keys"))
+    override fun visitForeignKey(leaderForeignKey1: ForeignKey): TraversalAction {
+        val foreignKeyName = leaderForeignKey1.name ?: throw IllegalStateException()
+        val targetTable = leaderForeignKey1.targetTable ?: throw IllegalStateException()
+        val keyMappings = leaderForeignKey1.keyMappings ?: throw IllegalStateException()
+        val sourceColumns = keyMappings.map { it.sourceKey ?: throw IllegalStateException() }
+        val targetColumns = keyMappings.map { it.targetKey ?: throw IllegalStateException() }
         alterTableCommand
             .appendLine(if (alterTableHasContent) "," else "")
             .append("  ADD FOREIGN KEY ")
@@ -134,22 +140,25 @@ class GenerateDdlCommandsVisitor(
             .append(" REFERENCES ")
             .append(targetTable)
             .append("(")
-            .append(targetKeys.joinToString())
+            .append(targetColumns.joinToString())
             .append(") ON DELETE RESTRICT")
         alterTableRollbackCommand
             .appendLine(if (alterTableHasContent) "," else "")
             .append("  DROP FOREIGN KEY ")
             .append(foreignKeyName)
         alterTableHasContent = true
+        return TraversalAction.ABORT_SUB_TREE // children (key-mappings) are handled above
+    }
+
+    override fun leaveForeignKey(leaderForeignKey1: ForeignKey) {}
+
+    override fun visitKeyMapping(leaderKeyMapping1: KeyMapping): TraversalAction {
+        // Nothing to do here since key-mappings are handled when the parent (foreign-key) is visited.
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveForeignKey(leaderForeignKey1: EntityModel) {}
+    override fun leaveKeyMapping(leaderKeyMapping1: KeyMapping) {}
 }
 
 private fun getLiquibaseAuthor(meta: EntityModel): String =
     "${getMetaModelName(meta)}-${getResolvedVersionAux(meta).semantic}"
-
-private fun getPrimitiveValues(stringListField: CollectionFieldModel): List<Any> = stringListField.values
-    .filterIsInstance<PrimitiveModel>()
-    .map { it.value }

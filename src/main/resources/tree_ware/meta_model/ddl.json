@@ -192,17 +192,11 @@
           "info": "",
           "fields": [
             {
-              "name": "order",
+              "name": "name",
               "number": 1,
               "info": "",
-              "type": "uint16",
+              "type": "string",
               "is_key": true
-            },
-            {
-              "name": "name",
-              "number": 2,
-              "info": "",
-              "type": "string"
             }
           ]
         },
