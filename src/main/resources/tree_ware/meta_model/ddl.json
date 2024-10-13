@@ -1,11 +1,11 @@
 {
   "name": "ddl",
-  "package": "org.tree_ware.sql.ddl",
+  "package": "org.tree_ware.sql",
   "version": {
     "semantic": "1.0.0"
   },
   "root": {
-    "entity": "ddl",
+    "entity": "ddl_root",
     "package": "org.tree_ware.sql.ddl"
   },
   "packages": [
@@ -16,7 +16,7 @@
       ],
       "entities": [
         {
-          "name": "ddl",
+          "name": "ddl_root",
           "info": "",
           "fields": [
             {
