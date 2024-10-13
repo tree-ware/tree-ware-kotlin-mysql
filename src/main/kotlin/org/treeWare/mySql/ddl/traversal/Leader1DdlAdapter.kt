@@ -14,7 +14,9 @@ class Leader1DdlAdapter<Return>(
             "/org.tree_ware.sql.ddl/table" -> adaptee.visitTable(leaderEntity1)
             "/org.tree_ware.sql.ddl/column" -> adaptee.visitColumn(leaderEntity1)
             "/org.tree_ware.sql.ddl/index" -> adaptee.visitIndex(leaderEntity1)
+            "/org.tree_ware.sql.ddl/index_column" -> adaptee.visitIndexColumn(leaderEntity1)
             "/org.tree_ware.sql.ddl/foreign_key" -> adaptee.visitForeignKey(leaderEntity1)
+            "/org.tree_ware.sql.ddl/key_mapping" -> adaptee.visitKeyMapping(leaderEntity1)
             else -> throw IllegalStateException("Illegal entityMetaName: $entityMetaName")
         }
 
@@ -25,30 +27,14 @@ class Leader1DdlAdapter<Return>(
             "/org.tree_ware.sql.ddl/table" -> adaptee.leaveTable(leaderEntity1)
             "/org.tree_ware.sql.ddl/column" -> adaptee.leaveColumn(leaderEntity1)
             "/org.tree_ware.sql.ddl/index" -> adaptee.leaveIndex(leaderEntity1)
+            "/org.tree_ware.sql.ddl/index_column" -> adaptee.leaveIndexColumn(leaderEntity1)
             "/org.tree_ware.sql.ddl/foreign_key" -> adaptee.leaveForeignKey(leaderEntity1)
+            "/org.tree_ware.sql.ddl/key_mapping" -> adaptee.leaveKeyMapping(leaderEntity1)
             else -> throw IllegalStateException("Illegal entityMetaName: $entityMetaName")
         }
 
     override fun visitSetField(leaderField1: SetFieldModel): Return = defaultVisitReturn
     override fun leaveSetField(leaderField1: SetFieldModel) {}
-
-    override fun visitListField(leaderField1: ListFieldModel): Return =
-        when (val listFieldMetaName = leaderField1.getMetaResolved()?.fullName) {
-            "/org.tree_ware.sql.ddl/table/primary_key" -> adaptee.visitPrimaryKey(leaderField1)
-            "/org.tree_ware.sql.ddl/index/columns" -> defaultVisitReturn
-            "/org.tree_ware.sql.ddl/foreign_key/source_columns" -> defaultVisitReturn
-            "/org.tree_ware.sql.ddl/foreign_key/target_keys" -> defaultVisitReturn
-            else -> throw IllegalStateException("Illegal listFieldMetaName: $listFieldMetaName")
-        }
-
-    override fun leaveListField(leaderField1: ListFieldModel) =
-        when (val listFieldMetaName = leaderField1.getMetaResolved()?.fullName) {
-            "/org.tree_ware.sql.ddl/table/primary_key" -> adaptee.leavePrimaryKey(leaderField1)
-            "/org.tree_ware.sql.ddl/index/columns" -> Unit
-            "/org.tree_ware.sql.ddl/foreign_key/source_columns" -> Unit
-            "/org.tree_ware.sql.ddl/foreign_key/target_keys" -> Unit
-            else -> throw IllegalStateException("Illegal listFieldMetaName: $listFieldMetaName")
-        }
 
     override fun visitSingleField(leaderField1: SingleFieldModel): Return = defaultVisitReturn
     override fun leaveSingleField(leaderField1: SingleFieldModel) {}

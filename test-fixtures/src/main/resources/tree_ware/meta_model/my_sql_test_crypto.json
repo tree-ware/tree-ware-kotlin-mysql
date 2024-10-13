@@ -1,38 +1,36 @@
 {
-  "meta_model": {
-    "packages": [
-      {
-        "my_sql_": {
-          "table_prefix": "crypto"
+  "packages": [
+    {
+      "my_sql_": {
+        "table_prefix": "crypto"
+      },
+      "name": "org.tree_ware.test.address_book.crypto",
+      "entities": [
+        {
+          "my_sql_": {},
+          "name": "password",
+          "fields": [
+            {
+              "name": "current",
+              "number": 1,
+              "info": "",
+              "type": "password1way"
+            }
+          ]
         },
-        "name": "test.crypto",
-        "entities": [
-          {
-            "my_sql_": {},
-            "name": "password",
-            "fields": [
-              {
-                "name": "current",
-                "number": 1,
-                "info": "",
-                "type": "password1way"
-              }
-            ]
-          },
-          {
-            "my_sql_": {},
-            "name": "secret",
-            "fields": [
-              {
-                "name": "main",
-                "number": 1,
-                "info": "",
-                "type": "password2way"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+        {
+          "my_sql_": {},
+          "name": "secret",
+          "fields": [
+            {
+              "name": "main",
+              "number": 1,
+              "info": "",
+              "type": "password2way"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

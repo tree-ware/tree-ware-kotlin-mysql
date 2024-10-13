@@ -1,126 +1,124 @@
 {
-  "meta_model": {
-    "packages": [
-      {
-        "my_sql_": {
-          "table_prefix": "city"
-        },
-        "name": "address_book.city",
-        "info": "Schema for storing city information",
-        "entities": [
-          {
-            "my_sql_": {
-              "table_name": "city_info"
+  "packages": [
+    {
+      "my_sql_": {
+        "table_prefix": "city"
+      },
+      "name": "org.tree_ware.test.address_book.city",
+      "info": "Schema for storing city information",
+      "entities": [
+        {
+          "my_sql_": {
+            "table_name": "city_info"
+          },
+          "name": "address_book_city_info",
+          "fields": [
+            {
+              "name": "name",
+              "number": 2,
+              "info": "City name",
+              "type": "string",
+              "max_size": 128,
+              "is_key": true
             },
-            "name": "address_book_city_info",
-            "fields": [
-              {
-                "name": "name",
-                "number": 2,
-                "info": "City name",
-                "type": "string",
-                "max_size": 128,
-                "is_key": true
-              },
-              {
-                "name": "state",
-                "number": 3,
-                "info": "Name of the state in which the city is",
-                "type": "string",
-                "max_size": 64,
-                "is_key": true
-              },
-              {
-                "name": "country",
-                "number": 4,
-                "info": "Name of the country in which the city is",
-                "type": "string",
-                "max_size": 64,
-                "is_key": true
-              },
-              {
-                "name": "info",
-                "number": 5,
-                "info": "Information about the city",
-                "type": "string",
-                "max_size": 512
-              },
-              {
-                "name": "latitude",
-                "number": 6,
-                "type": "double"
-              },
-              {
-                "name": "longitude",
-                "number": 7,
-                "type": "double"
-              },
-              {
-                "name": "city_center",
-                "number": 8,
-                "type": "composition",
-                "composition": {
-                  "entity": "point",
-                  "package": "org.tree_ware.meta_model.geo"
-                }
-              },
-              {
-                "name": "keyless",
-                "number": 41,
-                "info": "For testing keyless compositions",
-                "type": "composition",
-                "composition": {
-                  "entity": "keyless",
-                  "package": "test.keyless"
-                }
-              },
-              {
-                "name": "self",
-                "number": 51,
-                "info": "An association to self, for testing multi-column unique indexes",
-                "type": "association",
-                "association": {
-                  "entity": "address_book_city_info",
-                  "package": "address_book.city"
-                }
-              },
-              {
-                "name": "self2",
-                "number": 52,
-                "info": "An association to self, for testing multi-column foreign key indexes",
-                "type": "association",
-                "association": {
-                  "entity": "address_book_city_info",
-                  "package": "address_book.city"
-                }
+            {
+              "name": "state",
+              "number": 3,
+              "info": "Name of the state in which the city is",
+              "type": "string",
+              "max_size": 64,
+              "is_key": true
+            },
+            {
+              "name": "country",
+              "number": 4,
+              "info": "Name of the country in which the city is",
+              "type": "string",
+              "max_size": 64,
+              "is_key": true
+            },
+            {
+              "name": "info",
+              "number": 5,
+              "info": "Information about the city",
+              "type": "string",
+              "max_size": 512
+            },
+            {
+              "name": "latitude",
+              "number": 6,
+              "type": "double"
+            },
+            {
+              "name": "longitude",
+              "number": 7,
+              "type": "double"
+            },
+            {
+              "name": "city_center",
+              "number": 8,
+              "type": "composition",
+              "composition": {
+                "entity": "point",
+                "package": "org.tree_ware.meta_model.geo"
               }
-            ],
-            "uniques": [
-              {
-                "name": "coordinates",
-                "type": "global",
-                "fields": [
-                  {
-                    "value": "latitude"
-                  },
-                  {
-                    "value": "longitude"
-                  }
-                ]
-              },
-              {
-                "name": "self",
-                "type": "global",
-                "fields": [
-                  {
-                    "value": "self"
-                  }
-                ]
+            },
+            {
+              "name": "keyless",
+              "number": 41,
+              "info": "For testing keyless compositions",
+              "type": "composition",
+              "composition": {
+                "entity": "keyless",
+                "package": "org.tree_ware.test.address_book.keyless"
               }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+            },
+            {
+              "name": "self",
+              "number": 51,
+              "info": "An association to self, for testing multi-column unique indexes",
+              "type": "association",
+              "association": {
+                "entity": "address_book_city_info",
+                "package": "org.tree_ware.test.address_book.city"
+              }
+            },
+            {
+              "name": "self2",
+              "number": 52,
+              "info": "An association to self, for testing multi-column foreign key indexes",
+              "type": "association",
+              "association": {
+                "entity": "address_book_city_info",
+                "package": "org.tree_ware.test.address_book.city"
+              }
+            }
+          ],
+          "uniques": [
+            {
+              "name": "coordinates",
+              "type": "global",
+              "fields": [
+                {
+                  "name": "latitude"
+                },
+                {
+                  "name": "longitude"
+                }
+              ]
+            },
+            {
+              "name": "self",
+              "type": "global",
+              "fields": [
+                {
+                  "name": "self"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

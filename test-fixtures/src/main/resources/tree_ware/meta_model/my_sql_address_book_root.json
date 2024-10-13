@@ -1,16 +1,12 @@
 {
-  "meta_model": {
-    "version": {
-      "semantic": "1.0.0",
-      "name": "pacific-ocean"
-    },
-    "root": {
-      "name": "address_book",
-      "type": "composition",
-      "composition": {
-        "entity": "address_book_root",
-        "package": "address_book.main"
-      }
-    }
+  "name": "address_book",
+  "package": "org.tree_ware.test.address_book",
+  "version": {
+    "semantic": "1.0.0",
+    "name": "pacific-ocean"
+  },
+  "root": {
+    "entity": "address_book_root",
+    "package": "org.tree_ware.test.address_book.main"
   }
 }

@@ -1,235 +1,231 @@
 {
-  "meta_model": {
-    "version": {
-      "semantic": "1.0.0"
-    },
-    "root": {
-      "name": "ddl",
-      "type": "composition",
-      "composition": {
-        "entity": "ddl",
-        "package": "org.tree_ware.sql.ddl"
-      }
-    },
-    "packages": [
-      {
-        "name": "org.tree_ware.sql.ddl",
-        "info": "",
-        "enumerations": [
-        ],
-        "entities": [
-          {
-            "name": "ddl",
-            "info": "",
-            "fields": [
-              {
-                "name": "databases",
-                "number": 1,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "database",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
-              }
-            ]
-          },
-          {
-            "name": "database",
-            "info": "",
-            "fields": [
-              {
-                "name": "name",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
+  "name": "ddl",
+  "package": "org.tree_ware.sql.ddl",
+  "version": {
+    "semantic": "1.0.0"
+  },
+  "root": {
+    "entity": "ddl",
+    "package": "org.tree_ware.sql.ddl"
+  },
+  "packages": [
+    {
+      "name": "org.tree_ware.sql.ddl",
+      "info": "",
+      "enumerations": [
+      ],
+      "entities": [
+        {
+          "name": "ddl",
+          "info": "",
+          "fields": [
+            {
+              "name": "databases",
+              "number": 1,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "database",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "tables",
-                "number": 2,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "table",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
-              }
-            ]
-          },
-          {
-            "name": "table",
-            "info": "",
-            "fields": [
-              {
-                "name": "name",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
+              "multiplicity": "set"
+            }
+          ]
+        },
+        {
+          "name": "database",
+          "info": "",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "tables",
+              "number": 2,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "table",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "columns",
-                "number": 2,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "column",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
+              "multiplicity": "set"
+            }
+          ]
+        },
+        {
+          "name": "table",
+          "info": "",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "columns",
+              "number": 2,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "column",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "indexes",
-                "number": 4,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "index",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
+              "multiplicity": "set"
+            },
+            {
+              "name": "indexes",
+              "number": 4,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "index",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "foreign_keys",
-                "number": 5,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "foreign_key",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
-              }
-            ]
-          },
-          {
-            "name": "column",
-            "info": "",
-            "fields": [
-              {
-                "name": "name",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
+              "multiplicity": "set"
+            },
+            {
+              "name": "foreign_keys",
+              "number": 5,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "foreign_key",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "type",
-                "number": 2,
-                "info": "",
-                "type": "string"
+              "multiplicity": "set"
+            }
+          ]
+        },
+        {
+          "name": "column",
+          "info": "",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "type",
+              "number": 2,
+              "info": "",
+              "type": "string"
+            },
+            {
+              "name": "is_primary_key",
+              "number": 3,
+              "info": "",
+              "type": "boolean"
+            }
+          ]
+        },
+        {
+          "name": "index",
+          "info": "",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "is_unique",
+              "number": 2,
+              "info": "",
+              "type": "boolean"
+            },
+            {
+              "name": "columns",
+              "number": 3,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "index_column",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "is_primary_key",
-                "number": 3,
-                "info": "",
-                "type": "boolean"
-              }
-            ]
-          },
-          {
-            "name": "index",
-            "info": "",
-            "fields": [
-              {
-                "name": "name",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
+              "multiplicity": "set"
+            }
+          ]
+        },
+        {
+          "name": "foreign_key",
+          "info": "",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "target_table",
+              "number": 2,
+              "info": "",
+              "type": "string"
+            },
+            {
+              "name": "key_mappings",
+              "number": 3,
+              "info": "",
+              "type": "composition",
+              "composition": {
+                "entity": "key_mapping",
+                "package": "org.tree_ware.sql.ddl"
               },
-              {
-                "name": "is_unique",
-                "number": 2,
-                "info": "",
-                "type": "boolean"
-              },
-              {
-                "name": "columns",
-                "number": 3,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "index_column",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
-              }
-            ]
-          },
-          {
-            "name": "foreign_key",
-            "info": "",
-            "fields": [
-              {
-                "name": "name",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
-              },
-              {
-                "name": "target_table",
-                "number": 2,
-                "info": "",
-                "type": "string"
-              },
-              {
-                "name": "key_mappings",
-                "number": 3,
-                "info": "",
-                "type": "composition",
-                "composition": {
-                  "entity": "key_mapping",
-                  "package": "org.tree_ware.sql.ddl"
-                },
-                "multiplicity": "set"
-              }
-            ]
-          },
-          {
-            "name": "index_column",
-            "info": "",
-            "fields": [
-              {
-                "name": "order",
-                "number": 1,
-                "info": "",
-                "type": "uint16",
-                "is_key": true
-              },
-              {
-                "name": "name",
-                "number": 2,
-                "info": "",
-                "type": "string"
-              }
-            ]
-          },
-          {
-            "name": "key_mapping",
-            "info": "",
-            "fields": [
-              {
-                "name": "source_key",
-                "number": 1,
-                "info": "",
-                "type": "string",
-                "is_key": true
-              },
-              {
-                "name": "target_key",
-                "number": 2,
-                "info": "",
-                "type": "string"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+              "multiplicity": "set"
+            }
+          ]
+        },
+        {
+          "name": "index_column",
+          "info": "",
+          "fields": [
+            {
+              "name": "order",
+              "number": 1,
+              "info": "",
+              "type": "uint16",
+              "is_key": true
+            },
+            {
+              "name": "name",
+              "number": 2,
+              "info": "",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "name": "key_mapping",
+          "info": "",
+          "fields": [
+            {
+              "name": "source_key",
+              "number": 1,
+              "info": "",
+              "type": "string",
+              "is_key": true
+            },
+            {
+              "name": "target_key",
+              "number": 2,
+              "info": "",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }

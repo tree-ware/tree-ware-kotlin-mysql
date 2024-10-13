@@ -1,7 +1,7 @@
 package org.treeWare.mySql.ddl
 
 import org.treeWare.metaModel.aux.getResolvedVersionAux
-import org.treeWare.metaModel.getMainMetaName
+import org.treeWare.metaModel.getMetaModelName
 import org.treeWare.model.core.*
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.ddl.traversal.Leader1DdlVisitor
@@ -9,7 +9,7 @@ import org.treeWare.mySql.operator.liquibase.ChangeSet
 import org.treeWare.mySql.operator.liquibase.MutableChangeSet
 
 class GenerateDdlCommandsVisitor(
-    mainMeta: MainModel,
+    meta: EntityModel,
     private val createDatabase: Boolean
 ) : Leader1DdlVisitor<TraversalAction> {
     val changeSets: List<ChangeSet>
@@ -19,7 +19,7 @@ class GenerateDdlCommandsVisitor(
             }
         }
 
-    private val liquibaseAuthor = getLiquibaseAuthor(mainMeta)
+    private val liquibaseAuthor = getLiquibaseAuthor(meta)
 
     private val createChangeSets = mutableListOf<MutableChangeSet>()
     private val alterChangeSets = mutableListOf<MutableChangeSet>()
@@ -147,8 +147,8 @@ class GenerateDdlCommandsVisitor(
     override fun leaveForeignKey(leaderForeignKey1: EntityModel) {}
 }
 
-private fun getLiquibaseAuthor(mainMeta: MainModel): String =
-    "${getMainMetaName(mainMeta)}-${getResolvedVersionAux(mainMeta).semantic}"
+private fun getLiquibaseAuthor(meta: EntityModel): String =
+    "${getMetaModelName(meta)}-${getResolvedVersionAux(meta).semantic}"
 
 private fun getPrimitiveValues(stringListField: CollectionFieldModel): List<Any> = stringListField.values
     .filterIsInstance<PrimitiveModel>()
