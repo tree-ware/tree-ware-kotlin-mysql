@@ -7,11 +7,12 @@ import org.treeWare.model.operator.OperatorId
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 import org.treeWare.mySql.ddl.GenerateDdlCommandsVisitor
 import org.treeWare.mySql.ddl.traversal.leader1DdlForEach
-import org.treeWare.mySql.ddl.ddlMetaModel
 import org.treeWare.mySql.operator.ddl.Column
 import org.treeWare.mySql.operator.ddl.getAssociationFieldColumns
 import org.treeWare.mySql.operator.ddl.getFieldColumns
 import org.treeWare.mySql.operator.liquibase.ChangeSet
+import org.treeWare.sql.ddl
+import org.treeWare.sql.ddl.MutableDdlRoot
 import org.treeWare.util.assertInDevMode
 
 interface GenerateDdlCommandsEntityDelegate {
@@ -22,18 +23,17 @@ interface GenerateDdlCommandsEntityDelegate {
 object GenerateDdlCommandsOperatorId : OperatorId<GenerateDdlCommandsEntityDelegate>
 
 fun generateDdlChangeSets(
-    mainMeta: MainModel,
+    metaModel: EntityModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
     fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ): List<ChangeSet> {
-    val ddlModel = MutableMainModel(ddlMetaModel)
-    val ddlRoot = ddlModel.getOrNewRoot()
-    populateMain(ddlRoot, mainMeta, entityDelegates, fullyQualifyTableNames, createForeignKeyConstraints)
+    val ddlRoot = ddl {}
+    populateMetaModel(ddlRoot, metaModel, entityDelegates, fullyQualifyTableNames, createForeignKeyConstraints)
 
-    val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor(mainMeta, createDatabase)
-    leader1DdlForEach(ddlModel, generateDdlCommandsVisitor)
+    val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor(metaModel, createDatabase)
+    leader1DdlForEach(ddlRoot, generateDdlCommandsVisitor)
     return generateDdlCommandsVisitor.changeSets
 }
 
@@ -44,15 +44,15 @@ private class DdlState {
 
 private data class TableKeys(val tableName: String, val keys: List<Column>, val isRealKeys: Boolean)
 
-private fun populateMain(
-    ddlRoot: MutableEntityModel,
-    mainMeta: MainModel,
+private fun populateMetaModel(
+    ddlRoot: MutableDdlRoot,
+    metaModel: EntityModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     fullyQualifyTableNames: Boolean,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
-    val databaseName = getMySqlMetaModelMap(mainMeta)?.validated?.fullName ?: return
-    val rootMeta = getRootMeta(mainMeta)
+    val databaseName = getMySqlMetaModelMap(metaModel)?.validated?.fullName ?: return
+    val rootMeta = getRootMeta(metaModel)
     val rootCompositionMeta = getMetaModelResolved(rootMeta)?.compositionMeta
         ?: throw IllegalStateException("Root meta not resolved")
     val ddlState = DdlState()
@@ -70,7 +70,7 @@ private fun populateMain(
 }
 
 private fun populateComposition(
-    ddlRoot: MutableEntityModel,
+    ddlRoot: MutableDdlRoot,
     databaseName: String,
     compositionMeta: EntityModel,
     isRoot: Boolean,
@@ -130,8 +130,7 @@ private fun populateComposition(
 
 private fun populateSingletonKeys(ddlTable: MutableEntityModel) {
     val ddlColumns = getOrNewMutableSetField(ddlTable, "columns")
-    populateColumn(ddlColumns, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_TYPE)
-    populatePrimaryKey(ddlTable, SINGLETON_KEY_COLUMN_NAME)
+    populateColumn(ddlColumns, SINGLETON_KEY_COLUMN_NAME, SINGLETON_KEY_COLUMN_TYPE, true)
 }
 
 private fun getSingletonTableKeys(tableName: String): TableKeys =
@@ -157,8 +156,7 @@ private fun populateField(
     val ddlColumns = getOrNewMutableSetField(ddlTable, "columns")
     val isKey = isKeyFieldMeta(fieldMeta)
     getFieldColumns(fieldMeta, false, entityDelegates).forEach {
-        populateColumn(ddlColumns, it.name, it.type)
-        if (isKey) populatePrimaryKey(ddlTable, it.name)
+        populateColumn(ddlColumns, it.name, it.type, isKey)
     }
     if (createForeignKeyConstraints == CreateForeignKeyConstraints.ALL) populateForeignKeys(ddlTable, fieldMeta)
 }
@@ -199,31 +197,26 @@ private fun populateAncestorColumns(ddlTable: MutableEntityModel, ancestor: Tabl
     val ddlColumns = getOrNewMutableSetField(ddlTable, "columns")
     ancestor.keys.forEach { keyColumn ->
         val columnName = "$prefix${keyColumn.name}"
-        populateColumn(ddlColumns, columnName, keyColumn.type)
+        populateColumn(ddlColumns, columnName, keyColumn.type, false)
     }
 }
 
 private fun populateParentForeignKey(ddlTable: MutableEntityModel, parent: TableKeys) {
     val sourcePrefix = if (parent.isRealKeys) "${parent.tableName}__" else ""
-    val sourceColumns = parent.keys.map { "$sourcePrefix${it.name}" }
     val targetTableName = parent.tableName
-    val targetColumns = parent.keys.map { it.name }
-    val foreignKeyName = sourceColumns.first()
+    val foreignKeyName = "$sourcePrefix${parent.keys.first().name}"
 
     val ddlForeignKeys = getOrNewMutableSetField(ddlTable, "foreign_keys")
     val ddlForeignKey = getOrNewNamedEntity(ddlForeignKeys, foreignKeyName)
-    val ddlSourceColumns = getOrNewMutableListField(ddlForeignKey, "source_columns")
-    if (!ddlSourceColumns.isEmpty()) return
-
-    sourceColumns.forEach { addStringListFieldElement(ddlSourceColumns, it) }
     setStringSingleField(ddlForeignKey, "target_table", targetTableName)
-    val ddlTargetKeys = getOrNewMutableListField(ddlForeignKey, "target_keys")
-    targetColumns.forEach { addStringListFieldElement(ddlTargetKeys, it) }
-}
-
-private fun populatePrimaryKey(ddlTable: MutableEntityModel, columnName: String) {
-    val ddlPrimaryKey = getOrNewMutableListField(ddlTable, "primary_key")
-    addStringListFieldElement(ddlPrimaryKey, columnName)
+    val ddlKeyMappings = getOrNewMutableSetField(ddlForeignKey, "key_mappings")
+    if (ddlKeyMappings.isEmpty()) return
+    parent.keys.map {
+        val sourceColumn = "$sourcePrefix${it.name}"
+        val targetColumn = it.name
+        val ddlKeyMapping = getOrNewNamedEntity(ddlKeyMappings, sourceColumn)
+        setStringSingleField(ddlKeyMapping, "target_key", targetColumn)
+    }
 }
 
 fun populateUniqueIndex(
@@ -237,13 +230,13 @@ fun populateUniqueIndex(
     val ddlIndexes = getOrNewMutableSetField(ddlTable, "indexes")
     val ddlIndex = getOrNewNamedEntity(ddlIndexes, uniqueName)
     setBooleanSingleField(ddlIndex, "is_unique", true)
-    val ddlIndexColumns = getOrNewMutableListField(ddlIndex, "columns")
+    val ddlIndexColumns = getOrNewMutableSetField(ddlIndex, "columns")
     getFieldsMeta(uniqueMeta).values.forEach { uniqueFieldElementMeta ->
         val uniqueFieldMeta = uniqueFieldElementMeta as PrimitiveModel
         val entityFieldMeta = getFieldMeta(compositionMeta, uniqueFieldMeta.value as String)
         val prefix = if (isAssociationFieldMeta(entityFieldMeta)) "${getMetaName(entityFieldMeta)}__" else ""
         getFieldColumns(entityFieldMeta, true, entityDelegates).forEach {
-            addStringListFieldElement(ddlIndexColumns, "${prefix}${it.name}")
+            getOrNewNamedEntity(ddlIndexColumns, "${prefix}${it.name}")
         }
     }
 }
@@ -260,17 +253,17 @@ private fun populateKeylessParentUniqueIndex(
 
     val ddlIndexes = getOrNewMutableSetField(ddlTable, "indexes")
     val ddlIndex = getOrNewNamedEntity(ddlIndexes, indexName)
-    val ddlIndexColumns = getOrNewMutableListField(ddlIndex, "columns")
+    val ddlIndexColumns = getOrNewMutableSetField(ddlIndex, "columns")
     if (ddlIndexColumns.isEmpty()) {
         setBooleanSingleField(ddlIndex, "is_unique", true)
-        inheritedKeys.forEach { addStringListFieldElement(ddlIndexColumns, it.name) }
+        inheritedKeys.forEach { getOrNewNamedEntity(ddlIndexColumns, it.name) }
     }
 
     return TableKeys(tableName, inheritedKeys, false)
 }
 
 private fun populateForeignKeys(ddlTable: MutableEntityModel, fieldMeta: EntityModel) {
-    if (!isAssociationFieldMeta(fieldMeta) || isListFieldMeta(fieldMeta)) return
+    if (!isAssociationFieldMeta(fieldMeta)) return
     val fieldName = getMetaName(fieldMeta)
     val columns = getAssociationFieldColumns(fieldMeta, true)
     val foreignKeyName = "${fieldName}__${columns.first().name}"
@@ -284,11 +277,12 @@ private fun populateForeignKeys(ddlTable: MutableEntityModel, fieldMeta: EntityM
     val ddlForeignKeys = getOrNewMutableSetField(ddlTable, "foreign_keys")
     val ddlForeignKey = getOrNewNamedEntity(ddlForeignKeys, foreignKeyName)
     setStringSingleField(ddlForeignKey, "target_table", targetTableName)
-    val ddlSourceColumns = getOrNewMutableListField(ddlForeignKey, "source_columns")
-    val ddlTargetKeys = getOrNewMutableListField(ddlForeignKey, "target_keys")
+    val ddlKeyMappings = getOrNewMutableSetField(ddlForeignKey, "key_mappings")
     columns.forEach {
-        addStringListFieldElement(ddlSourceColumns, "${fieldName}__${it.name}")
-        addStringListFieldElement(ddlTargetKeys, it.name)
+        val sourceColumn = "${fieldName}__${it.name}"
+        val targetColumn = it.name
+        val ddlKeyMapping = getOrNewNamedEntity(ddlKeyMappings, sourceColumn)
+        setStringSingleField(ddlKeyMapping, "target_key", targetColumn)
     }
 }
 
@@ -304,14 +298,15 @@ private fun getDdlTable(ddlRoot: MutableEntityModel, databaseName: String, table
 private fun populateTreeWareColumns(ddlTable: MutableEntityModel) {
     val ddlColumns = getOrNewMutableSetField(ddlTable, "columns")
     if (!ddlColumns.isEmpty()) return
-    populateColumn(ddlColumns, CREATED_ON_COLUMN_NAME, CREATED_ON_COLUMN_TYPE)
-    populateColumn(ddlColumns, UPDATED_ON_COLUMN_NAME, UPDATED_ON_COLUMN_TYPE)
-    populateColumn(ddlColumns, FIELD_PATH_COLUMN_NAME, FIELD_PATH_COLUMN_TYPE)
+    populateColumn(ddlColumns, CREATED_ON_COLUMN_NAME, CREATED_ON_COLUMN_TYPE, false)
+    populateColumn(ddlColumns, UPDATED_ON_COLUMN_NAME, UPDATED_ON_COLUMN_TYPE, false)
+    populateColumn(ddlColumns, FIELD_PATH_COLUMN_NAME, FIELD_PATH_COLUMN_TYPE, false)
 }
 
-private fun populateColumn(ddlColumns: MutableSetFieldModel, columnName: String, columnType: String) {
+private fun populateColumn(ddlColumns: MutableSetFieldModel, columnName: String, columnType: String, isKey: Boolean) {
     val ddlColumn = getOrNewNamedEntity(ddlColumns, columnName)
     setStringSingleField(ddlColumn, "type", columnType)
+    setBooleanSingleField(ddlColumn, "is_primary_key", isKey)
 }
 
 private fun getOrNewNamedEntity(setField: MutableSetFieldModel, entityName: String): MutableEntityModel {

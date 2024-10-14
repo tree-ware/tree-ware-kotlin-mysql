@@ -6,16 +6,15 @@ import org.treeWare.metaModel.traversal.mutableMetaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MutableElementModel
 import org.treeWare.model.core.MutableEntityModel
-import org.treeWare.model.core.MutableMainModel
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.aux.MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME
 import org.treeWare.mySql.aux.MySqlMetaModelMap
 import org.treeWare.mySql.aux.MySqlMetaModelMapValidated
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 
-fun validateMySqlMetaModelMap(mainMeta: MutableMainModel, environment: String): List<String> {
+fun validateMySqlMetaModelMap(metaModel: MutableEntityModel, environment: String): List<String> {
     val visitor = ValidateMySqlMetaModelMapVisitor(environment)
-    mutableMetaModelForEach(mainMeta, visitor)
+    mutableMetaModelForEach(metaModel, visitor)
     return visitor.errors
 }
 
@@ -61,20 +60,20 @@ private class ValidateMySqlMetaModelMapVisitor(
     private val path = ArrayDeque<String>()
     private fun getPathName(): String = path.joinToString("/", prefix = "/")
 
-    override fun visitMainMeta(leaderMainMeta1: MutableMainModel): TraversalAction {
-        val mainMetaName = getMainMetaName(leaderMainMeta1)
-        path.addLast(mainMetaName)
-        databaseName = "${environment}__$mainMetaName"
+    override fun visitMetaModel(leaderMeta1: MutableEntityModel): TraversalAction {
+        val metaModelName = getMetaModelName(leaderMeta1)
+        path.addLast(metaModelName)
+        databaseName = "${environment}__$metaModelName"
         val nameErrors = validateDatabaseName(databaseName)
         if (nameErrors.isNotEmpty()) errors.addAll(nameErrors)
         else {
-            val aux = getMySqlMetaModelMap(leaderMainMeta1) ?: newMySqlMetaModelMapFor(leaderMainMeta1)
+            val aux = getMySqlMetaModelMap(leaderMeta1) ?: newMySqlMetaModelMapFor(leaderMeta1)
             aux.validated = MySqlMetaModelMapValidated(databaseName, "")
         }
         return TraversalAction.CONTINUE
     }
 
-    override fun leaveMainMeta(leaderMainMeta1: MutableMainModel) {
+    override fun leaveMetaModel(leaderMeta1: MutableEntityModel) {
         path.removeLast()
     }
 
