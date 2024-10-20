@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonFileIntoEntity
 import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
@@ -57,7 +58,7 @@ class SetUpdateTests {
     fun `Set-update must fail for a new model`() {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = update
@@ -141,7 +142,7 @@ class SetUpdateTests {
         val expectedRows = readFile("operator/my_sql_address_book_1_set_update_results.txt")
 
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -153,7 +154,7 @@ class SetUpdateTests {
         assertNotEquals(expectedRows, createdRows)
 
         val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = update

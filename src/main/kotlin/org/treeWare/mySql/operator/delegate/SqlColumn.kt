@@ -65,8 +65,7 @@ internal fun getSqlColumns(
     forSelectClause: Boolean = false
 ): List<SqlColumn> {
     val fieldMeta = requireNotNull(field.meta) { "Field meta is missing" }
-    val fieldValue: Any? =
-        if (isListField(field)) (field as ListFieldModel).values else (field as SingleFieldModel).value
+    val fieldValue: Any? = (field as SingleFieldModel).value
     return getSqlColumnsForMeta(
         namePrefix,
         fieldMeta,
@@ -85,8 +84,7 @@ internal fun getSqlColumnsForMeta(
     getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?,
     forSelectClause: Boolean = false
 ): List<SqlColumn> =
-    if (isListFieldMeta(fieldMeta)) listOf(getSqlJsonListColumn(fieldMeta, fieldValue as List<ElementModel>))
-    else when (val fieldType = requireNotNull(getFieldTypeMeta(fieldMeta)) { "Field meta is missing" }) {
+    when (val fieldType = requireNotNull(getFieldTypeMeta(fieldMeta)) { "Field meta is missing" }) {
         FieldType.ASSOCIATION -> getAssociationSqlColumns(fieldMeta, fieldValue, forSelectClause)
         FieldType.COMPOSITION -> getCompositionSqlColumns(
             fieldMeta,

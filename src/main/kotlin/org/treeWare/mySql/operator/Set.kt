@@ -1,6 +1,6 @@
 package org.treeWare.mySql.operator
 
-import org.treeWare.model.core.MainModel
+import org.treeWare.model.core.EntityModel
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.Response
@@ -9,13 +9,13 @@ import java.time.Clock
 import javax.sql.DataSource
 
 fun set(
-    main: MainModel,
+    model: EntityModel,
     entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     dataSource: DataSource,
     logCommands: Boolean = false,
     clock: Clock = Clock.systemUTC()
 ): Response = dataSource.connection.use { connection ->
-    val mainMeta = main.mainMeta ?: throw IllegalStateException("No mainMeta for main model being set")
-    val setDelegate = MySqlSetDelegate(mainMeta, entityDelegates, connection, logCommands, clock)
-    org.treeWare.model.operator.set(main, setDelegate, entityDelegates)
+    val metaModel = model.meta ?: throw IllegalStateException("No meta-model for model being set")
+    val setDelegate = MySqlSetDelegate(metaModel, entityDelegates, connection, logCommands, clock)
+    org.treeWare.model.operator.set(model, setDelegate, entityDelegates)
 }

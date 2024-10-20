@@ -2,7 +2,7 @@ package org.treeWare.mySql.operator.liquibase
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
-import org.treeWare.model.core.MainModel
+import org.treeWare.model.core.EntityModel
 
 private val changeLogXmlHeader = """
 <?xml version="1.0" encoding="UTF-8"?>
@@ -16,14 +16,14 @@ private val changeLogXmlHeader = """
 
 private const val changeLogXmlFooter = "</databaseChangeLog>"
 
-fun generateRootChangeLog(mainMeta: MainModel, officialDirectoryPath: String) {
-    val currentChangeLog = getReleaseChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY, true)
+fun generateRootChangeLog(metaModel: EntityModel, officialDirectoryPath: String) {
+    val currentChangeLog = getReleaseChangeLogPath(metaModel, GENERATED_ROOT_DIRECTORY, true)
 
     val changeLogs = mutableSetOf(currentChangeLog)
     // TODO(deepak-nulu): add release change-logs from `officialDirectoryPath` to the above set.
     // TODO(deepak-nulu): convert set to list and sort in ascending semantic-version order.
 
-    val rootChangeLog = getRootChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY)
+    val rootChangeLog = getRootChangeLogPath(metaModel, GENERATED_ROOT_DIRECTORY)
     FileSystem.SYSTEM.write(rootChangeLog.toPath()) {
         this.writeUtf8(changeLogXmlHeader).writeUtf8("\n")
         changeLogs.forEach { changeLogRelativePath ->

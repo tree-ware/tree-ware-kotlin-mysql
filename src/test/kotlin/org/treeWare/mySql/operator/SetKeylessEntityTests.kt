@@ -4,10 +4,11 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonFileIntoEntity
+import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
-import org.treeWare.model.getMainModelFromJsonFile
-import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
 import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
@@ -69,10 +70,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must succeed when creating new keyless entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -84,10 +86,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must fail when recreating existing keyless entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -137,10 +140,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must succeed when updating existing keyless entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -149,10 +153,11 @@ class SetKeylessEntityTests {
         val afterCreateRows = getKeylessTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_update_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.Success
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
@@ -164,10 +169,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must fail when updating non-existing keyless entities`() {
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_update_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
@@ -206,10 +212,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must succeed when deleting existing keyless entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -217,10 +224,11 @@ class SetKeylessEntityTests {
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
@@ -231,10 +239,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must succeed when deleting non-existing keyless entities`() {
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_delete_keyless_entities_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
@@ -245,10 +254,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must fail when creating a keyless entity without a parent`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities_no_parent.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
@@ -287,10 +297,11 @@ class SetKeylessEntityTests {
 
     @Test
     fun `set() must fail when deleting a keyless entity that has children in the database`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_keyless_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -322,12 +333,12 @@ class SetKeylessEntityTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val expectedDeleteResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(

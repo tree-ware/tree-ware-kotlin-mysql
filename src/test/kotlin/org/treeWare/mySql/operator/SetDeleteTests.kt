@@ -4,10 +4,11 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonFileIntoEntity
+import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
-import org.treeWare.model.getMainModelFromJsonFile
-import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
 import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
@@ -62,10 +63,11 @@ class SetDeleteTests {
         // 3) the deletion attempt should fail and nothing should be deleted from the database.
 
         // 1) create a model using the model in `SetCreateTests`.
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -87,12 +89,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
 
         // 3) the deletion attempt should fail and nothing should be deleted from the database.
@@ -151,12 +153,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                createJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            createJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
@@ -176,12 +178,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
 
         // 3) the deletion attempt should fail and nothing should be deleted from the database.
@@ -207,10 +209,11 @@ class SetDeleteTests {
         // 3) since set() issues delete commands in reverse order, it should delete the entire model bottoms-up.
 
         // 1) create a model using the model in `SetCreateTests`.
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -220,10 +223,11 @@ class SetDeleteTests {
         assertEquals(expectedRows, afterCreateRows)
 
         // 2) issue a delete request with all entities marked for deletion.
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_delete_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
 
@@ -270,12 +274,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                createJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            createJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
@@ -306,12 +310,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
         val expectedDeleteResponse = Response.Success
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
@@ -355,12 +359,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                createJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            createJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
@@ -391,12 +395,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
         val expectedDeleteResponse = Response.Success
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
@@ -406,10 +410,11 @@ class SetDeleteTests {
 
     @Test
     fun `Set-delete must succeed for entities that are non-existent or already deleted`() {
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_delete_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
@@ -439,12 +444,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                createJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            createJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
@@ -472,12 +477,12 @@ class SetDeleteTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = clock)
         // NOTE: delete operations never return errors, not even when the entity to be deleted is not found.
         // While no error is returned, the delete operation should fail by not updating the database.

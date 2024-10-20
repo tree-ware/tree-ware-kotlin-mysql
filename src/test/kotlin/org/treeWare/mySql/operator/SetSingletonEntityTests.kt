@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonFileIntoEntity
 import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
@@ -70,7 +71,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must succeed when creating new singleton entities`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -86,7 +87,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must fail when recreating existing singleton entities`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -114,7 +115,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must succeed when updating existing singleton entities`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -127,7 +128,7 @@ class SetSingletonEntityTests {
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
         val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = update
@@ -143,7 +144,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must fail when updating non-existing singleton entities`() {
         val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = update
@@ -165,7 +166,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must succeed when deleting existing singleton entities`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -177,7 +178,7 @@ class SetSingletonEntityTests {
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
         val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = delete
@@ -192,7 +193,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must succeed when deleting non-existing singleton entities`() {
         val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = delete
@@ -207,7 +208,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must fail when creating a singleton entity without a parent`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create
@@ -228,7 +229,7 @@ class SetSingletonEntityTests {
     @Test
     fun `set() must fail when deleting a singleton entity that has children in the database`() {
         val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
-        decodeJsonStringIntoEntity(
+        decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = create

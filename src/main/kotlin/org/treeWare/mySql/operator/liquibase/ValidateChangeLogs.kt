@@ -2,7 +2,7 @@ package org.treeWare.mySql.operator.liquibase
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
-import org.treeWare.model.core.MainModel
+import org.treeWare.model.core.EntityModel
 
 /**
  * Verify that the change-logs in the generated directory match those in the official directory.
@@ -16,17 +16,17 @@ import org.treeWare.model.core.MainModel
  *
  * @return a list of errors, if any.
  */
-fun validateChangeLogs(mainMeta: MainModel, officialDirectoryPath: String): List<String> {
+fun validateChangeLogs(metaModel: EntityModel, officialDirectoryPath: String): List<String> {
     if (!FileSystem.SYSTEM.exists(officialDirectoryPath.toPath())) return listOf("Official directory `$officialDirectoryPath` does not exist")
 
     val errors = mutableListOf<String>()
 
-    val generatedRootChangeLog = getRootChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY)
-    val officialRootChangeLog = getRootChangeLogPath(mainMeta, officialDirectoryPath)
+    val generatedRootChangeLog = getRootChangeLogPath(metaModel, GENERATED_ROOT_DIRECTORY)
+    val officialRootChangeLog = getRootChangeLogPath(metaModel, officialDirectoryPath)
     errors.addAll(validateChangeLog(generatedRootChangeLog, officialRootChangeLog))
 
-    val generatedReleaseChangeLog = getReleaseChangeLogPath(mainMeta, GENERATED_ROOT_DIRECTORY, false)
-    val officialReleaseChangeLog = getReleaseChangeLogPath(mainMeta, officialDirectoryPath, false)
+    val generatedReleaseChangeLog = getReleaseChangeLogPath(metaModel, GENERATED_ROOT_DIRECTORY, false)
+    val officialReleaseChangeLog = getReleaseChangeLogPath(metaModel, officialDirectoryPath, false)
     errors.addAll(validateChangeLog(generatedReleaseChangeLog, officialReleaseChangeLog))
 
     return errors
