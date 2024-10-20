@@ -4,12 +4,11 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonFileIntoEntity
+import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
-import org.treeWare.model.getMainModelFromJsonFile
-import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -17,6 +16,7 @@ import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
 import java.time.Clock
@@ -53,10 +53,11 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must succeed for a new model`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -68,10 +69,11 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must succeed for a forward-referencing association`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "operator/forward_referencing_association_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -115,10 +117,11 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             modelJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -161,10 +164,11 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             modelJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -197,10 +201,11 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             modelJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -243,10 +248,11 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             modelJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -292,10 +298,11 @@ class SetCreateTests {
             |  }
             |}
         """.trimMargin()
-        val create = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             modelJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedResponse = Response.Success
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
@@ -324,10 +331,11 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must fail for an old model`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedRows = readFile("operator/my_sql_address_book_1_set_create_results.txt")
 
@@ -461,12 +469,12 @@ class SetCreateTests {
                 )
             )
         )
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                modelJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            modelJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -497,12 +505,12 @@ class SetCreateTests {
             |}
         """.trimMargin()
         val expectedResponse1 = Response.Success
-        val create1 =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                create1Json,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create1 = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            create1Json,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create1
+        )
         val actualResponse1 = set(create1, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse1, actualResponse1)
         val afterCreate1Rows = getDatabaseRows(testDataSource, TEST_DATABASE)
@@ -538,12 +546,12 @@ class SetCreateTests {
                 )
             )
         )
-        val create2 =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                create2Json,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create2 = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            create2Json,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create2
+        )
         val actualResponse2 = set(create2, setEntityDelegates, testDataSource, clock = clock)
         assertSetResponse(expectedResponse2, actualResponse2)
         val afterCreate2Rows = getDatabaseRows(testDataSource, TEST_DATABASE)

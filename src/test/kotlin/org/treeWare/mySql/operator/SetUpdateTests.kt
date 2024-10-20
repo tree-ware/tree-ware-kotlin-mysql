@@ -4,10 +4,10 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
-import org.treeWare.model.getMainModelFromJsonFile
-import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
 import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
@@ -56,10 +56,11 @@ class SetUpdateTests {
     @Test
     fun `Set-update must fail for a new model`() {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
@@ -139,10 +140,11 @@ class SetUpdateTests {
         //    The update model has different values as well as different ordering of entities in sets.
         val expectedRows = readFile("operator/my_sql_address_book_1_set_update_results.txt")
 
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -150,10 +152,11 @@ class SetUpdateTests {
         val createdRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(expectedRows, createdRows)
 
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.Success
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
@@ -185,12 +188,12 @@ class SetUpdateTests {
             |  }
             |}
         """.trimMargin()
-        val create =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                createJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            createJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
+        )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
@@ -227,12 +230,12 @@ class SetUpdateTests {
                 )
             )
         )
-        val update =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                updateJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            updateJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
+        )
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)

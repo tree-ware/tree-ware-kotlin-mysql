@@ -4,10 +4,10 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
+import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.decodeJsonStringIntoEntity
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
-import org.treeWare.model.getMainModelFromJsonFile
-import org.treeWare.model.getMainModelFromJsonString
 import org.treeWare.model.operator.*
 import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
@@ -69,10 +69,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when creating new singleton entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -84,10 +85,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when recreating existing singleton entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -111,10 +113,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when updating existing singleton entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -123,10 +126,11 @@ class SetSingletonEntityTests {
         val afterCreateRows = getSingletonTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_update_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.Success
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
@@ -138,10 +142,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when updating non-existing singleton entities`() {
-        val update = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_update_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = update
         )
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
@@ -159,10 +164,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when deleting existing singleton entities`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -170,10 +176,11 @@ class SetSingletonEntityTests {
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
@@ -184,10 +191,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when deleting non-existing singleton entities`() {
-        val delete = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
         )
         val expectedDeleteResponse = Response.Success
         val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
@@ -198,10 +206,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when creating a singleton entity without a parent`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities_no_parent.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
@@ -218,10 +227,11 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when deleting a singleton entity that has children in the database`() {
-        val create = getMainModelFromJsonFile(
-            mySqlAddressBookMetaModel,
+        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             "model/my_sql_create_singleton_entities.json",
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = create
         )
         val expectedCreateResponse = Response.Success
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -236,12 +246,12 @@ class SetSingletonEntityTests {
             |  }
             |}
         """.trimMargin()
-        val delete =
-            getMainModelFromJsonString(
-                mySqlAddressBookMetaModel,
-                deleteJson,
-                multiAuxDecodingStateMachineFactory = auxDecodingFactory
-            )
+        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
+            deleteJson,
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = delete
+        )
         val expectedDeleteResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
@@ -267,10 +277,11 @@ class SetSingletonEntityTests {
             |  }
             |}
         """.trimMargin()
-        val createRoot = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val createRoot = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             createRootJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = createRoot
         )
         val expectedCreateRootResponse = Response.Success
         val actualCreateRootResponse = set(createRoot, setEntityDelegates, testDataSource, clock = createClock)
@@ -308,10 +319,11 @@ class SetSingletonEntityTests {
             |  }
             |}
         """.trimMargin()
-        val createChildren = getMainModelFromJsonString(
-            mySqlAddressBookMetaModel,
+        val createChildren = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        decodeJsonStringIntoEntity(
             createChildrenJson,
-            multiAuxDecodingStateMachineFactory = auxDecodingFactory
+            multiAuxDecodingStateMachineFactory = auxDecodingFactory,
+            entity = createChildren
         )
         val expectedCreateChildrenResponse = Response.Success
         val actualCreateChildrenResponse = set(createChildren, setEntityDelegates, testDataSource, clock = updateClock)
