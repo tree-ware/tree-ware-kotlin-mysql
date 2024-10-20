@@ -30,7 +30,6 @@ fun getFieldColumns(
     }
 
 fun getAssociationFieldColumns(fieldMeta: EntityModel, isForKeyOrUnique: Boolean): List<Column> {
-    if (isListFieldMeta(fieldMeta)) return listOf(getSingleFieldColumn(fieldMeta))
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")
     val targetAux = getMySqlMetaModelMap(targetEntityMeta)

@@ -32,7 +32,7 @@ internal data class EntitySqlCommand(
  * The commands are issued only if a connection is specified.
  */
 internal class MySqlSetDelegate(
-    mainMeta: MainModel,
+    metaModel: EntityModel,
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val connection: Connection?,
     private val logCommands: Boolean = false,
@@ -62,7 +62,7 @@ internal class MySqlSetDelegate(
         if (connection != null && connection.autoCommit) {
             throw IllegalStateException("SQL connection should not be in auto-commit mode")
         }
-        val rootMeta = getRootMeta(mainMeta)
+        val rootMeta = getRootMeta(metaModel)
         val rootEntityMeta = getMetaModelResolved(rootMeta)?.compositionMeta
             ?: throw IllegalStateException("Root is not resolved")
         rootTableName = getEntityMetaTableName(rootEntityMeta)
@@ -329,10 +329,6 @@ internal class MySqlSetDelegate(
 
 private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateCommandBuilder) {
     val fieldName = getMetaName(fieldMeta)
-    if (isListFieldMeta(fieldMeta)) {
-        builder.addUpdateColumn(SingleValuedSqlColumn(null, fieldName, null))
-        return
-    }
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)

@@ -38,61 +38,21 @@ class MySqlGetDelegate(
     private val connection: Connection,
     private val logCommands: Boolean
 ) : GetDelegate {
+    override fun getRoot(
+        fieldPath: String,
+        ancestorKeys: List<Keys>,
+        requestFields: List<FieldModel>,
+        responseRootEntity: MutableEntityModel
+    ): GetCompositionResult = getEntity(fieldPath, ancestorKeys, requestFields, responseRootEntity)
+
     override fun getComposition(
         fieldPath: String,
         ancestorKeys: List<Keys>,
         requestFields: List<FieldModel>,
-        responseParentField: MutableSingleFieldModel
+        responseParentField: MutableSingleFieldModel?
     ): GetCompositionResult {
-        val responseEntity = responseParentField.getOrNewValue() as MutableEntityModel
-        if (requestFields.isEmpty()) return GetCompositionResult.Entity(responseEntity)
-        val entityMeta = getCompositionEntityMeta(responseParentField)
-        val tableName = getEntityMetaTableFullName(entityMeta)
-        val select = SelectCommandBuilder(tableName)
-        if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
-        else getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
-        select.addWhereColumn(
-            SingleValuedSqlColumn(
-                null,
-                FIELD_PATH_COLUMN_NAME,
-                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
-            )
-        )
-        requestFields.forEach {
-            select.addSelectColumns(
-                getSqlColumns(
-                    null,
-                    it,
-                    setEntityDelegates,
-                    getEntityDelegates,
-                    true
-                )
-            )
-        }
-        val statement: PreparedStatement = select.prepareStatement(connection)
-        if (logCommands) logger.info { statement.getBoundSql() }
-        return try {
-            val result = statement.executeQuery()
-            val errors = mutableListOf<String>()
-            while (result.next()) {
-                var columnIndex = 1
-                requestFields.forEach { requestField ->
-                    val responseField = responseEntity.getOrNewField(getFieldName(requestField))
-                    val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseField)
-                    errors.addAll(fieldErrors)
-                    columnIndex += columnsConsumed
-                }
-            }
-            if (errors.isEmpty()) GetCompositionResult.Entity(responseEntity)
-            else GetCompositionResult.ErrorList(ErrorCode.CLIENT_ERROR, errors.map { ElementModelError(fieldPath, it) })
-        } catch (e: Exception) {
-            GetCompositionResult.ErrorList(
-                ErrorCode.SERVER_ERROR,
-                listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entity"))
-            )
-        } finally {
-            statement.close()
-        }
+        val responseEntity = responseParentField?.getOrNewValue() as MutableEntityModel
+        return getEntity(fieldPath, ancestorKeys, requestFields, responseEntity)
     }
 
     override fun getCompositionSet(
@@ -168,6 +128,62 @@ class MySqlGetDelegate(
         }
     }
 
+    private fun getEntity(
+        fieldPath: String,
+        ancestorKeys: List<Keys>,
+        requestFields: List<FieldModel>,
+        responseEntity: MutableEntityModel
+    ): GetCompositionResult {
+        if (requestFields.isEmpty()) return GetCompositionResult.Entity(responseEntity)
+        val entityMeta = requireNotNull(responseEntity.meta) { "Entity meta is missing" }
+        val tableName = getEntityMetaTableFullName(entityMeta)
+        val select = SelectCommandBuilder(tableName)
+        if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
+        else getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
+        select.addWhereColumn(
+            SingleValuedSqlColumn(
+                null,
+                FIELD_PATH_COLUMN_NAME,
+                TypedValue(FIELD_PATH_COLUMN_SQL_TYPE, fieldPath)
+            )
+        )
+        requestFields.forEach {
+            select.addSelectColumns(
+                getSqlColumns(
+                    null,
+                    it,
+                    setEntityDelegates,
+                    getEntityDelegates,
+                    true
+                )
+            )
+        }
+        val statement: PreparedStatement = select.prepareStatement(connection)
+        if (logCommands) logger.info { statement.getBoundSql() }
+        return try {
+            val result = statement.executeQuery()
+            val errors = mutableListOf<String>()
+            while (result.next()) {
+                var columnIndex = 1
+                requestFields.forEach { requestField ->
+                    val responseField = responseEntity.getOrNewField(getFieldName(requestField))
+                    val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseField)
+                    errors.addAll(fieldErrors)
+                    columnIndex += columnsConsumed
+                }
+            }
+            if (errors.isEmpty()) GetCompositionResult.Entity(responseEntity)
+            else GetCompositionResult.ErrorList(ErrorCode.CLIENT_ERROR, errors.map { ElementModelError(fieldPath, it) })
+        } catch (e: Exception) {
+            GetCompositionResult.ErrorList(
+                ErrorCode.SERVER_ERROR,
+                listOf(ElementModelError(fieldPath, e.message ?: "Exception while getting entity"))
+            )
+        } finally {
+            statement.close()
+        }
+    }
+
     private fun getAncestorKeyColumns(ancestorKeys: Keys): List<SqlColumn> {
         val ancestorFirstKey = ancestorKeys.available.firstOrNull() ?: return emptyList()
         val ancestorFirstKeyMeta = requireNotNull(ancestorFirstKey.meta) { "Ancestor key field meta is missing" }
@@ -181,29 +197,17 @@ class MySqlGetDelegate(
         result: ResultSet,
         columnIndex: Int,
         responseField: FieldModel
-    ): SetResponseFieldResult =
-        if (isListField(responseField)) {
-            setResponseListField(result, columnIndex, responseField as MutableListFieldModel)
-        } else when (getFieldType(responseField)) {
-            FieldType.ASSOCIATION ->
-                setResponseAssociationField(result, columnIndex, responseField as MutableSingleFieldModel)
-            FieldType.COMPOSITION ->
-                setResponseCompositionField(result, columnIndex, responseField as MutableSingleFieldModel)
-            else -> {
-                setResponseSingleField(result, columnIndex, responseField as MutableSingleFieldModel)
-                SetResponseFieldResult(emptyList(), 1)
-            }
-        }
+    ): SetResponseFieldResult = when (getFieldType(responseField)) {
+        FieldType.ASSOCIATION ->
+            setResponseAssociationField(result, columnIndex, responseField as MutableSingleFieldModel)
 
-    private fun setResponseListField(
-        result: ResultSet,
-        columnIndex: Int,
-        responseListField: MutableListFieldModel
-    ): SetResponseFieldResult {
-        val json = result.getString(columnIndex) ?: return SetResponseFieldResult(emptyList(), 1)
-        val buffer = Buffer().writeUtf8(json)
-        val decodeErrors = decodeJsonField(buffer, responseListField)
-        return SetResponseFieldResult(decodeErrors, 1)
+        FieldType.COMPOSITION ->
+            setResponseCompositionField(result, columnIndex, responseField as MutableSingleFieldModel)
+
+        else -> {
+            setResponseSingleField(result, columnIndex, responseField as MutableSingleFieldModel)
+            SetResponseFieldResult(emptyList(), 1)
+        }
     }
 
     private fun setResponseAssociationField(
@@ -251,98 +255,117 @@ class MySqlGetDelegate(
                 (it as MutablePrimitiveModel).value = boolean
             }
         }
+
         FieldType.UINT8 -> result.getByte(columnIndex).toUByte().let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.UINT16 -> result.getShort(columnIndex).toUShort().let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.UINT32 -> result.getInt(columnIndex).toUInt().let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.UINT64 -> result.getLong(columnIndex).toULong().let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.INT8 -> result.getByte(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.INT16 -> result.getShort(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.INT32 -> result.getInt(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.INT64 -> result.getLong(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.FLOAT -> result.getFloat(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.DOUBLE -> result.getDouble(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.BIG_INTEGER -> result.getBigDecimal(columnIndex)?.toBigInteger()?.let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.BIG_DECIMAL -> result.getBigDecimal(columnIndex)?.let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = number
             }
         }
+
         FieldType.TIMESTAMP -> result.getTimestamp(columnIndex, Calendar.getInstance(UTC_TIMEZONE))?.time?.let { time ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = time
             }
         }
+
         FieldType.STRING -> result.getString(columnIndex)?.let { string ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = string
             }
         }
+
         FieldType.UUID -> getUuidString(result, columnIndex)?.let { uuid ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = uuid
             }
         }
+
         FieldType.BLOB -> result.getBytes(columnIndex)?.let { bytes ->
             responseSingleField.getOrNewValue().also {
                 (it as MutablePrimitiveModel).value = bytes
             }
         }
+
         FieldType.PASSWORD1WAY,
         FieldType.PASSWORD2WAY -> result.getString(columnIndex)?.let { string ->
             val buffer = Buffer().writeUtf8(string)
             decodeJsonField(buffer, responseSingleField)
             responseSingleField.value
         }
+
         FieldType.ALIAS -> throw UnsupportedOperationException("Aliases are not yet supported")
         FieldType.ENUMERATION -> result.getInt(columnIndex).let { number ->
             responseSingleField.getOrNewValue().also {
                 (it as MutableEnumerationModel).setNumber(number.toUInt())
             }
         }
+
         FieldType.ASSOCIATION -> throw IllegalStateException("Setting association as a single SQL value")
         FieldType.COMPOSITION -> throw IllegalStateException("Setting composition as a single SQL value")
     }
