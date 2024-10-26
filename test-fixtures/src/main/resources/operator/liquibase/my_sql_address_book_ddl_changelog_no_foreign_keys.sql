@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS test__address_book.main__address_book_person (
   self__id BINARY(16),
   main__address_book_root__singleton_key_ INT UNSIGNED,
   main__person_group__id BINARY(16),
-  PRIMARY KEY (id),
-  UNIQUE INDEX self (self__id)
+  UNIQUE INDEX self (self__id),
+  PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 -- rollback DROP TABLE IF EXISTS test__address_book.main__address_book_person;
 
@@ -183,8 +183,8 @@ CREATE TABLE IF NOT EXISTS test__address_book.city__city_info (
   self2__state VARCHAR(64),
   self2__country VARCHAR(64),
   main__address_book_root__singleton_key_ INT UNSIGNED,
-  PRIMARY KEY (name, state, country),
   UNIQUE INDEX coordinates (latitude, longitude),
-  UNIQUE INDEX self (self__name, self__state, self__country)
+  UNIQUE INDEX self (self__name, self__state, self__country),
+  PRIMARY KEY (name, state, country)
 ) ENGINE = InnoDB;
 -- rollback DROP TABLE IF EXISTS test__address_book.city__city_info;

@@ -16,7 +16,7 @@ class KeyValidationTests {
             |  "my_sql_": {
             |    "table_prefix": "main"
             |  },
-            |  "name": "test.main",
+            |  "name": "org.tree_ware.test.main",
             |  "entities": [
             |    {
             |      "my_sql_": {},
@@ -112,7 +112,7 @@ class KeyValidationTests {
                 FieldType.PASSWORD1WAY,
                 FieldType.PASSWORD2WAY -> listOf("$FIELD_ID is a password field and they cannot be keys")
                 FieldType.ASSOCIATION -> listOf("$FIELD_ID is an association field and they cannot be keys")
-                else -> listOf("Entity /root/test.main/entity1 key field type $fieldType is not supported for MySQL")
+                else -> listOf("Entity /test_meta_model/org.tree_ware.test.main/entity1 key field type $fieldType is not supported for MySQL")
             }
             assertJsonStringValidationErrors(
                 metaModelJson,
@@ -137,7 +137,7 @@ class KeyValidationTests {
     fun `Validation must fail for string keys without max_size`() {
         val metaModelJson = getStringKeyMetaModelJson(null)
         val expectedErrors =
-            listOf("String field /root/test.main/entity1/key1 must specify max_size constraint for MySQL")
+            listOf("String field /test_meta_model/org.tree_ware.test.main/entity1/key1 must specify max_size constraint for MySQL")
         assertJsonStringValidationErrors(
             metaModelJson,
             expectedErrors,
@@ -149,9 +149,9 @@ class KeyValidationTests {
 private fun getTypedKeyMetaModelJson(fieldType: FieldType): String {
     val fieldTypeJson = fieldType.toString().lowercase()
     val typeInfoJson = when (fieldType) {
-        FieldType.ENUMERATION -> """"enumeration": {"name": "enumeration1", "package": "test.common"},"""
-        FieldType.ASSOCIATION -> """"association": {"entity": "entity2", "package": "test.common"},"""
-        FieldType.COMPOSITION -> """"composition": {"entity": "entity3", "package": "test.common"},"""
+        FieldType.ENUMERATION -> """"enumeration": {"name": "enumeration1", "package": "org.tree_ware.test.common"},"""
+        FieldType.ASSOCIATION -> """"association": {"entity": "entity2", "package": "org.tree_ware.test.common"},"""
+        FieldType.COMPOSITION -> """"composition": {"entity": "entity3", "package": "org.tree_ware.test.common"},"""
         else -> ""
     }
     val mainPackageJson = """
@@ -159,7 +159,7 @@ private fun getTypedKeyMetaModelJson(fieldType: FieldType): String {
             |  "my_sql_": {
             |    "table_prefix": "main"
             |  },
-            |  "name": "test.main",
+            |  "name": "org.tree_ware.test.main",
             |  "entities": [
             |    {
             |      "my_sql_": {},
@@ -187,7 +187,7 @@ private fun getStringKeyMetaModelJson(maxSize: Int?): String {
             |  "my_sql_": {
             |    "table_prefix": "main"
             |  },
-            |  "name": "test.main",
+            |  "name": "org.tree_ware.test.main",
             |  "entities": [
             |    {
             |      "my_sql_": {},

@@ -14,7 +14,7 @@ class FieldValidationTests {
     fun `Validation must fail if string fields do not specify max_size constraint`() {
         val metaModelJson = getStringFieldMetaModelJson(true, null)
         val expectedErrors =
-            listOf("String field /root/test.main/entity1/field1 must specify max_size constraint for MySQL")
+            listOf("String field /test_meta_model/org.tree_ware.test.main/entity1/field1 must specify max_size constraint for MySQL")
         assertJsonStringValidationErrors(
             metaModelJson,
             expectedErrors,
@@ -53,7 +53,7 @@ private fun getStringFieldMetaModelJson(isStoredInMySQL: Boolean, maxSize: Int?)
             |  "my_sql_": {
             |    "table_prefix": "main"
             |  },
-            |  "name": "test.main",
+            |  "name": "org.tree_ware.test.main",
             |  "entities": [
             |    {
             |      $mySqlJson

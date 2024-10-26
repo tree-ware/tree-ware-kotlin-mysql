@@ -52,9 +52,7 @@ private fun populateMetaModel(
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
     val databaseName = getMySqlMetaModelMap(metaModel)?.validated?.fullName ?: return
-    val rootMeta = getRootMeta(metaModel)
-    val rootCompositionMeta = getMetaModelResolved(rootMeta)?.compositionMeta
-        ?: throw IllegalStateException("Root meta not resolved")
+    val rootCompositionMeta = getResolvedRootMeta(metaModel)
     val ddlState = DdlState()
     populateComposition(
         ddlRoot,
@@ -207,14 +205,13 @@ private fun populateParentForeignKey(ddlTable: MutableEntityModel, parent: Table
     val foreignKeyName = "$sourcePrefix${parent.keys.first().name}"
 
     val ddlForeignKeys = getOrNewMutableSetField(ddlTable, "foreign_keys")
-    val ddlForeignKey = getOrNewNamedEntity(ddlForeignKeys, foreignKeyName)
+    val ddlForeignKey = getOrNewSetFieldEntity(ddlForeignKeys, foreignKeyName)
     setStringSingleField(ddlForeignKey, "target_table", targetTableName)
     val ddlKeyMappings = getOrNewMutableSetField(ddlForeignKey, "key_mappings")
-    if (ddlKeyMappings.isEmpty()) return
     parent.keys.map {
         val sourceColumn = "$sourcePrefix${it.name}"
         val targetColumn = it.name
-        val ddlKeyMapping = getOrNewNamedEntity(ddlKeyMappings, sourceColumn)
+        val ddlKeyMapping = getOrNewSetFieldEntity(ddlKeyMappings, sourceColumn, "source_key")
         setStringSingleField(ddlKeyMapping, "target_key", targetColumn)
     }
 }
@@ -228,15 +225,16 @@ fun populateUniqueIndex(
     val uniqueMeta = uniqueElementMeta as EntityModel
     val uniqueName = getMetaName(uniqueMeta)
     val ddlIndexes = getOrNewMutableSetField(ddlTable, "indexes")
-    val ddlIndex = getOrNewNamedEntity(ddlIndexes, uniqueName)
+    val ddlIndex = getOrNewSetFieldEntity(ddlIndexes, uniqueName)
     setBooleanSingleField(ddlIndex, "is_unique", true)
     val ddlIndexColumns = getOrNewMutableSetField(ddlIndex, "columns")
     getFieldsMeta(uniqueMeta).values.forEach { uniqueFieldElementMeta ->
-        val uniqueFieldMeta = uniqueFieldElementMeta as PrimitiveModel
-        val entityFieldMeta = getFieldMeta(compositionMeta, uniqueFieldMeta.value as String)
-        val prefix = if (isAssociationFieldMeta(entityFieldMeta)) "${getMetaName(entityFieldMeta)}__" else ""
+        val uniqueFieldMeta = uniqueFieldElementMeta as EntityModel
+        val uniqueFieldName = getSingleString(uniqueFieldMeta, "name")
+        val entityFieldMeta = getFieldMeta(compositionMeta, uniqueFieldName)
+        val prefix = if (isAssociationFieldMeta(entityFieldMeta)) "${uniqueFieldName}__" else ""
         getFieldColumns(entityFieldMeta, true, entityDelegates).forEach {
-            getOrNewNamedEntity(ddlIndexColumns, "${prefix}${it.name}")
+            getOrNewSetFieldEntity(ddlIndexColumns, "${prefix}${it.name}")
         }
     }
 }
@@ -252,11 +250,11 @@ private fun populateKeylessParentUniqueIndex(
     val indexName = inheritedKeys.firstOrNull()?.name ?: throw IllegalStateException("No keys in any ancestor")
 
     val ddlIndexes = getOrNewMutableSetField(ddlTable, "indexes")
-    val ddlIndex = getOrNewNamedEntity(ddlIndexes, indexName)
+    val ddlIndex = getOrNewSetFieldEntity(ddlIndexes, indexName)
     val ddlIndexColumns = getOrNewMutableSetField(ddlIndex, "columns")
     if (ddlIndexColumns.isEmpty()) {
         setBooleanSingleField(ddlIndex, "is_unique", true)
-        inheritedKeys.forEach { getOrNewNamedEntity(ddlIndexColumns, it.name) }
+        inheritedKeys.forEach { getOrNewSetFieldEntity(ddlIndexColumns, it.name) }
     }
 
     return TableKeys(tableName, inheritedKeys, false)
@@ -275,22 +273,22 @@ private fun populateForeignKeys(ddlTable: MutableEntityModel, fieldMeta: EntityM
         ?: throw IllegalStateException("Association target entity my_sql_ aux is not validated")
 
     val ddlForeignKeys = getOrNewMutableSetField(ddlTable, "foreign_keys")
-    val ddlForeignKey = getOrNewNamedEntity(ddlForeignKeys, foreignKeyName)
+    val ddlForeignKey = getOrNewSetFieldEntity(ddlForeignKeys, foreignKeyName)
     setStringSingleField(ddlForeignKey, "target_table", targetTableName)
     val ddlKeyMappings = getOrNewMutableSetField(ddlForeignKey, "key_mappings")
     columns.forEach {
         val sourceColumn = "${fieldName}__${it.name}"
         val targetColumn = it.name
-        val ddlKeyMapping = getOrNewNamedEntity(ddlKeyMappings, sourceColumn)
+        val ddlKeyMapping = getOrNewSetFieldEntity(ddlKeyMappings, sourceColumn, "source_key")
         setStringSingleField(ddlKeyMapping, "target_key", targetColumn)
     }
 }
 
 private fun getDdlTable(ddlRoot: MutableEntityModel, databaseName: String, tableName: String): MutableEntityModel {
     val ddlDatabases = getOrNewMutableSetField(ddlRoot, "databases")
-    val ddlDatabase = getOrNewNamedEntity(ddlDatabases, databaseName)
+    val ddlDatabase = getOrNewSetFieldEntity(ddlDatabases, databaseName)
     val ddlTables = getOrNewMutableSetField(ddlDatabase, "tables")
-    val ddlTable = getOrNewNamedEntity(ddlTables, tableName)
+    val ddlTable = getOrNewSetFieldEntity(ddlTables, tableName)
     populateTreeWareColumns(ddlTable)
     return ddlTable
 }
@@ -304,15 +302,19 @@ private fun populateTreeWareColumns(ddlTable: MutableEntityModel) {
 }
 
 private fun populateColumn(ddlColumns: MutableSetFieldModel, columnName: String, columnType: String, isKey: Boolean) {
-    val ddlColumn = getOrNewNamedEntity(ddlColumns, columnName)
+    val ddlColumn = getOrNewSetFieldEntity(ddlColumns, columnName)
     setStringSingleField(ddlColumn, "type", columnType)
     setBooleanSingleField(ddlColumn, "is_primary_key", isKey)
 }
 
-private fun getOrNewNamedEntity(setField: MutableSetFieldModel, entityName: String): MutableEntityModel {
+private fun getOrNewSetFieldEntity(
+    setField: MutableSetFieldModel,
+    keyFieldValue: String,
+    keyFieldName: String = "name"
+): MutableEntityModel {
     // TODO(cleanup): need a getOrNew() method with key values as parameters.
     val newEntity = getNewMutableSetEntity(setField)
-    setStringSingleField(newEntity, "name", entityName)
+    setStringSingleField(newEntity, keyFieldName, keyFieldValue)
     val oldEntity = setField.getValueMatching(newEntity) as MutableEntityModel?
     return if (oldEntity != null) oldEntity else {
         setField.addValue(newEntity)

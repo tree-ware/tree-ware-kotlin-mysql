@@ -67,10 +67,12 @@ class GenerateDdlCommandsVisitor(
     }
 
     override fun leaveTable(leaderTable1: Table) {
-        createTableCommand.appendLine(",")
-            .append("  PRIMARY KEY (")
-            .append(primaryKeyColumnNames.joinToString())
-            .append(")")
+        if (primaryKeyColumnNames.isNotEmpty()) {
+            createTableCommand.appendLine(",")
+                .append("  PRIMARY KEY (")
+                .append(primaryKeyColumnNames.joinToString())
+                .append(")")
+        }
         createTableCommand.appendLine().append(") ENGINE = InnoDB;")
         val createChangeSet =
             MutableChangeSet(liquibaseAuthor).add(createTableCommand.toString(), createTableRollbackCommand.toString())
