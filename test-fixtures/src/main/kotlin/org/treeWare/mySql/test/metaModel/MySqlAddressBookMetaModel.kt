@@ -1,6 +1,7 @@
 package org.treeWare.mySql.test.metaModel
 
 import org.treeWare.metaModel.ValidatedMetaModel
+import org.treeWare.metaModel.getResolvedRootMeta
 import org.treeWare.metaModel.newMetaModelFromJsonFiles
 import org.treeWare.model.core.Cipher
 import org.treeWare.model.core.Hasher
@@ -18,6 +19,8 @@ val MY_SQL_ADDRESS_BOOK_META_MODEL_FILES = listOf(
 
 val mySqlAddressBookMetaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
     ?: throw IllegalStateException("Meta-model has validation errors")
+
+val mySqlAddressBookRootEntityMeta = getResolvedRootMeta(mySqlAddressBookMetaModel)
 
 fun newMySqlAddressBookMetaModel(environment: String, hasher: Hasher?, cipher: Cipher?): ValidatedMetaModel =
     newMetaModelFromJsonFiles(

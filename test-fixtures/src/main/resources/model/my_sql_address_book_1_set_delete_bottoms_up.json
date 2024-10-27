@@ -1,117 +1,115 @@
 {
-  "address_book": {
+  "set_": "delete",
+  "settings": {
     "set_": "delete",
-    "settings": {
+    "advanced": {
+      "set_": "delete"
+    }
+  },
+  "person": [
+    {
       "set_": "delete",
-      "advanced": {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "relation": [
+        {
+          "set_": "delete",
+          "id": "05ade278-4b44-43da-a0cc-14463854e397"
+        },
+        {
+          "set_": "delete",
+          "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce"
+        }
+      ],
+      "password": {
+        "set_": "delete"
+      },
+      "secret": {
         "set_": "delete"
       }
     },
-    "person": [
-      {
-        "set_": "delete",
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "relation": [
-          {
-            "set_": "delete",
-            "id": "05ade278-4b44-43da-a0cc-14463854e397"
-          },
-          {
-            "set_": "delete",
-            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce"
-          }
-        ],
-        "password": {
-          "set_": "delete"
-        },
-        "secret": {
-          "set_": "delete"
+    {
+      "set_": "delete",
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "relation": [
+        {
+          "set_": "delete",
+          "id": "16634916-8f83-4376-ad42-37038e108a0b"
         }
+      ],
+      "password": {
+        "set_": "delete"
       },
-      {
-        "set_": "delete",
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "relation": [
-          {
-            "set_": "delete",
-            "id": "16634916-8f83-4376-ad42-37038e108a0b"
-          }
-        ],
-        "password": {
-          "set_": "delete"
-        },
-        "secret": {
-          "set_": "delete"
-        }
-      },
-      {
-        "set_": "delete",
-        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+      "secret": {
+        "set_": "delete"
       }
-    ],
-    "groups": [
-      {
-        "set_": "delete",
-        "id": "ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
-        "sub_groups": [
-          {
-            "set_": "delete",
-            "id": "fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
-            "persons": [
-              {
-                "set_": "delete",
-                "id": "546a4982-b39a-4d01-aeb3-22d60c6963c0"
-              },
-              {
-                "set_": "delete",
-                "id": "e391c509-67d6-4846-bfea-0f7cd9c91bf7"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "set_": "delete",
-        "id": "ad9aaea8-30fe-45ed-93ef-bd368da0c756"
+    },
+    {
+      "set_": "delete",
+      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+    }
+  ],
+  "groups": [
+    {
+      "set_": "delete",
+      "id": "ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
+      "sub_groups": [
+        {
+          "set_": "delete",
+          "id": "fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
+          "persons": [
+            {
+              "set_": "delete",
+              "id": "546a4982-b39a-4d01-aeb3-22d60c6963c0"
+            },
+            {
+              "set_": "delete",
+              "id": "e391c509-67d6-4846-bfea-0f7cd9c91bf7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "set_": "delete",
+      "id": "ad9aaea8-30fe-45ed-93ef-bd368da0c756"
+    }
+  ],
+  "city_info": [
+    {
+      "set_": "delete",
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "set_": "delete"
       }
-    ],
-    "city_info": [
-      {
-        "set_": "delete",
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "set_": "delete"
-        }
-      },
-      {
-        "set_": "delete",
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "set_": "delete"
-        }
-      },
-      {
-        "set_": "delete",
-        "name": "Princeton",
-        "state": "New Jersey",
-        "country": "United States of America",
-        "city_center": {
-          "set_": "delete"
-        }
-      },
-      {
-        "set_": "delete",
-        "country": "United States of America",
-        "state": "California",
-        "name": "San Francisco",
-        "city_center": {
-          "set_": "delete"
-        }
+    },
+    {
+      "set_": "delete",
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "set_": "delete"
       }
-    ]
-  }
+    },
+    {
+      "set_": "delete",
+      "name": "Princeton",
+      "state": "New Jersey",
+      "country": "United States of America",
+      "city_center": {
+        "set_": "delete"
+      }
+    },
+    {
+      "set_": "delete",
+      "country": "United States of America",
+      "state": "California",
+      "name": "San Francisco",
+      "city_center": {
+        "set_": "delete"
+      }
+    }
+  ]
 }

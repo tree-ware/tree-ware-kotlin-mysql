@@ -3,16 +3,16 @@ package org.treeWare.mySql.operator
 import org.junit.jupiter.api.Tag
 import org.treeWare.model.core.MutableEntityModel
 import org.treeWare.model.decodeJsonFileIntoEntity
-import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.getBoundSql
 import org.treeWare.mySql.operator.delegate.MySqlSetDelegate
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
 import java.time.Clock
@@ -38,7 +38,7 @@ class GenerateSetCommandsTests {
 
     @Test
     fun `Set-create commands must be generated for the model`() {
-        val addressBook1Create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val addressBook1Create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -63,7 +63,7 @@ class GenerateSetCommandsTests {
 
     @Test
     fun `Set-update commands must be generated for the model`() {
-        val addressBook1Create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val addressBook1Create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -88,7 +88,7 @@ class GenerateSetCommandsTests {
 
     @Test
     fun `Set-delete commands must be generated for the model`() {
-        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val delete = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_delete_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -113,7 +113,7 @@ class GenerateSetCommandsTests {
 
     @Test
     fun `Set-mixed commands must be generated for the model`() {
-        val mixed = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val mixed = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_mixed.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,

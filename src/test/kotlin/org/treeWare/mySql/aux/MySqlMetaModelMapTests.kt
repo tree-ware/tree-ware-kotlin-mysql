@@ -1,13 +1,11 @@
 package org.treeWare.mySql.aux
 
-import org.treeWare.mySql.test.metaModel.MY_SQL_ADDRESS_BOOK_META_MODEL_FILES
-import org.treeWare.metaModel.newMetaMetaModel
+import org.treeWare.metaModel.MetaModelMutableEntityModelFactory
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.MultiAuxEncoder
 import org.treeWare.model.testRoundTrip
+import org.treeWare.mySql.test.metaModel.MY_SQL_ADDRESS_BOOK_META_MODEL_FILES
 import kotlin.test.Test
-
-private val metaMetaModel = newMetaMetaModel()
 
 class MySqlMetaModelMapTests {
     @Test
@@ -22,7 +20,7 @@ class MySqlMetaModelMapTests {
                 multiAuxDecodingStateMachineFactory = MultiAuxDecodingStateMachineFactory(
                     mySqlMetaModelMapAuxPlugin.auxName to mySqlMetaModelMapAuxPlugin.auxDecodingStateMachineFactory
                 ),
-                entityMeta = metaMetaModel
+                entity = MetaModelMutableEntityModelFactory.create()
             )
         }
     }

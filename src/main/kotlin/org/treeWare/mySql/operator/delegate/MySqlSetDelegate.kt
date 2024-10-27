@@ -62,9 +62,7 @@ internal class MySqlSetDelegate(
         if (connection != null && connection.autoCommit) {
             throw IllegalStateException("SQL connection should not be in auto-commit mode")
         }
-        val rootMeta = getRootMeta(metaModel)
-        val rootEntityMeta = getMetaModelResolved(rootMeta)?.compositionMeta
-            ?: throw IllegalStateException("Root is not resolved")
+        val rootEntityMeta = getResolvedRootMeta(metaModel)
         rootTableName = getEntityMetaTableName(rootEntityMeta)
     }
 
