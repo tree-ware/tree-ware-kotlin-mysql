@@ -1,19 +1,19 @@
 package org.treeWare.mySql.operator
 
 import org.junit.jupiter.api.*
-import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.assertMatchesJson
 import org.treeWare.model.core.MutableEntityModel
 import org.treeWare.model.decodeJsonFileIntoEntity
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.EncodePasswords
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import java.time.Clock
 import java.time.Instant
@@ -42,7 +42,7 @@ class GetTests {
 
     @BeforeEach
     fun beforeEach() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_get_tests_initial_create_request.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -63,12 +63,12 @@ class GetTests {
 
     @Test
     fun `get() must fetch nested wildcard entities in a request`() {
-        val request = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_get_request_nested_wildcard_entities.json",
             entity = request
         )
-        val responseModel = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
         assertTrue(response is Response.Success)
         assertMatchesJson(
@@ -80,12 +80,12 @@ class GetTests {
 
     @Test
     fun `get() must fetch specific and wildcard entities in a request`() {
-        val request = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_get_request_specific_and_wildcard_entities.json",
             entity = request
         )
-        val responseModel = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
         assertTrue(response is Response.Success)
         assertMatchesJson(
@@ -97,9 +97,9 @@ class GetTests {
 
     @Test
     fun `get() must fetch entities when non-key fields are not requested in parent entities`() {
-        val request = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity("model/my_sql_get_request_no_parent_fields.json", entity = request)
-        val responseModel = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
@@ -107,9 +107,9 @@ class GetTests {
 
     @Test
     fun `get() must fetch entities when a subset of keys are specified in a request`() {
-        val request = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity("model/my_sql_get_request_subset_of_keys.json", entity = request)
-        val responseModel = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_subset_of_keys.json", EncodePasswords.ALL)
@@ -117,9 +117,9 @@ class GetTests {
 
     @Test
     fun `get() must not fetch entities if entity path in request does not match entity path in DB`() {
-        val request = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity( "model/my_sql_get_request_invalid_entity_paths.json", entity = request)
-        val responseModel = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_invalid_entity_paths.json", EncodePasswords.ALL)

@@ -15,7 +15,7 @@ fun set(
     logCommands: Boolean = false,
     clock: Clock = Clock.systemUTC()
 ): Response = dataSource.connection.use { connection ->
-    val metaModel = model.meta ?: throw IllegalStateException("No meta-model for model being set")
-    val setDelegate = MySqlSetDelegate(metaModel, entityDelegates, connection, logCommands, clock)
+    val resolvedRootMeta = model.meta ?: throw IllegalStateException("No meta-model for model being set")
+    val setDelegate = MySqlSetDelegate(resolvedRootMeta, entityDelegates, connection, logCommands, clock)
     org.treeWare.model.operator.set(model, setDelegate, entityDelegates)
 }

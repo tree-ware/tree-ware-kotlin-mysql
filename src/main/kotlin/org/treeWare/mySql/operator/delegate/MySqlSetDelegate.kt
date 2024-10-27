@@ -32,7 +32,7 @@ internal data class EntitySqlCommand(
  * The commands are issued only if a connection is specified.
  */
 internal class MySqlSetDelegate(
-    metaModel: EntityModel,
+    resolvedRootMeta: EntityModel,
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val connection: Connection?,
     private val logCommands: Boolean = false,
@@ -62,8 +62,7 @@ internal class MySqlSetDelegate(
         if (connection != null && connection.autoCommit) {
             throw IllegalStateException("SQL connection should not be in auto-commit mode")
         }
-        val rootEntityMeta = getResolvedRootMeta(metaModel)
-        rootTableName = getEntityMetaTableName(rootEntityMeta)
+        rootTableName = getEntityMetaTableName(resolvedRootMeta)
     }
 
     override fun begin(): Response {

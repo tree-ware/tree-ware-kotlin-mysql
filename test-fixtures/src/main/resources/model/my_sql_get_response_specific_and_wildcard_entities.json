@@ -1,135 +1,133 @@
 {
-  "address_book": {
-    "name": "Super Heroes",
-    "last_updated": "1650390777000",
-    "settings": {
-      "last_name_first": true,
-      "encrypt_hero_name": false,
-      "advanced": {
-        "background_color": "blue"
+  "name": "Super Heroes",
+  "last_updated": "1650390777000",
+  "settings": {
+    "last_name_first": true,
+    "encrypt_hero_name": false,
+    "advanced": {
+      "background_color": "blue"
+    }
+  },
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "first_name": "Clark",
+      "relation": [
+        {
+          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+          "relationship": "colleague",
+          "person": {
+            "person": [
+              {
+                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+              }
+            ]
+          }
+        },
+        {
+          "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+          "person": {
+            "person": [
+              {
+                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+              }
+            ]
+          }
+        }
+      ],
+      "password": {
+        "current": null
+      },
+      "secret": {
+        "main": null
+      },
+      "last_name": "Kent",
+      "hero_name": "Superman",
+      "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50"
+    },
+    {
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "first_name": "Lois",
+      "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
+      "last_name": "Lane",
+      "hero_name": null,
+      "password": null,
+      "secret": null
+    },
+    {
+      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+      "last_name": "Olsen",
+      "hero_name": null,
+      "picture": null,
+      "password": {},
+      "secret": {}
+    }
+  ],
+  "city_info": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "info": "One of the most populous and most densely populated major city in USA",
+      "city_center": {
+        "latitude": 40.712982,
+        "longitude": -74.007205
+      },
+      "self": null,
+      "keyless": {
+        "name": "NYC keyless"
+      },
+      "self2": null
+    },
+    {
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "info": "Capital of New York state",
+      "keyless": {
+        "keyless_child": {
+          "name": "Albany keyless child"
+        }
+      },
+      "self2": null,
+      "city_center": {
+        "latitude": 42.651934,
+        "longitude": -73.75477
       }
     },
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "first_name": "Clark",
-        "relation": [
+    {
+      "name": "Princeton",
+      "state": "New Jersey",
+      "country": "United States of America",
+      "self2": {
+        "city_info": [
           {
-            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": "colleague",
-            "person": {
-              "person": [
-                {
-                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-                }
-              ]
-            }
-          },
-          {
-            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
-            "person": {
-              "person": [
-                {
-                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-                }
-              ]
-            }
+            "country": "United States of America",
+            "state": "New Jersey",
+            "name": "Princeton"
           }
-        ],
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
-        },
-        "last_name": "Kent",
-        "hero_name": "Superman",
-        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50"
+        ]
       },
-      {
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "first_name": "Lois",
-        "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
-        "last_name": "Lane",
-        "hero_name": null,
-        "password": null,
-        "secret": null
+      "city_center": {
+        "latitude": 40.360594,
+        "longitude": -74.664441
       },
-      {
-        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-        "last_name": "Olsen",
-        "hero_name": null,
-        "picture": null,
-        "password": {},
-        "secret": {}
+      "keyless": {
+        "keyed_child": {}
       }
-    ],
-    "city_info": [
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "info": "One of the most populous and most densely populated major city in USA",
-        "city_center": {
-          "latitude": 40.712982,
-          "longitude": -74.007205
-        },
-        "self": null,
-        "keyless": {
-          "name": "NYC keyless"
-        },
-        "self2": null
+    },
+    {
+      "name": "San Francisco",
+      "state": "California",
+      "country": "United States of America",
+      "self2": null,
+      "city_center": {
+        "latitude": 37.779379,
+        "longitude": -122.418433
       },
-      {
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "info": "Capital of New York state",
-        "keyless": {
-          "keyless_child": {
-            "name": "Albany keyless child"
-          }
-        },
-        "self2": null,
-        "city_center": {
-          "latitude": 42.651934,
-          "longitude": -73.75477
-        }
-      },
-      {
-        "name": "Princeton",
-        "state": "New Jersey",
-        "country": "United States of America",
-        "self2": {
-          "city_info": [
-            {
-              "country": "United States of America",
-              "state": "New Jersey",
-              "name": "Princeton"
-            }
-          ]
-        },
-        "city_center": {
-          "latitude": 40.360594,
-          "longitude": -74.664441
-        },
-        "keyless": {
-          "keyed_child": {}
-        }
-      },
-      {
-        "name": "San Francisco",
-        "state": "California",
-        "country": "United States of America",
-        "self2": null,
-        "city_center": {
-          "latitude": 37.779379,
-          "longitude": -122.418433
-        },
-        "keyless": {
-          "keyed_child": {}
-        }
+      "keyless": {
+        "keyed_child": {}
       }
-    ]
-  }
+    }
+  ]
 }

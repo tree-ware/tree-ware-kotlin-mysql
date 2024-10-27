@@ -1,108 +1,106 @@
 {
-  "address_book": {
-    "name": "Super Heroes",
-    "person": [
-      {
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "last_name": "Lane",
-        "hero_name": null,
-        "password": {
-          "current": {
-            "hashed": "test-hashed-lois",
-            "hash_version": 1
-          }
-        },
-        "secret": {
-          "main": {
-            "encrypted": "test-encrypted-main-secret",
-            "cipher_version": 1
-          }
+  "name": "Super Heroes",
+  "person": [
+    {
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "last_name": "Lane",
+      "hero_name": null,
+      "password": {
+        "current": {
+          "hashed": "test-hashed-lois",
+          "hash_version": 1
         }
       },
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "last_name": "Kent",
-        "hero_name": "Superman",
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
-        }
-      },
-      {
-        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-        "last_name": "Olsen",
-        "hero_name": null,
-        "password": {},
-        "secret": {}
-      }
-    ],
-    "city_info": [
-      {
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 42.651934,
-          "longitude": -73.75477
-        },
-        "keyless": {
-          "name": "Albany keyless",
-          "keyless_child": {
-            "name": "Albany keyless child"
-          },
-          "keyed_child": {
-            "name": "Albany keyed child",
-            "other": 2
-          }
-        }
-      },
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 40.712982,
-          "longitude": -74.007205
-        },
-        "keyless": {
-          "name": "NYC keyless",
-          "keyless_child": {
-            "name": "NYC keyless child"
-          },
-          "keyed_child": {
-            "name": "NYC keyed child",
-            "other": 1
-          }
-        }
-      },
-      {
-        "name": "Princeton",
-        "state": "New Jersey",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 40.360594,
-          "longitude": -74.664441
-        },
-        "keyless": {
-          "keyless_child": {},
-          "keyed_child": {}
-        }
-      },
-      {
-        "name": "San Francisco",
-        "state": "California",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 37.779379,
-          "longitude": -122.418433
-        },
-        "keyless": {
-          "keyless_child": {},
-          "keyed_child": {}
+      "secret": {
+        "main": {
+          "encrypted": "test-encrypted-main-secret",
+          "cipher_version": 1
         }
       }
-    ]
-  }
+    },
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "last_name": "Kent",
+      "hero_name": "Superman",
+      "password": {
+        "current": null
+      },
+      "secret": {
+        "main": null
+      }
+    },
+    {
+      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+      "last_name": "Olsen",
+      "hero_name": null,
+      "password": {},
+      "secret": {}
+    }
+  ],
+  "city_info": [
+    {
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 42.651934,
+        "longitude": -73.75477
+      },
+      "keyless": {
+        "name": "Albany keyless",
+        "keyless_child": {
+          "name": "Albany keyless child"
+        },
+        "keyed_child": {
+          "name": "Albany keyed child",
+          "other": 2
+        }
+      }
+    },
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 40.712982,
+        "longitude": -74.007205
+      },
+      "keyless": {
+        "name": "NYC keyless",
+        "keyless_child": {
+          "name": "NYC keyless child"
+        },
+        "keyed_child": {
+          "name": "NYC keyed child",
+          "other": 1
+        }
+      }
+    },
+    {
+      "name": "Princeton",
+      "state": "New Jersey",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 40.360594,
+        "longitude": -74.664441
+      },
+      "keyless": {
+        "keyless_child": {},
+        "keyed_child": {}
+      }
+    },
+    {
+      "name": "San Francisco",
+      "state": "California",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 37.779379,
+        "longitude": -122.418433
+      },
+      "keyless": {
+        "keyless_child": {},
+        "keyed_child": {}
+      }
+    }
+  ]
 }

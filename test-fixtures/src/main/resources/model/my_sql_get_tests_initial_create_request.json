@@ -1,217 +1,215 @@
 {
-  "address_book__set_": "create",
-  "address_book": {
-    "name": "Super Heroes",
-    "last_updated": "1650390777000",
-    "settings": {
-      "last_name_first": true,
-      "encrypt_hero_name": false,
-      "advanced": {
-        "background_color": "blue"
-      }
-    },
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "first_name": "Clark",
-        "last_name": "Kent",
-        "hero_name": "Superman",
-        "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
-        "relation": [
-          {
-            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": "colleague",
-            "person": {
-              "person": [
-                {
-                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-                }
-              ]
-            }
-          },
-          {
-            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
-            "relationship": "colleague",
-            "person": {
-              "person": [
-                {
-                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-                }
-              ]
-            }
-          }
-        ],
-        "password": {
-          "current": {
-            "unhashed": "kryptonite"
-          }
-        },
-        "secret": {
-          "main": {
-            "unencrypted": "Alien from Krypton"
-          }
-        }
-      },
-      {
-        "first_name": "Lois",
-        "last_name": "Lane",
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "self": {
-          "person": [
-            {
-              "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            }
-          ]
-        },
-        "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
-        "relation": [
-          {
-            "id": "16634916-8f83-4376-ad42-37038e108a0b",
-            "relationship": "colleague",
-            "person": {
-              "person": [
-                {
-                  "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
-                }
-              ]
-            }
-          }
-        ],
-        "password": {
-          "current": {
-            "hashed": "test-hashed-lois",
-            "hash_version": 1
-          }
-        },
-        "secret": {
-          "main": {
-            "encrypted": "test-encrypted-main-secret",
-            "cipher_version": 1
-          }
-        }
-      },
-      {
-        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-        "first_name": "Jimmy",
-        "last_name": "Olsen"
-      }
-    ],
-    "groups": [
-      {
-        "id": "ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
-        "name": "DC",
-        "sub_groups": [
-          {
-            "id": "fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
-            "name": "Superman",
-            "persons": [
+  "set_": "create",
+  "name": "Super Heroes",
+  "last_updated": "1650390777000",
+  "settings": {
+    "last_name_first": true,
+    "encrypt_hero_name": false,
+    "advanced": {
+      "background_color": "blue"
+    }
+  },
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "first_name": "Clark",
+      "last_name": "Kent",
+      "hero_name": "Superman",
+      "picture": "UGljdHVyZSBvZiBDbGFyayBLZW50",
+      "relation": [
+        {
+          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+          "relationship": "colleague",
+          "person": {
+            "person": [
               {
-                "id": "546a4982-b39a-4d01-aeb3-22d60c6963c0",
-                "first_name": "Clark",
-                "last_name": "Kent",
-                "hero_name": "Superman"
-              },
-              {
-                "first_name": "Lois",
-                "last_name": "Lane",
-                "id": "e391c509-67d6-4846-bfea-0f7cd9c91bf7"
+                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
               }
             ]
           }
+        },
+        {
+          "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+          "relationship": "colleague",
+          "person": {
+            "person": [
+              {
+                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+              }
+            ]
+          }
+        }
+      ],
+      "password": {
+        "current": {
+          "unhashed": "kryptonite"
+        }
+      },
+      "secret": {
+        "main": {
+          "unencrypted": "Alien from Krypton"
+        }
+      }
+    },
+    {
+      "first_name": "Lois",
+      "last_name": "Lane",
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "self": {
+        "person": [
+          {
+            "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+          }
         ]
       },
-      {
-        "id": "ad9aaea8-30fe-45ed-93ef-bd368da0c756",
-        "name": "Marvel"
+      "picture": "UGljdHVyZSBvZiBMb2lzIExhbmU=",
+      "relation": [
+        {
+          "id": "16634916-8f83-4376-ad42-37038e108a0b",
+          "relationship": "colleague",
+          "person": {
+            "person": [
+              {
+                "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
+              }
+            ]
+          }
+        }
+      ],
+      "password": {
+        "current": {
+          "hashed": "test-hashed-lois",
+          "hash_version": 1
+        }
+      },
+      "secret": {
+        "main": {
+          "encrypted": "test-encrypted-main-secret",
+          "cipher_version": 1
+        }
       }
-    ],
-    "city_info": [
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "info": "One of the most populous and most densely populated major city in USA",
+    },
+    {
+      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+      "first_name": "Jimmy",
+      "last_name": "Olsen"
+    }
+  ],
+  "groups": [
+    {
+      "id": "ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
+      "name": "DC",
+      "sub_groups": [
+        {
+          "id": "fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
+          "name": "Superman",
+          "persons": [
+            {
+              "id": "546a4982-b39a-4d01-aeb3-22d60c6963c0",
+              "first_name": "Clark",
+              "last_name": "Kent",
+              "hero_name": "Superman"
+            },
+            {
+              "first_name": "Lois",
+              "last_name": "Lane",
+              "id": "e391c509-67d6-4846-bfea-0f7cd9c91bf7"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ad9aaea8-30fe-45ed-93ef-bd368da0c756",
+      "name": "Marvel"
+    }
+  ],
+  "city_info": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "info": "One of the most populous and most densely populated major city in USA",
+      "latitude": 40.712982,
+      "longitude": -74.007205,
+      "city_center": {
         "latitude": 40.712982,
-        "longitude": -74.007205,
-        "city_center": {
-          "latitude": 40.712982,
-          "longitude": -74.007205
-        },
-        "keyless": {
-          "name": "NYC keyless",
-          "keyless_child": {
-            "name": "NYC keyless child"
-          },
-          "keyed_child": {
-            "name": "NYC keyed child",
-            "other": 1
-          }
-        }
+        "longitude": -74.007205
       },
-      {
-        "info": "Capital of New York state",
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "latitude": 42.651934,
-        "longitude": -73.75477,
-        "city_center": {
-          "latitude": 42.651934,
-          "longitude": -73.75477
+      "keyless": {
+        "name": "NYC keyless",
+        "keyless_child": {
+          "name": "NYC keyless child"
         },
-        "keyless": {
-          "name": "Albany keyless",
-          "keyless_child": {
-            "name": "Albany keyless child"
-          },
-          "keyed_child": {
-            "name": "Albany keyed child",
-            "other": 2
-          }
-        }
-      },
-      {
-        "info": "Home of Princeton University",
-        "name": "Princeton",
-        "state": "New Jersey",
-        "country": "United States of America",
-        "latitude": 40.360594,
-        "longitude": -74.664441,
-        "city_center": {
-          "latitude": 40.360594,
-          "longitude": -74.664441
-        },
-        "self": {
-          "city_info": [
-            {
-              "name": "Princeton",
-              "state": "New Jersey",
-              "country": "United States of America"
-            }
-          ]
-        },
-        "self2": {
-          "city_info": [
-            {
-              "country": "United States of America",
-              "state": "New Jersey",
-              "name": "Princeton"
-            }
-          ]
-        }
-      },
-      {
-        "info": "The cultural and financial center of Northern California",
-        "country": "United States of America",
-        "state": "California",
-        "name": "San Francisco",
-        "latitude": 37.779379,
-        "longitude": -122.418433,
-        "city_center": {
-          "latitude": 37.779379,
-          "longitude": -122.418433
+        "keyed_child": {
+          "name": "NYC keyed child",
+          "other": 1
         }
       }
-    ]
-  }
+    },
+    {
+      "info": "Capital of New York state",
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "latitude": 42.651934,
+      "longitude": -73.75477,
+      "city_center": {
+        "latitude": 42.651934,
+        "longitude": -73.75477
+      },
+      "keyless": {
+        "name": "Albany keyless",
+        "keyless_child": {
+          "name": "Albany keyless child"
+        },
+        "keyed_child": {
+          "name": "Albany keyed child",
+          "other": 2
+        }
+      }
+    },
+    {
+      "info": "Home of Princeton University",
+      "name": "Princeton",
+      "state": "New Jersey",
+      "country": "United States of America",
+      "latitude": 40.360594,
+      "longitude": -74.664441,
+      "city_center": {
+        "latitude": 40.360594,
+        "longitude": -74.664441
+      },
+      "self": {
+        "city_info": [
+          {
+            "name": "Princeton",
+            "state": "New Jersey",
+            "country": "United States of America"
+          }
+        ]
+      },
+      "self2": {
+        "city_info": [
+          {
+            "country": "United States of America",
+            "state": "New Jersey",
+            "name": "Princeton"
+          }
+        ]
+      }
+    },
+    {
+      "info": "The cultural and financial center of Northern California",
+      "country": "United States of America",
+      "state": "California",
+      "name": "San Francisco",
+      "latitude": 37.779379,
+      "longitude": -122.418433,
+      "city_center": {
+        "latitude": 37.779379,
+        "longitude": -122.418433
+      }
+    }
+  ]
 }

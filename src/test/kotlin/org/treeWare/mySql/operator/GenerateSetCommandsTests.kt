@@ -11,7 +11,6 @@ import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.getBoundSql
 import org.treeWare.mySql.operator.delegate.MySqlSetDelegate
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
-import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
@@ -49,7 +48,7 @@ class GenerateSetCommandsTests {
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
-                mySqlAddressBookMetaModel,
+                mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
                 clock = clock,
@@ -74,7 +73,7 @@ class GenerateSetCommandsTests {
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
-                mySqlAddressBookMetaModel,
+                mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
                 clock = clock,
@@ -99,7 +98,7 @@ class GenerateSetCommandsTests {
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
-                mySqlAddressBookMetaModel,
+                mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
                 clock = clock,
@@ -124,7 +123,7 @@ class GenerateSetCommandsTests {
 
         testDataSource.connection.use { connection ->
             val setDelegate = MySqlSetDelegate(
-                mySqlAddressBookMetaModel,
+                mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
                 clock = clock,

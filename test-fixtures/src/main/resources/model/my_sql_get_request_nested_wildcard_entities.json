@@ -1,39 +1,37 @@
 {
-  "address_book": {
-    "name": null,
-    "person": [
-      {
-        "id": null,
-        "last_name": null,
-        "hero_name": null,
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
-        }
+  "name": null,
+  "person": [
+    {
+      "id": null,
+      "last_name": null,
+      "hero_name": null,
+      "password": {
+        "current": null
+      },
+      "secret": {
+        "main": null
       }
-    ],
-    "city_info": [
-      {
+    }
+  ],
+  "city_info": [
+    {
+      "name": null,
+      "state": null,
+      "country": null,
+      "city_center": {
+        "latitude": null,
+        "longitude": null
+      },
+      "keyless": {
         "name": null,
-        "state": null,
-        "country": null,
-        "city_center": {
-          "latitude": null,
-          "longitude": null
+        "keyless_child": {
+          "name": null
         },
-        "keyless": {
+        "keyed_child": {
           "name": null,
-          "keyless_child": {
-            "name": null
-          },
-          "keyed_child": {
-            "name": null,
-            "other": null
-          }
+          "other": null
         }
       }
-    ]
-  }
+    }
+  ]
 }

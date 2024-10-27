@@ -1,35 +1,33 @@
 {
-  "address_book": {
-    "city_info": [
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "self": null,
-        "keyless": {
-          "name": "NYC keyless"
-        },
-        "info": "One of the most populous and most densely populated major city in USA",
-        "city_center": {
-          "latitude": 40.712982,
-          "longitude": -74.007205
-        }
+  "city_info": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "self": null,
+      "keyless": {
+        "name": "NYC keyless"
       },
-      {
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "info": "Capital of New York state",
-        "city_center": {
-          "latitude": 42.651934,
-          "longitude": -73.75477
-        },
-        "keyless": {
-          "keyless_child": {
-            "name": "Albany keyless child"
-          }
+      "info": "One of the most populous and most densely populated major city in USA",
+      "city_center": {
+        "latitude": 40.712982,
+        "longitude": -74.007205
+      }
+    },
+    {
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "info": "Capital of New York state",
+      "city_center": {
+        "latitude": 42.651934,
+        "longitude": -73.75477
+      },
+      "keyless": {
+        "keyless_child": {
+          "name": "Albany keyless child"
         }
       }
-    ]
-  }
+    }
+  ]
 }

@@ -1,15 +1,13 @@
 {
-  "address_book": {
-    "person": [
-      {
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "relation": [
-          {
-            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": null
-          }
-        ]
-      }
-    ]
-  }
+  "person": [
+    {
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "relation": [
+        {
+          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+          "relationship": null
+        }
+      ]
+    }
+  ]
 }

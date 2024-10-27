@@ -1,95 +1,93 @@
 {
-  "address_book": {
-    "name": null,
-    "last_updated": null,
-    "settings": {
-      "last_name_first": null,
-      "encrypt_hero_name": null,
-      "advanced": {
-        "background_color": null
+  "name": null,
+  "last_updated": null,
+  "settings": {
+    "last_name_first": null,
+    "encrypt_hero_name": null,
+    "advanced": {
+      "background_color": null
+    }
+  },
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "first_name": null,
+      "relation": [
+        {
+          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+          "relationship": null
+        },
+        {
+          "id": null,
+          "person": null
+        }
+      ],
+      "password": {
+        "current": null
+      },
+      "secret": {
+        "main": null
       }
     },
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "first_name": null,
-        "relation": [
-          {
-            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": null
-          },
-          {
-            "id": null,
-            "person": null
-          }
-        ],
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
-        }
+    {
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "first_name": null,
+      "picture": null
+    },
+    {
+      "id": null,
+      "last_name": null,
+      "hero_name": null,
+      "picture": null,
+      "password": {
+        "current": null
       },
-      {
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "first_name": null,
-        "picture": null
-      },
-      {
-        "id": null,
-        "last_name": null,
-        "hero_name": null,
-        "picture": null,
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
-        }
+      "secret": {
+        "main": null
       }
-    ],
-    "city_info": [
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "info": null,
-        "city_center": {
-          "latitude": null,
-          "longitude": null
-        },
-        "self": null,
-        "keyless": {
+    }
+  ],
+  "city_info": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "info": null,
+      "city_center": {
+        "latitude": null,
+        "longitude": null
+      },
+      "self": null,
+      "keyless": {
+        "name": null
+      }
+    },
+    {
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "info": null,
+      "keyless": {
+        "keyless_child": {
           "name": null
         }
+      }
+    },
+    {
+      "name": null,
+      "state": null,
+      "country": null,
+      "self2": null,
+      "city_center": {
+        "latitude": null,
+        "longitude": null
       },
-      {
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "info": null,
-        "keyless": {
-          "keyless_child": {
-            "name": null
-          }
-        }
-      },
-      {
-        "name": null,
-        "state": null,
-        "country": null,
-        "self2": null,
-        "city_center": {
-          "latitude": null,
-          "longitude": null
-        },
-        "keyless": {
-          "keyed_child": {
-            "name": null,
-            "other": null
-          }
+      "keyless": {
+        "keyed_child": {
+          "name": null,
+          "other": null
         }
       }
-    ]
-  }
+    }
+  ]
 }

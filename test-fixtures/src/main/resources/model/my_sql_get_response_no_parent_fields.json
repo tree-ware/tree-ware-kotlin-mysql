@@ -1,118 +1,116 @@
 {
-  "address_book": {
-    "settings": {
-      "advanced": {
-        "background_color": "blue"
+  "settings": {
+    "advanced": {
+      "background_color": "blue"
+    }
+  },
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "relation": [
+        {
+          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+          "relationship": "colleague",
+          "person": {
+            "person": [
+              {
+                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+              }
+            ]
+          }
+        },
+        {
+          "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+          "person": {
+            "person": [
+              {
+                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+              }
+            ]
+          }
+        }
+      ],
+      "password": {
+        "current": null
+      },
+      "secret": {
+        "main": null
       }
     },
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "relation": [
-          {
-            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            "relationship": "colleague",
-            "person": {
-              "person": [
-                {
-                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-                }
-              ]
-            }
-          },
-          {
-            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
-            "person": {
-              "person": [
-                {
-                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-                }
-              ]
-            }
-          }
-        ],
-        "password": {
-          "current": null
-        },
-        "secret": {
-          "main": null
+    {
+      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+      "password": {
+        "current": {
+          "hashed": "test-hashed-lois",
+          "hash_version": 1
         }
       },
-      {
-        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-        "password": {
-          "current": {
-            "hashed": "test-hashed-lois",
-            "hash_version": 1
-          }
-        },
-        "secret": {
-          "main": {
-            "encrypted": "test-encrypted-main-secret",
-            "cipher_version": 1
-          }
-        }
-      },
-      {
-        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-        "password": {},
-        "secret": {}
-      }
-    ],
-    "city_info": [
-      {
-        "name": "New York City",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 40.712982,
-          "longitude": -74.007205
-        },
-        "keyless": {
-          "keyless_child": {
-            "name": "NYC keyless child"
-          }
-        }
-      },
-      {
-        "name": "Albany",
-        "state": "New York",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 42.651934,
-          "longitude": -73.75477
-        },
-        "keyless": {
-          "keyed_child": {
-            "name": "Albany keyed child",
-            "other": 2
-          }
-        }
-      },
-      {
-        "name": "Princeton",
-        "state": "New Jersey",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 40.360594,
-          "longitude": -74.664441
-        },
-        "keyless": {
-          "keyed_child": {}
-        }
-      },
-      {
-        "name": "San Francisco",
-        "state": "California",
-        "country": "United States of America",
-        "city_center": {
-          "latitude": 37.779379,
-          "longitude": -122.418433
-        },
-        "keyless": {
-          "keyed_child": {}
+      "secret": {
+        "main": {
+          "encrypted": "test-encrypted-main-secret",
+          "cipher_version": 1
         }
       }
-    ]
-  }
+    },
+    {
+      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+      "password": {},
+      "secret": {}
+    }
+  ],
+  "city_info": [
+    {
+      "name": "New York City",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 40.712982,
+        "longitude": -74.007205
+      },
+      "keyless": {
+        "keyless_child": {
+          "name": "NYC keyless child"
+        }
+      }
+    },
+    {
+      "name": "Albany",
+      "state": "New York",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 42.651934,
+        "longitude": -73.75477
+      },
+      "keyless": {
+        "keyed_child": {
+          "name": "Albany keyed child",
+          "other": 2
+        }
+      }
+    },
+    {
+      "name": "Princeton",
+      "state": "New Jersey",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 40.360594,
+        "longitude": -74.664441
+      },
+      "keyless": {
+        "keyed_child": {}
+      }
+    },
+    {
+      "name": "San Francisco",
+      "state": "California",
+      "country": "United States of America",
+      "city_center": {
+        "latitude": 37.779379,
+        "longitude": -122.418433
+      },
+      "keyless": {
+        "keyed_child": {}
+      }
+    }
+  ]
 }
