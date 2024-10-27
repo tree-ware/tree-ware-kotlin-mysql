@@ -1,45 +1,43 @@
 {
-  "address_book": {
-    "name": "Super Heroes",
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "first_name": "Clark",
-        "last_name": "Kent",
-        "keyless": {
+  "name": "Super Heroes",
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "first_name": "Clark",
+      "last_name": "Kent",
+      "keyless": {
+        "set_": "create",
+        "name": "Clark keyless",
+        "keyless_child": {
           "set_": "create",
-          "name": "Clark keyless",
-          "keyless_child": {
-            "set_": "create",
-            "name": "Clark keyless child"
-          },
-          "keyed_child": {
-            "set_": "create",
-            "name": "Clark keyed child",
-            "other": 0
-          }
+          "name": "Clark keyless child"
+        },
+        "keyed_child": {
+          "set_": "create",
+          "name": "Clark keyed child",
+          "other": 0
         }
       }
-    ],
-    "city_info": [
-      {
-        "name": "Fremont",
-        "state": "California",
-        "country": "USA",
-        "keyless": {
+    }
+  ],
+  "city_info": [
+    {
+      "name": "Fremont",
+      "state": "California",
+      "country": "USA",
+      "keyless": {
+        "set_": "create",
+        "name": "Fremont keyless",
+        "keyless_child": {
           "set_": "create",
-          "name": "Fremont keyless",
-          "keyless_child": {
-            "set_": "create",
-            "name": "Fremont keyless child"
-          },
-          "keyed_child": {
-            "set_": "create",
-            "name": "Fremont keyed child",
-            "other": 1
-          }
+          "name": "Fremont keyless child"
+        },
+        "keyed_child": {
+          "set_": "create",
+          "name": "Fremont keyed child",
+          "other": 1
         }
       }
-    ]
-  }
+    }
+  ]
 }

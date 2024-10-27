@@ -17,6 +17,7 @@ import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
 import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
 import java.time.Clock
@@ -53,7 +54,7 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must succeed for a new model`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -69,7 +70,7 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must succeed for a forward-referencing association`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "operator/forward_referencing_association_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -87,37 +88,35 @@ class SetCreateTests {
     fun `Set-create must succeed for an entity with multiple associations`() {
         val modelJson = """
             |{
-            |  "address_book__set_": "create",
-            |  "address_book": {
-            |    "city_info": [
-            |      {
-            |        "name": "Princeton",
-            |        "state": "New Jersey",
-            |        "country": "United States of America",
-            |        "self": {
-            |          "city_info": [
-            |            {
-            |              "name": "Princeton",
-            |              "state": "New Jersey",
-            |              "country": "United States of America"
-            |            }
-            |          ]
-            |        },
-            |        "self2": {
-            |          "city_info": [
-            |            {
-            |              "country": "United States of America",
-            |              "state": "New Jersey",
-            |              "name": "Princeton"
-            |            }
-            |          ]
-            |        }
+            |  "set_": "create",
+            |  "city_info": [
+            |    {
+            |      "name": "Princeton",
+            |      "state": "New Jersey",
+            |      "country": "United States of America",
+            |      "self": {
+            |        "city_info": [
+            |          {
+            |            "name": "Princeton",
+            |            "state": "New Jersey",
+            |            "country": "United States of America"
+            |          }
+            |        ]
+            |      },
+            |      "self2": {
+            |        "city_info": [
+            |          {
+            |            "country": "United States of America",
+            |            "state": "New Jersey",
+            |            "name": "Princeton"
+            |          }
+            |        ]
             |      }
-            |    ]
-            |  }
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -132,7 +131,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book/city_info
+            |field_path_: /city_info
             |name: Princeton
             |state: New Jersey
             |country: United States of America
@@ -159,12 +158,10 @@ class SetCreateTests {
     fun `Set-create must create rows when no fields are specified in the model root`() {
         val modelJson = """
             |{
-            |  "address_book__set_": "create",
-            |  "address_book": {
-            |  }
+            |  "set_": "create"
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -179,7 +176,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book
+            |field_path_:
             |singleton_key_: 0
             |name: null
             |last_updated: null
@@ -193,15 +190,13 @@ class SetCreateTests {
     fun `Set-create must create rows when only composition fields are specified in the model root`() {
         val modelJson = """
             |{
-            |  "address_book__set_": "create",
-            |  "address_book": {
-            |    "settings": {
-            |      "last_name_first": true
-            |    }
+            |  "set_": "create",
+            |  "settings": {
+            |    "last_name_first": true
             |  }
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -216,7 +211,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book
+            |field_path_:
             |singleton_key_: 0
             |name: null
             |last_updated: null
@@ -226,7 +221,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book/settings
+            |field_path_: /settings
             |last_name_first: 1
             |encrypt_hero_name: null
             |main__address_book_root__singleton_key_: 0
@@ -241,14 +236,12 @@ class SetCreateTests {
     fun `Set-create must create rows when no fields are specified in a single-composition entity`() {
         val modelJson = """
             |{
-            |  "address_book__set_": "create",
-            |  "address_book": {
-            |    "settings": {
-            |    }
+            |  "set_": "create",
+            |  "settings": {
             |  }
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -263,7 +256,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book
+            |field_path_:
             |singleton_key_: 0
             |name: null
             |last_updated: null
@@ -273,7 +266,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book/settings
+            |field_path_: /settings
             |last_name_first: null
             |encrypt_hero_name: null
             |main__address_book_root__singleton_key_: 0
@@ -288,17 +281,15 @@ class SetCreateTests {
     fun `Set-create must create rows when only key fields are specified in a composition-set entity`() {
         val modelJson = """
             |{
-            |  "address_book__set_": "create",
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |      }
-            |    ]
-            |  }
+            |  "set_": "create",
+            |  "person": [
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -313,7 +304,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: null
             |last_name: null
@@ -331,7 +322,7 @@ class SetCreateTests {
 
     @Test
     fun `Set-create must fail for an old model`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -351,83 +342,83 @@ class SetCreateTests {
         val expectedResponse2 = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
-                ElementModelError("/address_book", "unable to create: duplicate"),
-                ElementModelError("/address_book/settings", "unable to create: duplicate"),
-                ElementModelError("/address_book/settings/advanced", "unable to create: duplicate"),
+                ElementModelError("/", "unable to create: duplicate"),
+                ElementModelError("/settings", "unable to create: duplicate"),
+                ElementModelError("/settings/advanced", "unable to create: duplicate"),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/16634916-8f83-4376-ad42-37038e108a0b",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/16634916-8f83-4376-ad42-37038e108a0b",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/person/ec983c56-320f-4d66-9dde-f180e8ac3807",
+                    "/person/ec983c56-320f-4d66-9dde-f180e8ac3807",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/546a4982-b39a-4d01-aeb3-22d60c6963c0",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/546a4982-b39a-4d01-aeb3-22d60c6963c0",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/e391c509-67d6-4846-bfea-0f7cd9c91bf7",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/e391c509-67d6-4846-bfea-0f7cd9c91bf7",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ad9aaea8-30fe-45ed-93ef-bd368da0c756",
+                    "/groups/ad9aaea8-30fe-45ed-93ef-bd368da0c756",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/New York City/New York/United States of America",
+                    "/city_info/New York City/New York/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/Albany/New York/United States of America",
+                    "/city_info/Albany/New York/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/Princeton/New Jersey/United States of America",
+                    "/city_info/Princeton/New Jersey/United States of America",
                     "unable to create: duplicate"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/San Francisco/California/United States of America",
+                    "/city_info/San Francisco/California/United States of America",
                     "unable to create: duplicate"
                 ),
             )
@@ -442,34 +433,32 @@ class SetCreateTests {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val modelJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "set_": "create",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague"
-            |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "set_": "create",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague"
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: no parent or target entity"
                 )
             )
         )
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             modelJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -486,26 +475,24 @@ class SetCreateTests {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val create1Json = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague"
-            |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |  "set_": "create",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague"
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedResponse1 = Response.Success
-        val create1 = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create1 = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             create1Json,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -519,34 +506,32 @@ class SetCreateTests {
         // Attempt to recreate the relation entity but under a different person entity.
         val create2Json = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "set_": "create",
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague"
-            |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |  "person": [
+            |    {
+            |      "set_": "create",
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague"
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedResponse2 = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create: duplicate"
                 )
             )
         )
-        val create2 = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create2 = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             create2Json,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,

@@ -1,37 +1,35 @@
 {
-  "address_book": {
-    "set_": "update",
-    "person": [
-      {
-        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-        "keyless": {
-          "name": "Clark Kent keyless",
-          "keyless_child": {
-            "name": "Clark Kent keyless child"
-          },
-          "keyed_child": {
-            "name": "Clark keyed child",
-            "other": 1
-          }
+  "set_": "update",
+  "person": [
+    {
+      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+      "keyless": {
+        "name": "Clark Kent keyless",
+        "keyless_child": {
+          "name": "Clark Kent keyless child"
+        },
+        "keyed_child": {
+          "name": "Clark keyed child",
+          "other": 1
         }
       }
-    ],
-    "city_info": [
-      {
-        "name": "Fremont",
-        "state": "California",
-        "country": "USA",
-        "keyless": {
-          "name": "Fremont California keyless",
-          "keyless_child": {
-            "name": "Fremont California keyless child"
-          },
-          "keyed_child": {
-            "name": "Fremont keyed child",
-            "other": 2
-          }
+    }
+  ],
+  "city_info": [
+    {
+      "name": "Fremont",
+      "state": "California",
+      "country": "USA",
+      "keyless": {
+        "name": "Fremont California keyless",
+        "keyless_child": {
+          "name": "Fremont California keyless child"
+        },
+        "keyed_child": {
+          "name": "Fremont keyed child",
+          "other": 2
         }
       }
-    ]
-  }
+    }
+  ]
 }

@@ -17,7 +17,7 @@
 * Row 1 *
 created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
-field_path_: /address_book/person
+field_path_: /person
 id: a8aacf55-7810-4b43-afe5-4344f25435fd
 first_name: null
 last_name: null
@@ -31,7 +31,7 @@ main__person_group__id: null
 * Row 2 *
 created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
-field_path_: /address_book/person
+field_path_: /person
 id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
 first_name: null
 last_name: null
@@ -47,7 +47,7 @@ main__person_group__id: null
 * Row 1 *
 created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
-field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
+field_path_: /person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
 id: 05ade278-4b44-43da-a0cc-14463854e397
 relationship: null
 person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -60,7 +60,7 @@ main__person_group__id: null
 * Row 1 *
 created_on_: 2022-04-14 00:40:41.450
 updated_on_: 2022-04-14 00:40:41.450
-field_path_: /address_book
+field_path_:
 singleton_key_: 0
 name: Super Heroes
 last_updated: null

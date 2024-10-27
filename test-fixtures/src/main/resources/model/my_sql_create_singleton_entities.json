@@ -1,14 +1,12 @@
 {
-  "address_book": {
-    "set_": "create",
-    "name": "Super Heroes",
-    "last_updated": "1587147731",
-    "settings": {
-      "last_name_first": true,
-      "encrypt_hero_name": false,
-      "advanced": {
-        "background_color": "blue"
-      }
+  "set_": "create",
+  "name": "Super Heroes",
+  "last_updated": "1587147731",
+  "settings": {
+    "last_name_first": true,
+    "encrypt_hero_name": false,
+    "advanced": {
+      "background_color": "blue"
     }
   }
 }
