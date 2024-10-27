@@ -3,7 +3,7 @@
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-03-03 00:30:31.330
-field_path_: /address_book
+field_path_:
 singleton_key_: 0
 name: Super Heroes
 last_updated: 1970-01-19 08:52:27.731
@@ -13,7 +13,7 @@ last_updated: 1970-01-19 08:52:27.731
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-03-03 00:30:31.330
-field_path_: /address_book/settings
+field_path_: /settings
 last_name_first: 1
 encrypt_hero_name: 0
 main__address_book_root__singleton_key_: 0
@@ -23,6 +23,6 @@ main__address_book_root__singleton_key_: 0
 * Row 1 *
 created_on_: 2022-03-03 00:30:31.330
 updated_on_: 2022-03-03 00:30:31.330
-field_path_: /address_book/settings/advanced
+field_path_: /settings/advanced
 background_color: 3
 main__address_book_root__singleton_key_: 0

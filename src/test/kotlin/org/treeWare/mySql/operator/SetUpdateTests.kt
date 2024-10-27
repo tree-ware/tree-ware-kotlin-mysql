@@ -17,6 +17,7 @@ import org.treeWare.model.operator.set.aux.SetAuxStateMachine
 import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
 import java.time.Clock
@@ -57,7 +58,7 @@ class SetUpdateTests {
     @Test
     fun `Set-update must fail for a new model`() {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
-        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val update = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -66,63 +67,63 @@ class SetUpdateTests {
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
-                ElementModelError("/address_book", "unable to update"),
-                ElementModelError("/address_book/settings", "unable to update"),
-                ElementModelError("/address_book/settings/advanced", "unable to update"),
-                ElementModelError("/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd", "unable to update"),
+                ElementModelError("/", "unable to update"),
+                ElementModelError("/settings", "unable to update"),
+                ElementModelError("/settings/advanced", "unable to update"),
+                ElementModelError("/person/a8aacf55-7810-4b43-afe5-4344f25435fd", "unable to update"),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/16634916-8f83-4376-ad42-37038e108a0b",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/16634916-8f83-4376-ad42-37038e108a0b",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/password",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/secret",
                     "unable to update"
                 ),
-                ElementModelError("/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f", "unable to update"),
+                ElementModelError("/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f", "unable to update"),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
-                    "unable to update"
-                ),
-                ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret",
-                    "unable to update"
-                ),
-                ElementModelError("/address_book/groups/ad9aaea8-30fe-45ed-93ef-bd368da0c756", "unable to update"),
-                ElementModelError("/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a", "unable to update"),
-                ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/password",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/546a4982-b39a-4d01-aeb3-22d60c6963c0",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/secret",
+                    "unable to update"
+                ),
+                ElementModelError("/groups/ad9aaea8-30fe-45ed-93ef-bd368da0c756", "unable to update"),
+                ElementModelError("/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a", "unable to update"),
+                ElementModelError(
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/e391c509-67d6-4846-bfea-0f7cd9c91bf7",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/546a4982-b39a-4d01-aeb3-22d60c6963c0",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/Albany/New York/United States of America",
+                    "/groups/ca0a22e8-c300-4347-91b0-167a5f6f4f9a/sub_groups/fe2aa774-e1fe-4680-a439-8bd1d0eb4abc/persons/e391c509-67d6-4846-bfea-0f7cd9c91bf7",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/New York City/New York/United States of America",
+                    "/city_info/Albany/New York/United States of America",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/San Francisco/California/United States of America",
+                    "/city_info/New York City/New York/United States of America",
                     "unable to update"
                 ),
                 ElementModelError(
-                    "/address_book/city_info/Princeton/New Jersey/United States of America",
+                    "/city_info/San Francisco/California/United States of America",
+                    "unable to update"
+                ),
+                ElementModelError(
+                    "/city_info/Princeton/New Jersey/United States of America",
                     "unable to update"
                 ),
             )
@@ -141,7 +142,7 @@ class SetUpdateTests {
         //    The update model has different values as well as different ordering of entities in sets.
         val expectedRows = readFile("operator/my_sql_address_book_1_set_update_results.txt")
 
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_create.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -153,7 +154,7 @@ class SetUpdateTests {
         val createdRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(expectedRows, createdRows)
 
-        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val update = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_address_book_1_set_update.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -171,25 +172,23 @@ class SetUpdateTests {
         val emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         val createJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague"
-            |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |  "set_": "create",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague"
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -204,34 +203,32 @@ class SetUpdateTests {
         // Attempt to update the relation entity but under a different person entity.
         val updateJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane",
-            |        "relation": [
-            |          {
-            |            "set_": "update",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague"
-            |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |  "person": [
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane",
+            |      "relation": [
+            |        {
+            |          "set_": "update",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague"
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update"
                 )
             )
         )
-        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val update = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             updateJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,

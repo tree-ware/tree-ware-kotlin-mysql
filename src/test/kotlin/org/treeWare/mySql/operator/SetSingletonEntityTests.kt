@@ -18,6 +18,7 @@ import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import org.treeWare.util.readFile
 import java.time.Clock
@@ -70,7 +71,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when creating new singleton entities`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -86,7 +87,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when recreating existing singleton entities`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -101,9 +102,9 @@ class SetSingletonEntityTests {
         val expectedRecreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
-                ElementModelError("/address_book", "unable to create: duplicate"),
-                ElementModelError("/address_book/settings", "unable to create: duplicate"),
-                ElementModelError("/address_book/settings/advanced", "unable to create: duplicate"),
+                ElementModelError("/", "unable to create: duplicate"),
+                ElementModelError("/settings", "unable to create: duplicate"),
+                ElementModelError("/settings/advanced", "unable to create: duplicate"),
             )
         )
         val actualRecreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -114,7 +115,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when updating existing singleton entities`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -127,7 +128,7 @@ class SetSingletonEntityTests {
         val afterCreateRows = getSingletonTableRows()
         assertEquals(afterCreateRowsExpected, afterCreateRows)
 
-        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val update = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -143,7 +144,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when updating non-existing singleton entities`() {
-        val update = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val update = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_update_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -152,9 +153,9 @@ class SetSingletonEntityTests {
         val expectedUpdateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
-                ElementModelError("/address_book", "unable to update"),
-                ElementModelError("/address_book/settings", "unable to update"),
-                ElementModelError("/address_book/settings/advanced", "unable to update"),
+                ElementModelError("/", "unable to update"),
+                ElementModelError("/settings", "unable to update"),
+                ElementModelError("/settings/advanced", "unable to update"),
             )
         )
         val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
@@ -165,7 +166,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when deleting existing singleton entities`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -177,7 +178,7 @@ class SetSingletonEntityTests {
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
 
-        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val delete = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -192,7 +193,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must succeed when deleting non-existing singleton entities`() {
-        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val delete = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_delete_singleton_entities_bottoms_up.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -207,7 +208,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when creating a singleton entity without a parent`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities_no_parent.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -216,8 +217,8 @@ class SetSingletonEntityTests {
         val expectedCreateResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
-                ElementModelError("/address_book/settings", "unable to create: no parent or target entity"),
-                ElementModelError("/address_book/settings/advanced", "unable to create: no parent or target entity"),
+                ElementModelError("/settings", "unable to create: no parent or target entity"),
+                ElementModelError("/settings/advanced", "unable to create: no parent or target entity"),
             )
         )
         val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
@@ -228,7 +229,7 @@ class SetSingletonEntityTests {
 
     @Test
     fun `set() must fail when deleting a singleton entity that has children in the database`() {
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity(
             "model/my_sql_create_singleton_entities.json",
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -242,12 +243,10 @@ class SetSingletonEntityTests {
 
         val deleteJson = """
             |{
-            |  "address_book": {
-            |    "set_": "delete"
-            |  }
+            |  "set_": "delete"
             |}
         """.trimMargin()
-        val delete = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val delete = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             deleteJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -257,7 +256,7 @@ class SetSingletonEntityTests {
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book: unable to delete",
+                    "/: unable to delete",
                     "has children or source entity"
                 )
             )
@@ -272,13 +271,11 @@ class SetSingletonEntityTests {
     fun `set() must succeed when creating children of existing singleton entities`() {
         val createRootJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "name": "Super Heroes"
-            |  }
+            |  "set_": "create",
+            |  "name": "Super Heroes"
             |}
         """.trimMargin()
-        val createRoot = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val createRoot = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createRootJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -293,7 +290,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book
+            |field_path_:
             |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null
@@ -308,19 +305,17 @@ class SetSingletonEntityTests {
 
         val createChildrenJson = """
             |{
-            |  "address_book": {
-            |    "settings": {
+            |  "settings": {
+            |    "set_": "create",
+            |    "last_name_first": true,
+            |    "advanced": {
             |      "set_": "create",
-            |      "last_name_first": true,
-            |      "advanced": {
-            |        "set_": "create",
-            |        "background_color": "blue"
-            |      }
+            |      "background_color": "blue"
             |    }
             |  }
             |}
         """.trimMargin()
-        val createChildren = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val createChildren = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createChildrenJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -335,7 +330,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book
+            |field_path_:
             |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null
@@ -345,7 +340,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
-            |field_path_: /address_book/settings
+            |field_path_: /settings
             |last_name_first: 1
             |encrypt_hero_name: null
             |main__address_book_root__singleton_key_: 0
@@ -355,7 +350,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
-            |field_path_: /address_book/settings/advanced
+            |field_path_: /settings/advanced
             |background_color: 3
             |main__address_book_root__singleton_key_: 0
             |

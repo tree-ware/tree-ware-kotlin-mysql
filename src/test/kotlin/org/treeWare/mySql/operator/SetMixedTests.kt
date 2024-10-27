@@ -6,10 +6,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.treeWare.model.core.MutableEntityModel
 import org.treeWare.model.decodeJsonStringIntoEntity
-import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.operator.*
-import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.assertSetResponse
 import org.treeWare.model.operator.set.aux.SET_AUX_NAME
 import org.treeWare.model.operator.set.aux.SetAuxStateMachine
@@ -17,6 +15,8 @@ import org.treeWare.mySql.operator.delegate.registerMySqlOperatorEntityDelegates
 import org.treeWare.mySql.test.clearDatabase
 import org.treeWare.mySql.test.getDatabaseRows
 import org.treeWare.mySql.test.getTableRows
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookMetaModel
+import org.treeWare.mySql.test.metaModel.mySqlAddressBookRootEntityMeta
 import org.treeWare.mySql.test.testDataSource
 import java.time.Clock
 import java.time.Instant
@@ -61,38 +61,36 @@ class SetMixedTests {
     fun `set() must succeed when updating an association to point to an entity being created`() {
         val createJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "name": "Super Heroes",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |                }
-            |              ]
-            |            }
+            |  "set_": "create",
+            |  "name": "Super Heroes",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane"
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane"
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -107,7 +105,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -121,7 +119,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -137,7 +135,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
+            |field_path_: /person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -152,35 +150,33 @@ class SetMixedTests {
 
         val mixedJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "relation": [
-            |          {
-            |            "set_": "update",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-            |                }
-            |              ]
-            |            }
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "relation": [
+            |        {
+            |          "set_": "update",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "set_": "create",
-            |        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-            |        "first_name": "Jimmy",
-            |        "last_name": "Olsen"
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "set_": "create",
+            |      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+            |      "first_name": "Jimmy",
+            |      "last_name": "Olsen"
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val mixed = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val mixed = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             mixedJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -195,7 +191,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -209,7 +205,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -223,7 +219,7 @@ class SetMixedTests {
             |* Row 3 *
             |created_on_: 2022-04-04 00:40:41.440
             |updated_on_: 2022-04-04 00:40:41.440
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -239,7 +235,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-04-04 00:40:41.440
-            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
+            |field_path_: /person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"ec983c56-320f-4d66-9dde-f180e8ac3807"}]}
@@ -257,43 +253,41 @@ class SetMixedTests {
     fun `set() must fail when updating an association to point to an entity being deleted`() {
         val createJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "name": "Super Heroes",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |                }
-            |              ]
-            |            }
+            |  "set_": "create",
+            |  "name": "Super Heroes",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane"
-            |      },
-            |      {
-            |        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
-            |        "first_name": "Jimmy",
-            |        "last_name": "Olsen"
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane"
+            |    },
+            |    {
+            |      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807",
+            |      "first_name": "Jimmy",
+            |      "last_name": "Olsen"
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -308,7 +302,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -322,7 +316,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -336,7 +330,7 @@ class SetMixedTests {
             |* Row 3 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: ec983c56-320f-4d66-9dde-f180e8ac3807
             |first_name: Jimmy
             |last_name: Olsen
@@ -352,7 +346,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
+            |field_path_: /person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation
             |id: 05ade278-4b44-43da-a0cc-14463854e397
             |relationship: 7
             |person: {"person":[{"id":"a8aacf55-7810-4b43-afe5-4344f25435fd"}]}
@@ -367,42 +361,40 @@ class SetMixedTests {
 
         val mixedJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "relation": [
-            |          {
-            |            "set_": "update",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-            |                }
-            |              ]
-            |            }
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "relation": [
+            |        {
+            |          "set_": "update",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "set_": "delete",
-            |        "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "set_": "delete",
+            |      "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update: no parent or target entity"
                 )
             )
         )
-        val mixed = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val mixed = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             mixedJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -419,26 +411,24 @@ class SetMixedTests {
     fun `set() must fail when creating an association to point to an entity being deleted`() {
         val createJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "name": "Super Heroes",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent"
-            |      },
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane"
-            |      }
-            |    ]
-            |  }
+            |  "set_": "create",
+            |  "name": "Super Heroes",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent"
+            |    },
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane"
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedCreateResponse = Response.Success
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -452,7 +442,7 @@ class SetMixedTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: a8aacf55-7810-4b43-afe5-4344f25435fd
             |first_name: Lois
             |last_name: Lane
@@ -466,7 +456,7 @@ class SetMixedTests {
             |* Row 2 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_: /address_book/person
+            |field_path_: /person
             |id: cc477201-48ec-4367-83a4-7fdbd92f8a6f
             |first_name: Clark
             |last_name: Kent
@@ -486,43 +476,41 @@ class SetMixedTests {
 
         val mixedJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "relation": [
-            |          {
-            |            "set_": "create",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |                }
-            |              ]
-            |            }
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "relation": [
+            |        {
+            |          "set_": "create",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "set_": "delete",
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "set_": "delete",
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to create association in entity: no parent or target entity"
                 )
             )
         )
-        val mixed = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val mixed = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             mixedJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -539,51 +527,49 @@ class SetMixedTests {
     fun `set() must return multiple error messages for multiple errors in a set-request`() {
         val createJson = """
             |{
-            |  "address_book": {
-            |    "set_": "create",
-            |    "name": "Super Heroes",
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "first_name": "Clark",
-            |        "last_name": "Kent",
-            |        "relation": [
-            |          {
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "relationship": "colleague",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
-            |                }
-            |              ]
-            |            }
+            |  "set_": "create",
+            |  "name": "Super Heroes",
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "first_name": "Clark",
+            |      "last_name": "Kent",
+            |      "relation": [
+            |        {
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "relationship": "colleague",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "a8aacf55-7810-4b43-afe5-4344f25435fd"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane",
-            |        "relation": [
-            |          {
-            |            "id": "16634916-8f83-4376-ad42-37038e108a0b",
-            |            "relationship": "colleague",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
-            |                }
-            |              ]
-            |            }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane",
+            |      "relation": [
+            |        {
+            |          "id": "16634916-8f83-4376-ad42-37038e108a0b",
+            |          "relationship": "colleague",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      }
-            |    ]
-            |  }
+            |        }
+            |      ]
+            |    }
+            |  ]
             |}
         """.trimMargin()
-        val create = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val create = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             createJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
@@ -597,63 +583,61 @@ class SetMixedTests {
 
         val mixedJson = """
             |{
-            |  "address_book": {
-            |    "person": [
-            |      {
-            |        "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
-            |        "relation": [
-            |          {
-            |            "set_": "update",
-            |            "id": "05ade278-4b44-43da-a0cc-14463854e397",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-            |                }
-            |              ]
-            |            }
-            |          },
-            |          {
-            |            "set_": "create",
-            |            "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
-            |            "person": {
-            |              "person": [
-            |                {
-            |                  "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
-            |                }
-            |              ]
-            |            }
+            |  "person": [
+            |    {
+            |      "id": "cc477201-48ec-4367-83a4-7fdbd92f8a6f",
+            |      "relation": [
+            |        {
+            |          "set_": "update",
+            |          "id": "05ade278-4b44-43da-a0cc-14463854e397",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+            |              }
+            |            ]
             |          }
-            |        ]
-            |      },
-            |      {
-            |        "set_": "delete",
-            |        "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
-            |        "first_name": "Lois",
-            |        "last_name": "Lane"
-            |      }
-            |    ]
-            |  }
+            |        },
+            |        {
+            |          "set_": "create",
+            |          "id": "3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+            |          "person": {
+            |            "person": [
+            |              {
+            |                "id": "ec983c56-320f-4d66-9dde-f180e8ac3807"
+            |              }
+            |            ]
+            |          }
+            |        }
+            |      ]
+            |    },
+            |    {
+            |      "set_": "delete",
+            |      "id": "a8aacf55-7810-4b43-afe5-4344f25435fd",
+            |      "first_name": "Lois",
+            |      "last_name": "Lane"
+            |    }
+            |  ]
             |}
         """.trimMargin()
         val expectedMixedResponse = Response.ErrorList(
             ErrorCode.CLIENT_ERROR,
             listOf(
                 ElementModelError(
-                    "/address_book/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
+                    "/person/a8aacf55-7810-4b43-afe5-4344f25435fd",
                     "unable to delete: has children or source entity"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/3c71ede8-8ded-4038-b6e9-dcc4a0f3a8ce",
                     "unable to create association in entity: no parent or target entity"
                 ),
                 ElementModelError(
-                    "/address_book/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
+                    "/person/cc477201-48ec-4367-83a4-7fdbd92f8a6f/relation/05ade278-4b44-43da-a0cc-14463854e397",
                     "unable to update: no parent or target entity"
                 ),
             )
         )
-        val mixed = MutableEntityModel(mySqlAddressBookMetaModel, null)
+        val mixed = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonStringIntoEntity(
             mixedJson,
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
