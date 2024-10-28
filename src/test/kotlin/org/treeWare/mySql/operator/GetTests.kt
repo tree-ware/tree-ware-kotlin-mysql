@@ -51,7 +51,7 @@ class GetTests {
         val now = "2022-04-14T00:40:41.450Z"
         val clock = Clock.fixed(Instant.parse(now), ZoneOffset.UTC)
         val expectedResponse = Response.Success
-        val actualResponse = set(create, setEntityDelegates, testDataSource, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, true, clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
     }
 

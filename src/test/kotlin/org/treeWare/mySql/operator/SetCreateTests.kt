@@ -176,7 +176,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_:
+            |field_path_: /
             |singleton_key_: 0
             |name: null
             |last_updated: null
@@ -211,7 +211,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_:
+            |field_path_: /
             |singleton_key_: 0
             |name: null
             |last_updated: null
@@ -256,7 +256,7 @@ class SetCreateTests {
             |* Row 1 *
             |created_on_: 2022-04-14 00:40:41.450
             |updated_on_: 2022-04-14 00:40:41.450
-            |field_path_:
+            |field_path_: /
             |singleton_key_: 0
             |name: null
             |last_updated: null

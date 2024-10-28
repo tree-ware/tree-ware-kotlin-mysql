@@ -77,4 +77,4 @@ DELETE FROM test__address_book.main__advanced_settings
 DELETE FROM test__address_book.main__address_book_settings
   WHERE field_path_ = '/settings';
 DELETE FROM test__address_book.main__address_book_root
-  WHERE field_path_ = '';
+  WHERE field_path_ = '/';

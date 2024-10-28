@@ -1,7 +1,7 @@
 INSERT INTO test__address_book.main__address_book_root
   (created_on_, updated_on_, field_path_, singleton_key_, name, last_updated)
   VALUES
-  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '', 0, 'Super Heroes', '2022-04-19T17:52:57');
+  ('2022-04-14T00:40:41.450', '2022-04-14T00:40:41.450', '/', 0, 'Super Heroes', '2022-04-19T17:52:57');
 INSERT INTO test__address_book.main__address_book_settings
   (created_on_, updated_on_, field_path_, main__address_book_root__singleton_key_, last_name_first, encrypt_hero_name)
   VALUES

@@ -290,7 +290,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_:
+            |field_path_: /
             |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null
@@ -330,7 +330,7 @@ class SetSingletonEntityTests {
             |* Row 1 *
             |created_on_: 2022-03-03 00:30:31.330
             |updated_on_: 2022-03-03 00:30:31.330
-            |field_path_:
+            |field_path_: /
             |singleton_key_: 0
             |name: Super Heroes
             |last_updated: null

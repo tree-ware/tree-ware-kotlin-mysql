@@ -1,6 +1,6 @@
 UPDATE test__address_book.main__address_book_root
   SET updated_on_ = '2022-04-14T00:40:41.450', name = 'Super Heroes 2', last_updated = '2022-04-19T17:52:57.222'
-  WHERE field_path_ = '';
+  WHERE field_path_ = '/';
 UPDATE test__address_book.main__address_book_settings
   SET updated_on_ = '2022-04-14T00:40:41.450', last_name_first = 0, encrypt_hero_name = 1
   WHERE field_path_ = '/settings';
