@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 // conveys this.
 allprojects {
     group = "org.tree-ware.tree-ware-kotlin-mysql"
-    version = "0.3.0.0-SNAPSHOT"
+    version = "0.3.0.0"
 }
 
 val mySqlConnectorVersion = "8.0.29"
