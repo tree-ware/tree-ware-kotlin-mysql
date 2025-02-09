@@ -1,6 +1,6 @@
 package org.treeWare.mySql.aux
 
-import org.treeWare.metaModel.MetaModelMutableEntityModelFactory
+import org.treeWare.metaModel.metaModelRootEntityFactory
 import org.treeWare.model.decoder.stateMachine.MultiAuxDecodingStateMachineFactory
 import org.treeWare.model.encoder.MultiAuxEncoder
 import org.treeWare.model.testRoundTrip
@@ -20,7 +20,7 @@ class MySqlMetaModelMapTests {
                 multiAuxDecodingStateMachineFactory = MultiAuxDecodingStateMachineFactory(
                     mySqlMetaModelMapAuxPlugin.auxName to mySqlMetaModelMapAuxPlugin.auxDecodingStateMachineFactory
                 ),
-                entity = MetaModelMutableEntityModelFactory.create()
+                entity = metaModelRootEntityFactory(null)
             )
         }
     }
