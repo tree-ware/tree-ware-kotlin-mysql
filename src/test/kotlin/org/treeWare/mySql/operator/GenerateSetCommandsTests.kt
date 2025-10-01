@@ -51,6 +51,7 @@ class GenerateSetCommandsTests {
                 mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
+                databasePrefix = "test",
                 clock = clock,
                 issueCommands = false
             )
@@ -76,6 +77,7 @@ class GenerateSetCommandsTests {
                 mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
+                databasePrefix = "test",
                 clock = clock,
                 issueCommands = false
             )
@@ -101,6 +103,7 @@ class GenerateSetCommandsTests {
                 mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
+                databasePrefix = "test",
                 clock = clock,
                 issueCommands = false
             )
@@ -126,6 +129,7 @@ class GenerateSetCommandsTests {
                 mySqlAddressBookRootEntityMeta,
                 entityDelegates,
                 connection,
+                databasePrefix = "test",
                 clock = clock,
                 issueCommands = false
             )

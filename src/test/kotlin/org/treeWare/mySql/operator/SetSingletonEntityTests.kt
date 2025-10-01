@@ -50,7 +50,7 @@ class SetSingletonEntityTests {
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource, databasePrefix = "test")
         emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
     }
 
@@ -78,7 +78,7 @@ class SetSingletonEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
         val afterCreateRows = getSingletonTableRows()
@@ -94,7 +94,7 @@ class SetSingletonEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -107,7 +107,7 @@ class SetSingletonEntityTests {
                 ElementModelError("/settings/advanced", "unable to create: duplicate"),
             )
         )
-        val actualRecreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualRecreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedRecreateResponse, actualRecreateResponse)
         val afterRecreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterRecreateRows)
@@ -122,7 +122,7 @@ class SetSingletonEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_singleton_entities_results.txt")
         val afterCreateRows = getSingletonTableRows()
@@ -135,7 +135,7 @@ class SetSingletonEntityTests {
             entity = update
         )
         val expectedUpdateResponse = Response.Success
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRowsExpected = readFile("operator/my_sql_update_singleton_entities_results.txt")
         val afterUpdateRows = getSingletonTableRows()
@@ -158,7 +158,7 @@ class SetSingletonEntityTests {
                 ElementModelError("/settings/advanced", "unable to update"),
             )
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -173,7 +173,7 @@ class SetSingletonEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -185,7 +185,7 @@ class SetSingletonEntityTests {
             entity = delete
         )
         val expectedDeleteResponse = Response.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -200,7 +200,7 @@ class SetSingletonEntityTests {
             entity = delete
         )
         val expectedDeleteResponse = Response.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -221,7 +221,7 @@ class SetSingletonEntityTests {
                 ElementModelError("/settings/advanced", "unable to create: no parent or target entity"),
             )
         )
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
@@ -236,7 +236,7 @@ class SetSingletonEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -261,7 +261,7 @@ class SetSingletonEntityTests {
                 )
             )
         )
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)
@@ -282,7 +282,7 @@ class SetSingletonEntityTests {
             entity = createRoot
         )
         val expectedCreateRootResponse = Response.Success
-        val actualCreateRootResponse = set(createRoot, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateRootResponse = set(createRoot, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateRootResponse, actualCreateRootResponse)
         val afterCreateRootRowsExpected = """
             |= Table main__address_book_root =
@@ -322,7 +322,7 @@ class SetSingletonEntityTests {
             entity = createChildren
         )
         val expectedCreateChildrenResponse = Response.Success
-        val actualCreateChildrenResponse = set(createChildren, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualCreateChildrenResponse = set(createChildren, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedCreateChildrenResponse, actualCreateChildrenResponse)
         val afterCreateChildrenRowsExpected = """
             |= Table main__address_book_root =

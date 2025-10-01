@@ -10,7 +10,7 @@ import kotlin.test.Test
 class MySqlMetaModelMapTests {
     @Test
     fun `MySQL meta-model JSON codec round trip must be lossless`() {
-        val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin("test")
+        val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin()
         MY_SQL_ADDRESS_BOOK_META_MODEL_FILES.forEach { file ->
             testRoundTrip(
                 file,

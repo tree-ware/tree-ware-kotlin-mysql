@@ -36,6 +36,7 @@ internal class MySqlSetDelegate(
     private val entityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val connection: Connection?,
     private val logCommands: Boolean = false,
+    private val databasePrefix: String? = null,
     private val clock: Clock = Clock.systemUTC(),
     private val issueCommands: Boolean = true
 ) : SetDelegate {
@@ -81,7 +82,7 @@ internal class MySqlSetDelegate(
         associations: List<FieldModel>,
         other: List<FieldModel>
     ): Response {
-        val tableName = getEntityTableFullName(entity)
+        val tableName = getEntityTableFullName(entity, databasePrefix)
         when (setAux) {
             SetAux.CREATE -> addCreateCommands(
                 tableName,
@@ -92,6 +93,7 @@ internal class MySqlSetDelegate(
                 associations,
                 other
             )
+
             SetAux.UPDATE -> addUpdateCommands(tableName, fieldPath, entityPath, keys, associations, other)
             SetAux.DELETE -> addDeleteCommands(tableName, fieldPath, entityPath, keys, entity)
         }

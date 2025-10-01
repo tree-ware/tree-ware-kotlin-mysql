@@ -6,8 +6,8 @@ import org.treeWare.mySql.aux.getMySqlMetaModelMap
 fun getEntityMetaTableName(entityMeta: EntityModel): String = getMySqlMetaModelMap(entityMeta)?.validated?.tableName
     ?: throw IllegalStateException("Entity is not mapped to MySQL")
 
-fun getEntityMetaTableFullName(entityMeta: EntityModel): String =
-    getMySqlMetaModelMap(entityMeta)?.validated?.fullName
+fun getEntityMetaTableFullName(entityMeta: EntityModel, databasePrefix: String?): String =
+    getMySqlMetaModelMap(entityMeta)?.validated?.getFullName(databasePrefix)
         ?: throw IllegalStateException("Entity is not mapped to MySQL")
 
 fun getEntityTableName(entity: EntityModel): String {
@@ -15,7 +15,7 @@ fun getEntityTableName(entity: EntityModel): String {
     return getEntityMetaTableName(entityMeta)
 }
 
-fun getEntityTableFullName(entity: EntityModel): String {
+fun getEntityTableFullName(entity: EntityModel, databasePrefix: String?): String {
     val entityMeta = entity.meta ?: throw IllegalStateException("Entity does not have meta")
-    return getEntityMetaTableFullName(entityMeta)
+    return getEntityMetaTableFullName(entityMeta, databasePrefix)
 }

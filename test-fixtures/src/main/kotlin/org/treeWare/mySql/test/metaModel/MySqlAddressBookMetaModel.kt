@@ -18,18 +18,18 @@ val MY_SQL_ADDRESS_BOOK_META_MODEL_FILES = listOf(
     "tree_ware/meta_model/geo.json"
 )
 
-fun newMySqlAddressBookMetaModel(environment: String, hasher: Hasher?, cipher: Cipher?): ValidatedMetaModel =
+fun newMySqlAddressBookMetaModel(hasher: Hasher?, cipher: Cipher?): ValidatedMetaModel =
     newMetaModelFromJsonFiles(
         MY_SQL_ADDRESS_BOOK_META_MODEL_FILES,
         false,
         hasher,
         cipher,
         ::mySqlAddressBookRootEntityFactory,
-        listOf(MySqlMetaModelMapAuxPlugin(environment)),
+        listOf(MySqlMetaModelMapAuxPlugin()),
         true
     )
 
-val mySqlAddressBookMetaModel = newMySqlAddressBookMetaModel("test", null, null).metaModel
+val mySqlAddressBookMetaModel = newMySqlAddressBookMetaModel(null, null).metaModel
     ?: throw IllegalStateException("Meta-model has validation errors")
 
 val mySqlAddressBookRootEntityMeta = getResolvedRootMeta(mySqlAddressBookMetaModel)

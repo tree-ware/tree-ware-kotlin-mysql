@@ -27,10 +27,11 @@ fun generateDdlChangeSets(
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     createDatabase: Boolean,
     fullyQualifyTableNames: Boolean,
+    databasePrefix: String? = null,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ): List<ChangeSet> {
     val ddlRoot = ddl {}
-    populateMetaModel(ddlRoot, metaModel, entityDelegates, fullyQualifyTableNames, createForeignKeyConstraints)
+    populateMetaModel(ddlRoot, metaModel, entityDelegates, fullyQualifyTableNames, databasePrefix, createForeignKeyConstraints)
 
     val generateDdlCommandsVisitor = GenerateDdlCommandsVisitor(metaModel, createDatabase)
     leader1DdlForEach(ddlRoot, generateDdlCommandsVisitor)
@@ -49,9 +50,10 @@ private fun populateMetaModel(
     metaModel: EntityModel,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     fullyQualifyTableNames: Boolean,
+    databasePrefix: String? = null,
     createForeignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) {
-    val databaseName = getMySqlMetaModelMap(metaModel)?.validated?.fullName ?: return
+    val databaseName = getMySqlMetaModelMap(metaModel)?.validated?.getFullName(databasePrefix) ?: return
     val rootCompositionMeta = getResolvedRootMeta(metaModel)
     val ddlState = DdlState()
     populateComposition(
@@ -61,6 +63,7 @@ private fun populateMetaModel(
         true,
         entityDelegates,
         fullyQualifyTableNames,
+        databasePrefix,
         createForeignKeyConstraints,
         ddlState
     )
@@ -74,12 +77,13 @@ private fun populateComposition(
     isRoot: Boolean,
     entityDelegates: EntityDelegateRegistry<GenerateDdlCommandsEntityDelegate>?,
     fullyQualifyTableNames: Boolean,
+    databasePrefix: String?,
     createForeignKeyConstraints: CreateForeignKeyConstraints,
     ddlState: DdlState
 ) {
     val validated = getMySqlMetaModelMap(compositionMeta)?.validated ?: return
     val tableName = validated.tableName
-    val tableFullName = validated.fullName
+    val tableFullName = validated.getFullName(databasePrefix)
     val ddlTable = getDdlTable(ddlRoot, databaseName, if (fullyQualifyTableNames) tableFullName else tableName)
 
     val fieldsMeta = getFieldsMeta(compositionMeta).values.filterIsInstance<EntityModel>()
@@ -119,6 +123,7 @@ private fun populateComposition(
             false,
             entityDelegates,
             fullyQualifyTableNames,
+            databasePrefix,
             createForeignKeyConstraints,
             ddlState
         )

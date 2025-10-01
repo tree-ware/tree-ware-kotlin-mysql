@@ -13,9 +13,17 @@ fun createDatabase(
     dataSource: DataSource,
     fullyQualifyTableNames: Boolean = true,
     logCommands: Boolean = false,
+    databasePrefix: String? = null,
     foreignKeyConstraints: CreateForeignKeyConstraints = CreateForeignKeyConstraints.ALL
 ) = dataSource.connection.use { connection ->
-    val changeSets = generateDdlChangeSets(metaModel, delegates, true, fullyQualifyTableNames, foreignKeyConstraints)
+    val changeSets = generateDdlChangeSets(
+        metaModel,
+        delegates,
+        true,
+        fullyQualifyTableNames,
+        databasePrefix,
+        foreignKeyConstraints
+    )
     changeSets.forEach { changeSet ->
         changeSet.commands.forEach { command ->
             if (logCommands) logger.info { command }

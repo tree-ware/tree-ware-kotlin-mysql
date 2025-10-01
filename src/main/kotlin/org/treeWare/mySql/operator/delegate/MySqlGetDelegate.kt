@@ -36,7 +36,8 @@ class MySqlGetDelegate(
     private val setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
     private val getEntityDelegates: EntityDelegateRegistry<GetEntityDelegate>?,
     private val connection: Connection,
-    private val logCommands: Boolean
+    private val logCommands: Boolean,
+    private val databasePrefix: String? = null
 ) : GetDelegate {
     override fun getRoot(
         fieldPath: String,
@@ -64,7 +65,7 @@ class MySqlGetDelegate(
     ): GetCompositionSetResult {
         if (requestKeys.isEmpty() && requestFields.isEmpty()) return GetCompositionSetResult.Entities(emptyList())
         val entityMeta = getCompositionEntityMeta(responseParentField)
-        val tableName = getEntityMetaTableFullName(entityMeta)
+        val tableName = getEntityMetaTableFullName(entityMeta, databasePrefix)
         val select = SelectCommandBuilder(tableName)
         requestKeys.forEach { requestKey ->
             val columns = getSqlColumns(null, requestKey, setEntityDelegates)
@@ -136,7 +137,7 @@ class MySqlGetDelegate(
     ): GetCompositionResult {
         if (requestFields.isEmpty()) return GetCompositionResult.Entity(responseEntity)
         val entityMeta = requireNotNull(responseEntity.meta) { "Entity meta is missing" }
-        val tableName = getEntityMetaTableFullName(entityMeta)
+        val tableName = getEntityMetaTableFullName(entityMeta, databasePrefix)
         val select = SelectCommandBuilder(tableName)
         if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
         else getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }

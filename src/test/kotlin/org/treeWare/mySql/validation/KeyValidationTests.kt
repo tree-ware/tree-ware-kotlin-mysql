@@ -7,7 +7,7 @@ import kotlin.test.Test
 private const val FIELD_ID = "Package 1 entity 0 field 0"
 
 class KeyValidationTests {
-    private val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin("test")
+    private val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin()
 
     @Test
     fun `Entities may have more than 1 key`() {

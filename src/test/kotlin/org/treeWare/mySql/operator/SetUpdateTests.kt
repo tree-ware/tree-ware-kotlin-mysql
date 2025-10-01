@@ -47,7 +47,7 @@ class SetUpdateTests {
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource, databasePrefix = "test")
     }
 
     @AfterEach
@@ -128,7 +128,7 @@ class SetUpdateTests {
                 ),
             )
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val actualRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, actualRows)
@@ -149,7 +149,7 @@ class SetUpdateTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val createdRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(expectedRows, createdRows)
@@ -161,7 +161,7 @@ class SetUpdateTests {
             entity = update
         )
         val expectedUpdateResponse = Response.Success
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val updatedRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(expectedRows, updatedRows)
@@ -195,7 +195,7 @@ class SetUpdateTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -234,7 +234,7 @@ class SetUpdateTests {
             multiAuxDecodingStateMachineFactory = auxDecodingFactory,
             entity = update
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterUpdateRows)

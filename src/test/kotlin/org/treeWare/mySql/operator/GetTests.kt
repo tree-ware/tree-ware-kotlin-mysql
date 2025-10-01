@@ -37,7 +37,7 @@ class GetTests {
         getEntityDelegates = operatorEntityDelegateRegistry.get(GetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource, databasePrefix = "test")
     }
 
     @BeforeEach
@@ -51,7 +51,7 @@ class GetTests {
         val now = "2022-04-14T00:40:41.450Z"
         val clock = Clock.fixed(Instant.parse(now), ZoneOffset.UTC)
         val expectedResponse = Response.Success
-        val actualResponse = set(create, setEntityDelegates, testDataSource, true, clock = clock)
+        val actualResponse = set(create, setEntityDelegates, testDataSource, true, databasePrefix = "test", clock = clock)
         assertSetResponse(expectedResponse, actualResponse)
     }
 
@@ -69,7 +69,7 @@ class GetTests {
             entity = request
         )
         val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
-        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
+        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel, databasePrefix = "test")
         assertTrue(response is Response.Success)
         assertMatchesJson(
             responseModel,
@@ -86,7 +86,7 @@ class GetTests {
             entity = request
         )
         val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
-        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
+        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel, databasePrefix = "test")
         assertTrue(response is Response.Success)
         assertMatchesJson(
             responseModel,
@@ -100,7 +100,7 @@ class GetTests {
         val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity("model/my_sql_get_request_no_parent_fields.json", entity = request)
         val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
-        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
+        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel, databasePrefix = "test")
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_no_parent_fields.json", EncodePasswords.ALL)
     }
@@ -110,7 +110,7 @@ class GetTests {
         val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity("model/my_sql_get_request_subset_of_keys.json", entity = request)
         val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
-        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
+        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel, databasePrefix = "test")
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_subset_of_keys.json", EncodePasswords.ALL)
     }
@@ -120,7 +120,7 @@ class GetTests {
         val request = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
         decodeJsonFileIntoEntity( "model/my_sql_get_request_invalid_entity_paths.json", entity = request)
         val responseModel = MutableEntityModel(mySqlAddressBookRootEntityMeta, null)
-        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel)
+        val response = get(request, setEntityDelegates, getEntityDelegates, testDataSource, responseModel, databasePrefix = "test")
         assertTrue(response is Response.Success)
         assertMatchesJson(responseModel, "model/my_sql_get_response_invalid_entity_paths.json", EncodePasswords.ALL)
     }

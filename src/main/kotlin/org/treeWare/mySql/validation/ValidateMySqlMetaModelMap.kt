@@ -12,8 +12,8 @@ import org.treeWare.mySql.aux.MySqlMetaModelMap
 import org.treeWare.mySql.aux.MySqlMetaModelMapValidated
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 
-fun validateMySqlMetaModelMap(metaModel: MutableEntityModel, environment: String): List<String> {
-    val visitor = ValidateMySqlMetaModelMapVisitor(environment)
+fun validateMySqlMetaModelMap(metaModel: MutableEntityModel): List<String> {
+    val visitor = ValidateMySqlMetaModelMapVisitor()
     mutableMetaModelForEach(metaModel, visitor)
     return visitor.errors
 }
@@ -51,7 +51,6 @@ private fun validateKey(entityId: String, keyFieldMeta: EntityModel): String? =
     }
 
 private class ValidateMySqlMetaModelMapVisitor(
-    private val environment: String
 ) : AbstractLeader1MutableMetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
     val errors = mutableListOf<String>()
     private var databaseName = ""
@@ -63,7 +62,7 @@ private class ValidateMySqlMetaModelMapVisitor(
     override fun visitMetaModel(leaderMeta1: MutableEntityModel): TraversalAction {
         val metaModelName = getMetaModelName(leaderMeta1)
         path.addLast(metaModelName)
-        databaseName = "${environment}__$metaModelName"
+        databaseName = metaModelName
         val nameErrors = validateDatabaseName(databaseName)
         if (nameErrors.isNotEmpty()) errors.addAll(nameErrors)
         else {

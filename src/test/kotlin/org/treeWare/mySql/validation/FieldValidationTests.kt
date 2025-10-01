@@ -8,7 +8,7 @@ import org.treeWare.mySql.aux.MySqlMetaModelMapAuxPlugin
 import kotlin.test.Test
 
 class FieldValidationTests {
-    private val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin("test")
+    private val mySqlMetaModelMapAuxPlugin = MySqlMetaModelMapAuxPlugin()
 
     @Test
     fun `Validation must fail if string fields do not specify max_size constraint`() {

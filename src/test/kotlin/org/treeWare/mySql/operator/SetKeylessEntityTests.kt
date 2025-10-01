@@ -50,7 +50,7 @@ class SetKeylessEntityTests {
         setEntityDelegates = operatorEntityDelegateRegistry.get(SetOperatorId)
 
         val createDbEntityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
-        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource)
+        createDatabase(mySqlAddressBookMetaModel, createDbEntityDelegates, testDataSource, databasePrefix = "test")
         emptyDatabaseRows = getDatabaseRows(testDataSource, TEST_DATABASE)
     }
 
@@ -78,7 +78,7 @@ class SetKeylessEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
@@ -94,7 +94,7 @@ class SetKeylessEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -133,7 +133,7 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualRecreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualRecreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedRecreateResponse, actualRecreateResponse)
         val afterRecreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterRecreateRows)
@@ -148,7 +148,7 @@ class SetKeylessEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRowsExpected = readFile("operator/my_sql_create_keyless_entities_results.txt")
         val afterCreateRows = getKeylessTableRows()
@@ -161,7 +161,7 @@ class SetKeylessEntityTests {
             entity = update
         )
         val expectedUpdateResponse = Response.Success
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRowsExpected = readFile("operator/my_sql_update_keyless_entities_results.txt")
         val afterUpdateRows = getKeylessTableRows()
@@ -205,7 +205,7 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualUpdateResponse = set(update, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedUpdateResponse, actualUpdateResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -220,7 +220,7 @@ class SetKeylessEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -232,7 +232,7 @@ class SetKeylessEntityTests {
             entity = delete
         )
         val expectedDeleteResponse = Response.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -247,7 +247,7 @@ class SetKeylessEntityTests {
             entity = delete
         )
         val expectedDeleteResponse = Response.Success
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterUpdateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterUpdateRows)
@@ -290,7 +290,7 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(emptyDatabaseRows, afterCreateRows)
@@ -305,7 +305,7 @@ class SetKeylessEntityTests {
             entity = create
         )
         val expectedCreateResponse = Response.Success
-        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, clock = createClock)
+        val actualCreateResponse = set(create, setEntityDelegates, testDataSource, databasePrefix = "test", clock = createClock)
         assertSetResponse(expectedCreateResponse, actualCreateResponse)
         val afterCreateRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertNotEquals(emptyDatabaseRows, afterCreateRows)
@@ -351,7 +351,7 @@ class SetKeylessEntityTests {
                 ),
             )
         )
-        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, clock = updateClock)
+        val actualDeleteResponse = set(delete, setEntityDelegates, testDataSource, databasePrefix = "test", clock = updateClock)
         assertSetResponse(expectedDeleteResponse, actualDeleteResponse)
         val afterDeleteRows = getDatabaseRows(testDataSource, TEST_DATABASE)
         assertEquals(afterCreateRows, afterDeleteRows)

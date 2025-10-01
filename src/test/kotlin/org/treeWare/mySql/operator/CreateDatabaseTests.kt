@@ -37,7 +37,7 @@ class CreateDatabaseTests {
         registerMySqlOperatorEntityDelegates(operatorEntityDelegateRegistry)
         val delegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
-        createDatabase(mySqlAddressBookMetaModel, delegates, testDataSource)
+        createDatabase(mySqlAddressBookMetaModel, delegates, testDataSource, databasePrefix = "test")
 
         val expectedColumnsSchemaAfter = readFile("operator/my_sql_address_book_db_columns_schema.txt")
         val actualColumnsSchemaAfter = getColumnsSchema(testDataSource, expectedDatabaseName)

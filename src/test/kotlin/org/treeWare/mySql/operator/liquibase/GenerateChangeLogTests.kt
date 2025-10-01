@@ -18,7 +18,7 @@ class GenerateChangeLogTests {
         val entityDelegates = operatorEntityDelegateRegistry.get(GenerateDdlCommandsOperatorId)
 
         val buffer = Buffer()
-        generateChangeLog(buffer, mySqlAddressBookMetaModel, entityDelegates, true, false)
+        generateChangeLog(buffer, mySqlAddressBookMetaModel, entityDelegates, true, false, "test")
 
         val expected = readFile("operator/liquibase/my_sql_address_book_ddl_changelog.sql")
         val actual = buffer.readUtf8()
@@ -38,6 +38,7 @@ class GenerateChangeLogTests {
             entityDelegates,
             true,
             true,
+            "test",
             CreateForeignKeyConstraints.NONE
         )
 

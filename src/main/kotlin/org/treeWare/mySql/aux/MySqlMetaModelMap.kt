@@ -17,5 +17,8 @@ class MySqlMetaModelMap {
 }
 
 data class MySqlMetaModelMapValidated(val databaseName: String, val tableName: String) {
-    val fullName = if (tableName.isEmpty()) databaseName else "$databaseName.$tableName"
+    fun getFullName(databasePrefix: String?): String {
+        val fullName = if (tableName.isEmpty()) databaseName else "$databaseName.$tableName"
+        return if (databasePrefix == null) fullName else "${databasePrefix}__$fullName"
+    }
 }
