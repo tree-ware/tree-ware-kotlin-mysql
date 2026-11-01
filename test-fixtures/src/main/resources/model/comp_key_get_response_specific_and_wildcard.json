@@ -1,0 +1,19 @@
+{
+  "shipments": [
+    {
+      "id": {
+        "code": "S",
+        "seq": 1
+      },
+      "description": "First shipment"
+    }
+  ],
+  "warehouses": [
+    {
+      "id": {
+        "code": "WH-1"
+      },
+      "location": "Austin"
+    }
+  ]
+}

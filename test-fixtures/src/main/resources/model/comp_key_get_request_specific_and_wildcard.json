@@ -1,0 +1,19 @@
+{
+  "shipments": [
+    {
+      "id": {
+        "code": "S",
+        "seq": 1
+      },
+      "description": null
+    }
+  ],
+  "warehouses": [
+    {
+      "id": {
+        "code": null
+      },
+      "location": null
+    }
+  ]
+}
