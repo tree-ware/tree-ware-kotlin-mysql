@@ -1,0 +1,59 @@
+{
+  "set_": "update",
+  "name": "Test World 2",
+  "warehouses": [
+    {
+      "id": {
+        "code": "WH-1"
+      },
+      "location": "Dallas"
+    }
+  ],
+  "favorite_shipment": {
+    "shipments": [
+      {
+        "id": {
+          "code": "S",
+          "seq": 2
+        }
+      }
+    ]
+  },
+  "primary_shipment": {
+    "id": {
+      "code": "PR",
+      "seq": 1
+    },
+    "description": "Primary shipment rerouted"
+  },
+  "shipments": [
+    {
+      "id": {
+        "code": "S",
+        "seq": 1
+      },
+      "description": "First shipment rerouted",
+      "parcels": [
+        {
+          "tracking_id": "11111111-1111-1111-1111-111111111111",
+          "weight": 14.0
+        }
+      ]
+    },
+    {
+      "id": {
+        "code": "S",
+        "seq": 2
+      },
+      "hub": {
+        "warehouses": [
+          {
+            "id": {
+              "code": "WH-1"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

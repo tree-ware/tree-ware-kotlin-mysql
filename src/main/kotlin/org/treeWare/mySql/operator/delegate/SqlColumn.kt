@@ -9,6 +9,8 @@ import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.model.operator.GetEntityDelegate
 import org.treeWare.model.operator.SetEntityDelegate
 import org.treeWare.model.operator.getAssociationTargetEntity
+import org.treeWare.mySql.util.getFieldColumnName
+import org.treeWare.mySql.util.getFlattenedKeyColumnNames
 import org.treeWare.util.assertInDevMode
 import java.sql.PreparedStatement
 import java.time.Instant
@@ -65,11 +67,12 @@ internal fun getSqlColumns(
     forSelectClause: Boolean = false
 ): List<SqlColumn> {
     val fieldMeta = requireNotNull(field.meta) { "Field meta is missing" }
-    val fieldValue: Any? = (field as SingleFieldModel).value
+    val singleField = field as SingleFieldModel
     return getSqlColumnsForMeta(
         namePrefix,
+        getFieldColumnName(singleField),
         fieldMeta,
-        fieldValue,
+        singleField.value,
         setEntityDelegates,
         getEntityDelegates,
         forSelectClause
@@ -78,6 +81,7 @@ internal fun getSqlColumns(
 
 internal fun getSqlColumnsForMeta(
     namePrefix: String?,
+    columnName: String,
     fieldMeta: EntityModel,
     fieldValue: Any?,
     setEntityDelegates: EntityDelegateRegistry<SetEntityDelegate>?,
@@ -93,7 +97,7 @@ internal fun getSqlColumnsForMeta(
             getEntityDelegates,
             forSelectClause
         )
-        else -> getSingleSqlColumn(namePrefix, fieldType, fieldMeta, fieldValue)
+        else -> getSingleSqlColumn(namePrefix, columnName, fieldType, fieldValue)
             ?.let { listOf(it) } ?: emptyList()
     }
 
@@ -112,7 +116,7 @@ private fun getSqlJsonListColumn(
 }
 
 private fun getSqlJsonColumn(
-    fieldMeta: EntityModel,
+    columnName: String,
     fieldValue: ElementModel
 ): SqlColumn? {
     val buffer = Buffer()
@@ -121,7 +125,7 @@ private fun getSqlJsonColumn(
     return if (jsonValue.isEmpty()) null
     else SingleValuedSqlColumn(
         null,
-        getMetaName(fieldMeta),
+        columnName,
         TypedValue(FieldType.STRING, jsonValue)
     )
 }
@@ -142,7 +146,8 @@ private fun getAssociationSqlColumns(
         val fieldName = getMetaName(fieldMeta)
         val jsonColumn = SingleValuedSqlColumn(null, fieldName, null)
         if (forSelectClause) listOf(jsonColumn)
-        else targetKeyFieldsMeta.map { SingleValuedSqlColumn(fieldName, getMetaName(it), null) } + jsonColumn
+        else targetKeyFieldsMeta.flatMap { getFlattenedKeyColumnNames(it) }
+            .map { SingleValuedSqlColumn(fieldName, it, null) } + jsonColumn
     } else {
         val fieldName = getMetaName(fieldMeta)
         val association = fieldValue as AssociationModel
@@ -162,8 +167,8 @@ private fun getAssociationSqlColumns(
             keys.available.mapNotNull { key ->
                 getSingleSqlColumn(
                     fieldName,
+                    getFieldColumnName(key),
                     getFieldType(key),
-                    requireNotNull(key.meta) { "Key field meta is missing" },
                     key.value
                 )
             } + jsonColumn
@@ -197,11 +202,10 @@ private fun getCompositionSqlColumns(
 
 private fun getSingleSqlColumn(
     namePrefix: String?,
+    columnName: String,
     fieldType: FieldType,
-    fieldMeta: EntityModel,
     fieldValue: Any?
 ): SqlColumn? {
-    val columnName = getMetaName(fieldMeta)
     return if (fieldValue == null) SingleValuedSqlColumn(namePrefix, columnName, null)
     else when (fieldType) {
         FieldType.BOOLEAN,
@@ -225,8 +229,8 @@ private fun getSingleSqlColumn(
         FieldType.STRING -> getPrimitiveSqlColumn(namePrefix, columnName, fieldType, fieldValue)
         FieldType.UUID -> getPrimitiveSqlColumn(namePrefix, columnName, fieldType, fieldValue, "UUID_TO_BIN(?)")
         FieldType.BLOB -> getPrimitiveSqlColumn(namePrefix, columnName, fieldType, fieldValue)
-        FieldType.PASSWORD1WAY -> getSqlJsonColumn(fieldMeta, fieldValue as Password1wayModel)
-        FieldType.PASSWORD2WAY -> getSqlJsonColumn(fieldMeta, fieldValue as Password2wayModel)
+        FieldType.PASSWORD1WAY -> getSqlJsonColumn(columnName, fieldValue as Password1wayModel)
+        FieldType.PASSWORD2WAY -> getSqlJsonColumn(columnName, fieldValue as Password2wayModel)
         FieldType.ALIAS -> throw IllegalStateException("Getting alias as a single SQL column")
         FieldType.ENUMERATION -> SingleValuedSqlColumn(
             namePrefix,
