@@ -12,6 +12,8 @@ import org.treeWare.model.operator.Response
 import org.treeWare.model.operator.set.aux.SetAux
 import org.treeWare.mySql.operator.*
 import org.treeWare.mySql.util.getEntityMetaTableName
+import org.treeWare.mySql.util.getFlattenedKeyColumnNames
+import org.treeWare.mySql.util.getTrueOwnerEntity
 import org.treeWare.mySql.util.getEntityTableFullName
 import org.treeWare.mySql.util.getEntityTableName
 import java.sql.Connection
@@ -279,8 +281,7 @@ internal class MySqlSetDelegate(
             // First Keys is current entity's keys, not an ancestor's.
             if (index == 0) return@forEachIndexed
             val ancestorFirstKey = ancestor.available.firstOrNull() ?: return@forEachIndexed
-            val ancestorEntity = ancestorFirstKey.parent
-                ?: throw IllegalStateException("Ancestor key does not have parent entity")
+            val ancestorEntity = getTrueOwnerEntity(ancestorFirstKey)
             val ancestorTableName = getEntityTableName(ancestorEntity)
             if (ancestorTableName == previousAncestorTableName) return@forEachIndexed
             ancestor.available.forEach {
@@ -331,8 +332,7 @@ private fun clearAssociationColumns(fieldMeta: EntityModel, builder: UpdateComma
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
         ?: throw IllegalStateException("Association meta-model is not resolved")
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
-    targetKeyFieldsMeta.forEach { targetKeyFieldMeta ->
-        val targetKeyName = getMetaName(targetKeyFieldMeta)
+    targetKeyFieldsMeta.flatMap { getFlattenedKeyColumnNames(it) }.forEach { targetKeyName ->
         builder.addUpdateColumn(SingleValuedSqlColumn(fieldName, targetKeyName, null))
     }
 }

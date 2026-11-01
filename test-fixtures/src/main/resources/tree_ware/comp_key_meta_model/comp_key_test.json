@@ -28,19 +28,30 @@
               "multiplicity": "set"
             },
             {
-              "name": "main_warehouse",
+              "name": "warehouses",
               "number": 3,
               "type": "composition",
               "composition": {
                 "entity": "warehouse",
                 "package": "org.tree_ware.test.comp_key"
-              }
+              },
+              "multiplicity": "set"
             },
             {
               "name": "favorite_shipment",
               "number": 4,
               "type": "association",
               "association": {
+                "entity": "shipment",
+                "package": "org.tree_ware.test.comp_key"
+              }
+            },
+            {
+              "name": "primary_shipment",
+              "number": 5,
+              "info": "Single composition with a composition-keyed target",
+              "type": "composition",
+              "composition": {
                 "entity": "shipment",
                 "package": "org.tree_ware.test.comp_key"
               }

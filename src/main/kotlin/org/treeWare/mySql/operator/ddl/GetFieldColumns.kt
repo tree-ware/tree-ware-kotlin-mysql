@@ -6,6 +6,7 @@ import org.treeWare.model.core.getMetaModelResolved
 import org.treeWare.model.operator.EntityDelegateRegistry
 import org.treeWare.mySql.aux.getMySqlMetaModelMap
 import org.treeWare.mySql.operator.GenerateDdlCommandsEntityDelegate
+import org.treeWare.mySql.util.getCompositionKeyLeafColumnName
 
 data class Column(val name: String, val type: String) {
     fun cloneWithNamePrefix(prefix: String): Column =
@@ -40,7 +41,7 @@ fun getCompositionKeyFieldColumns(fieldMeta: EntityModel): List<Column> {
         ?: throw IllegalStateException("Composition meta-model is not resolved")
     val fieldName = getMetaName(fieldMeta)
     return getKeyFieldsMeta(targetEntityMeta).map {
-        getSingleFieldColumn(it).cloneWithNamePrefix(fieldName)
+        Column(getCompositionKeyLeafColumnName(fieldName, getMetaName(it)), getFieldColumnType(it))
     }
 }
 
