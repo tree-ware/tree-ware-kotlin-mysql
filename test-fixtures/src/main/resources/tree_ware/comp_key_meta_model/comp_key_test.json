@@ -1,0 +1,189 @@
+{
+  "packages": [
+    {
+      "my_sql_": {
+        "table_prefix": "ck"
+      },
+      "name": "org.tree_ware.test.comp_key",
+      "info": "Schema for testing composition keys",
+      "entities": [
+        {
+          "my_sql_": {},
+          "name": "world",
+          "fields": [
+            {
+              "name": "name",
+              "number": 1,
+              "type": "string",
+              "max_size": 64
+            },
+            {
+              "name": "shipments",
+              "number": 2,
+              "type": "composition",
+              "composition": {
+                "entity": "shipment",
+                "package": "org.tree_ware.test.comp_key"
+              },
+              "multiplicity": "set"
+            },
+            {
+              "name": "main_warehouse",
+              "number": 3,
+              "type": "composition",
+              "composition": {
+                "entity": "warehouse",
+                "package": "org.tree_ware.test.comp_key"
+              }
+            },
+            {
+              "name": "favorite_shipment",
+              "number": 4,
+              "type": "association",
+              "association": {
+                "entity": "shipment",
+                "package": "org.tree_ware.test.comp_key"
+              }
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "shipment_id",
+          "info": "Composition-key target with multiple leaves",
+          "fields": [
+            {
+              "name": "code",
+              "number": 1,
+              "type": "string",
+              "max_size": 32,
+              "is_key": true
+            },
+            {
+              "name": "seq",
+              "number": 2,
+              "type": "uint32",
+              "is_key": true
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "shipment",
+          "fields": [
+            {
+              "name": "id",
+              "number": 1,
+              "type": "composition",
+              "composition": {
+                "entity": "shipment_id",
+                "package": "org.tree_ware.test.comp_key"
+              },
+              "is_key": true
+            },
+            {
+              "name": "description",
+              "number": 2,
+              "type": "string",
+              "max_size": 256
+            },
+            {
+              "name": "parcels",
+              "number": 3,
+              "type": "composition",
+              "composition": {
+                "entity": "parcel",
+                "package": "org.tree_ware.test.comp_key"
+              },
+              "multiplicity": "set"
+            },
+            {
+              "name": "label",
+              "number": 4,
+              "type": "composition",
+              "composition": {
+                "entity": "label",
+                "package": "org.tree_ware.test.comp_key"
+              }
+            },
+            {
+              "name": "hub",
+              "number": 5,
+              "type": "association",
+              "association": {
+                "entity": "warehouse",
+                "package": "org.tree_ware.test.comp_key"
+              }
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "parcel",
+          "fields": [
+            {
+              "name": "tracking_id",
+              "number": 1,
+              "type": "uuid",
+              "is_key": true
+            },
+            {
+              "name": "weight",
+              "number": 2,
+              "type": "double"
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "label",
+          "info": "Keyless entity for testing ancestor key inheritance",
+          "fields": [
+            {
+              "name": "text",
+              "number": 1,
+              "type": "string",
+              "max_size": 128
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "warehouse_id",
+          "info": "Composition-key target with a single leaf",
+          "fields": [
+            {
+              "name": "code",
+              "number": 1,
+              "type": "string",
+              "max_size": 32,
+              "is_key": true
+            }
+          ]
+        },
+        {
+          "my_sql_": {},
+          "name": "warehouse",
+          "fields": [
+            {
+              "name": "id",
+              "number": 1,
+              "type": "composition",
+              "composition": {
+                "entity": "warehouse_id",
+                "package": "org.tree_ware.test.comp_key"
+              },
+              "is_key": true
+            },
+            {
+              "name": "location",
+              "number": 2,
+              "type": "string",
+              "max_size": 128
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
