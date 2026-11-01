@@ -61,9 +61,28 @@ private fun validateKey(entityId: String, keyFieldMeta: EntityModel): List<Strin
 private fun validateCompositionKey(entityId: String, keyFieldMeta: EntityModel): List<String> {
     val targetEntityMeta = getMetaModelResolved(keyFieldMeta)?.compositionMeta
         ?: return listOf("Entity $entityId composition key field ${getMetaName(keyFieldMeta)} target entity cannot be resolved")
+    // String leaves need max_size for their DDL column types. Targets with my_sql_ aux get this check from
+    // visitFieldMeta, so only check here when the target has no my_sql_ aux (to avoid duplicate errors).
+    val targetHasMySqlAux = getMySqlMetaModelMap(targetEntityMeta) != null
     // Core guarantees composition-key targets have only primitive (single-level, non-composition) keys,
     // so validating each leaf with validateKey suffices without recursion concerns.
-    return getKeyFieldsMeta(targetEntityMeta).flatMap { validateKey(entityId, it) }
+    return getKeyFieldsMeta(targetEntityMeta).flatMap {
+        validateKey(entityId, it) + validateLeafMaxSize(entityId, keyFieldMeta, it, targetHasMySqlAux)
+    }
+}
+
+private fun validateLeafMaxSize(
+    entityId: String,
+    keyFieldMeta: EntityModel,
+    leafFieldMeta: EntityModel,
+    targetHasMySqlAux: Boolean
+): List<String> {
+    if (targetHasMySqlAux) return emptyList()
+    if (getFieldTypeMeta(leafFieldMeta) != FieldType.STRING) return emptyList()
+    if (getMaxSizeConstraint(leafFieldMeta) != null) return emptyList()
+    val keyFieldName = getMetaName(keyFieldMeta)
+    val leafFieldName = getMetaName(leafFieldMeta)
+    return listOf("String field $entityId/$keyFieldName/$leafFieldName must specify max_size constraint for MySQL")
 }
 
 private class ValidateMySqlMetaModelMapVisitor(

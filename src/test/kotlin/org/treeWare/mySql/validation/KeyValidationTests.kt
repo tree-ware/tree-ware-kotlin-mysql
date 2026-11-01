@@ -272,6 +272,31 @@ class KeyValidationTests {
     }
 
     @Test
+    fun `Validation must fail for string leaves without max_size when target has no MySQL aux`() {
+        val targetFieldsJson = getLeafFieldJson("leaf1", 1, FieldType.STRING)
+        val metaModelJson = getCompositionKeyMetaModelJson(targetFieldsJson, targetHasMySqlAux = false)
+        val expectedErrors =
+            listOf("String field /test_meta_model/org.tree_ware.test.main/entity1/key1/leaf1 must specify max_size constraint for MySQL")
+        assertJsonStringValidationErrors(
+            metaModelJson,
+            expectedErrors,
+            auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
+        )
+    }
+
+    @Test
+    fun `Validation must pass for string leaves with max_size when target has no MySQL aux`() {
+        val targetFieldsJson = getLeafFieldJson("leaf1", 1, FieldType.STRING, 64)
+        val metaModelJson = getCompositionKeyMetaModelJson(targetFieldsJson, targetHasMySqlAux = false)
+        val expectedErrors = emptyList<String>()
+        assertJsonStringValidationErrors(
+            metaModelJson,
+            expectedErrors,
+            auxPlugins = arrayOf(mySqlMetaModelMapAuxPlugin)
+        )
+    }
+
+    @Test
     fun `Validation must report both target and leaf errors when target has MySQL aux`() {
         val targetFieldsJson = getLeafFieldJson("leaf1", 1, FieldType.BLOB)
         val metaModelJson = getCompositionKeyMetaModelJson(targetFieldsJson, targetHasMySqlAux = true)

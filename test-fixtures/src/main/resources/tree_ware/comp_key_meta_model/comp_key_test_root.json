@@ -1,0 +1,12 @@
+{
+  "name": "comp_key_test",
+  "package": "org.tree_ware.test.comp_key",
+  "version": {
+    "semantic": "1.0.0",
+    "name": "pacific-ocean"
+  },
+  "root": {
+    "entity": "world",
+    "package": "org.tree_ware.test.comp_key"
+  }
+}

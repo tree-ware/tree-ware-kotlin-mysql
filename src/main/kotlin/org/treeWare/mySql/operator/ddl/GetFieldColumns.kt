@@ -19,15 +19,30 @@ fun getFieldColumns(
 ): List<Column> =
     when (getFieldTypeMeta(fieldMeta)) {
         FieldType.COMPOSITION -> {
-            val compositionMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
-            val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
-            val entityDelegate = entityDelegates?.get(entityFullName)
-            if (entityDelegate?.isSingleColumn() != true) emptyList()
-            else listOf(getSingleFieldColumn(fieldMeta, entityDelegate.getSingleColumnType()))
+            // Composition keys flatten to one column per leaf of the target entity's keys.
+            // Non-key compositions are stored in their own tables (or a single column for
+            // single-column entity delegates).
+            if (isKeyFieldMeta(fieldMeta)) getCompositionKeyFieldColumns(fieldMeta)
+            else {
+                val compositionMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
+                val entityFullName = getMetaModelResolved(compositionMeta)?.fullName
+                val entityDelegate = entityDelegates?.get(entityFullName)
+                if (entityDelegate?.isSingleColumn() != true) emptyList()
+                else listOf(getSingleFieldColumn(fieldMeta, entityDelegate.getSingleColumnType()))
+            }
         }
         FieldType.ASSOCIATION -> getAssociationFieldColumns(fieldMeta, isForKeyOrUnique)
         else -> listOf(getSingleFieldColumn(fieldMeta))
     }
+
+fun getCompositionKeyFieldColumns(fieldMeta: EntityModel): List<Column> {
+    val targetEntityMeta = getMetaModelResolved(fieldMeta)?.compositionMeta
+        ?: throw IllegalStateException("Composition meta-model is not resolved")
+    val fieldName = getMetaName(fieldMeta)
+    return getKeyFieldsMeta(targetEntityMeta).map {
+        getSingleFieldColumn(it).cloneWithNamePrefix(fieldName)
+    }
+}
 
 fun getAssociationFieldColumns(fieldMeta: EntityModel, isForKeyOrUnique: Boolean): List<Column> {
     val targetEntityMeta = getMetaModelResolved(fieldMeta)?.associationMeta?.targetEntityMeta
@@ -39,9 +54,12 @@ fun getAssociationFieldColumns(fieldMeta: EntityModel, isForKeyOrUnique: Boolean
     val fieldName = getMetaName(fieldMeta)
     val pathColumn = Column(fieldName, "TEXT")
     val targetKeyFieldsMeta = getKeyFieldsMeta(targetEntityMeta)
-    val foreignKeyColumns = targetKeyFieldsMeta.map {
-        val targetColumn = getSingleFieldColumn(it)
-        if (isForKeyOrUnique) targetColumn else targetColumn.cloneWithNamePrefix(fieldName)
+    val foreignKeyColumns = targetKeyFieldsMeta.flatMap {
+        val targetColumns = if (getFieldTypeMeta(it) == FieldType.COMPOSITION) getCompositionKeyFieldColumns(it)
+        else listOf(getSingleFieldColumn(it))
+        if (isForKeyOrUnique) targetColumns else targetColumns.map { targetColumn ->
+            targetColumn.cloneWithNamePrefix(fieldName)
+        }
     }
 
     return if (isForKeyOrUnique) foreignKeyColumns else listOf(pathColumn) + foreignKeyColumns
