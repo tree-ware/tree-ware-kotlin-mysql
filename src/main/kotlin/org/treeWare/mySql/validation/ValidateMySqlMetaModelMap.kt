@@ -6,6 +6,7 @@ import org.treeWare.metaModel.traversal.mutableMetaModelForEach
 import org.treeWare.model.core.EntityModel
 import org.treeWare.model.core.MutableElementModel
 import org.treeWare.model.core.MutableEntityModel
+import org.treeWare.model.core.getMetaModelResolved
 import org.treeWare.model.traversal.TraversalAction
 import org.treeWare.mySql.aux.MY_SQL_META_MODEL_MAP_CODEC_AUX_NAME
 import org.treeWare.mySql.aux.MySqlMetaModelMap
@@ -26,10 +27,10 @@ private fun validateTableName(name: String): List<String> =
 
 private fun validateKeys(entityId: String, entityMeta: EntityModel): List<String> {
     val keyFieldsMeta = getKeyFieldsMeta(entityMeta)
-    return keyFieldsMeta.mapNotNull { validateKey(entityId, it) }
+    return keyFieldsMeta.flatMap { validateKey(entityId, it) }
 }
 
-private fun validateKey(entityId: String, keyFieldMeta: EntityModel): String? =
+private fun validateKey(entityId: String, keyFieldMeta: EntityModel): List<String> =
     when (val keyFieldType = getFieldTypeMeta(keyFieldMeta)) {
         FieldType.BOOLEAN,
         FieldType.UINT8,
@@ -46,9 +47,24 @@ private fun validateKey(entityId: String, keyFieldMeta: EntityModel): String? =
         FieldType.BIG_DECIMAL,
         FieldType.TIMESTAMP,
         FieldType.STRING,
-        FieldType.UUID -> null
-        else -> "Entity $entityId key field type $keyFieldType is not supported for MySQL"
+        FieldType.UUID -> emptyList()
+        FieldType.COMPOSITION -> validateCompositionKey(entityId, keyFieldMeta)
+        FieldType.BLOB,
+        FieldType.PASSWORD1WAY,
+        FieldType.PASSWORD2WAY,
+        FieldType.ALIAS,
+        FieldType.ENUMERATION,
+        FieldType.ASSOCIATION -> listOf("Entity $entityId key field type $keyFieldType is not supported for MySQL")
+        null -> listOf("Entity $entityId key field type null is not supported for MySQL")
     }
+
+private fun validateCompositionKey(entityId: String, keyFieldMeta: EntityModel): List<String> {
+    val targetEntityMeta = getMetaModelResolved(keyFieldMeta)?.compositionMeta
+        ?: return listOf("Entity $entityId composition key field ${getMetaName(keyFieldMeta)} target entity cannot be resolved")
+    // Core guarantees composition-key targets have only primitive (single-level, non-composition) keys,
+    // so validating each leaf with validateKey suffices without recursion concerns.
+    return getKeyFieldsMeta(targetEntityMeta).flatMap { validateKey(entityId, it) }
+}
 
 private class ValidateMySqlMetaModelMapVisitor(
 ) : AbstractLeader1MutableMetaModelVisitor<TraversalAction>(TraversalAction.CONTINUE) {
