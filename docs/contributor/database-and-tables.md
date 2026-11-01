@@ -87,6 +87,10 @@ The example meta-model has 3 entity types (`organization`, `site`, `device`), so
 
 The table name is created as explained [here](../user/database-and-tables.md#meta-model-aux-data).
 
+A table is created for every composition target entity, including entities used only as composition keys. Those
+key-target tables are never written (set skips key-child rows and get never queries them); skipping them is a possible
+follow-up.
+
 # Primary Keys
 
 If entity instances are unique only under their parent, then parent paths need to be part of the primary-keys. These
@@ -99,12 +103,14 @@ The example meta-model uses UUIDs as keys for entities. A UUID value has to be u
 That is why the example model is able to reuse `"uuid-1"` in an organization instance, in a site instance, and in a
 device instance (this is for illustration purposes only and reusing UUIDs in different entity types is not recommended).
 
+Composition key fields are flattened into the primary key: each leaf of the key-target entity's keys becomes a
+primary-key column (see below).
+
 # Columns
 
 Field names in the meta-model are used as column names. Sometimes column names are derived from multiple fields. In such
-cases, the field names are combined with a dollar sign. Tree-ware also adds its own columns and the names for these end
-with a dollar sign. Field names in the meta-model are not allowed to have dollar signs, so these column names will not
-collide.
+cases, the field names are combined with a double underscore (`__`). Tree-ware also adds its own columns and the names
+for these end with an underscore.
 
 The following columns are stored for each entity:
 
@@ -121,14 +127,20 @@ The following columns are stored for each entity:
         * the `id`, `name`, `model`, and `sw_version` fields in the `device` entity
 * The PRIMARY KEY is made up of only the key field columns.
     * For example, the `id` fields in the `organization`, `site`, and `device` entities
+* Composition key fields are flattened: each leaf of the key-target entity's keys is stored in its own column named
+  `<composition-key-field>__<leaf>`, and each such column is part of the PRIMARY KEY.
+    * For example, if the `shipment` entity has a composition key field called `id` targeting an entity with key
+      leaves `code` and `seq`, the columns are called `id__code` and `id__seq`.
 * Association field values are paths with keys of entities along the path. Since tree-ware requires unique-keys while
   targeting MySQL, and since the type of the target entity is fixed in the association meta-model, only the target
   entity's keys need to be stored. The target entity's keys are stored in separate columns. The names for these columns
-  are created by joining the association field name and the target entity key field names with a dollar sign. The types
-  for these columns is the same as the key columns in the target entity.
+  are created by joining the association field name and the target entity key field names with a double underscore
+  (`__`). The types for these columns is the same as the key columns in the target entity.
     * For example, there is a `parent` association in the `organization` entity, and its target entity is
       the `organization` entity (self-referential). The `id` field is the key field in the `organization` entity. So the
-      `parent` association is stored in a column called `parent$id`.
+      `parent` association is stored in a column called `parent__id`.
+    * When the target entity has composition keys, the target keys are flattened first, so the columns are named
+      `<association>__<composition-key-field>__<leaf>` (for example, `hub__id__code`).
 * The columns mentioned above for associations is not sufficient to reconstruct their full paths. So an additional
   column is used for storing the entire path in a TEXT column. The column name is the association field name.
     * The column value is the JSON representation of the association value. In the future, a more compact path
@@ -142,7 +154,8 @@ The following columns are stored for each entity:
 Since the model is a tree, every entity instance in the model tree has a parent (field) path. Tree-ware supports the
 ability to list all entities under any ancestor in the parent path. To support this, the key fields of each ancestor are
 added as columns in the entity-table. These columns are named by joining the ancestor table names and their key field
-names with a dollar sign.
+names with a double underscore (`__`). Composition keys of ancestors are flattened first, so those columns are named
+`<ancestor-table>__<composition-key-field>__<leaf>` (for example, `ck__shipment__id__code`).
 
 # Recursive Ancestors
 
@@ -183,6 +196,10 @@ TODO: will [CTE](https://dev.mysql.com/doc/refman/8.0/en/with.html) be more perf
     * To prevent a parent from being deleted if it has children, the foreign key is set to `ON DELETE RESTRICT`.
     * The columns for ancestors are also foreign keys, but they are not declared as foreign keys in order to avoid
       indexes being created automatically for all ancestors.
+* There is deliberately no foreign key from a parent table's flattened composition-key columns to the key-target
+  table. The key-child row's ancestor foreign key already points back at the parent, and a second foreign key in the
+  other direction would create an insert-order cycle (MySQL cannot defer constraint checks to the end of the
+  transaction).
 * The entity columns in the join-table for recursive-entities are foreign keys to the entity in the entity-table.
     * The rows in the join-table need to be removed if the entity in the entity-table is deleted, so the foreign key is
       set to `ON DELETE CASCADE`.
