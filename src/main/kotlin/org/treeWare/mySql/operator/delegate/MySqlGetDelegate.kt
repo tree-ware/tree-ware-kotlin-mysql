@@ -3,7 +3,9 @@ package org.treeWare.mySql.operator.delegate
 import okio.Buffer
 import org.lighthousegames.logging.logging
 import org.treeWare.metaModel.FieldType
-import org.treeWare.metaModel.getParentEntityMeta
+import org.treeWare.metaModel.getKeyFieldsMeta
+import org.treeWare.metaModel.getMetaName
+import org.treeWare.metaModel.isCompositionFieldMeta
 import org.treeWare.model.core.*
 import org.treeWare.model.decoder.decodeJsonField
 import org.treeWare.model.operator.*
@@ -12,8 +14,10 @@ import org.treeWare.model.operator.get.GetCompositionSetResult
 import org.treeWare.model.operator.get.GetDelegate
 import org.treeWare.mySql.getBoundSql
 import org.treeWare.mySql.operator.*
+import org.treeWare.mySql.util.getCompositionKeyLeafColumnName
 import org.treeWare.mySql.util.getEntityMetaTableFullName
-import org.treeWare.mySql.util.getEntityMetaTableName
+import org.treeWare.mySql.util.getEntityTableName
+import org.treeWare.mySql.util.getTrueOwnerEntity
 import java.nio.ByteBuffer
 import java.sql.Connection
 import java.sql.PreparedStatement
@@ -68,9 +72,12 @@ class MySqlGetDelegate(
         val tableName = getEntityMetaTableFullName(entityMeta, databasePrefix)
         val select = SelectCommandBuilder(tableName)
         requestKeys.forEach { requestKey ->
-            val columns = getSqlColumns(null, requestKey, setEntityDelegates)
-            select.addSelectColumns(columns)
-            if (requestKey.value != null) select.addWhereColumns(columns)
+            if (getFieldType(requestKey) == FieldType.COMPOSITION) addCompositionKeySelectColumns(select, requestKey)
+            else {
+                val columns = getSqlColumns(null, requestKey, setEntityDelegates)
+                select.addSelectColumns(columns)
+                if (requestKey.value != null) select.addWhereColumns(columns)
+            }
         }
         getAncestorKeyColumns(ancestorKeys[0]).forEach { select.addWhereColumn(it) }
         select.addWhereColumn(
@@ -102,7 +109,10 @@ class MySqlGetDelegate(
                 var columnIndex = 1
                 requestKeys.forEach { requestKey ->
                     val responseKey = responseEntity.getOrNewField(getFieldName(requestKey))
-                    val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseKey)
+                    val (fieldErrors, columnsConsumed) =
+                        if (getFieldType(requestKey) == FieldType.COMPOSITION)
+                            setResponseCompositionKeyField(result, columnIndex, responseKey as MutableSingleFieldModel)
+                        else setResponseField(result, columnIndex, responseKey)
                     errors.addAll(fieldErrors)
                     columnIndex += columnsConsumed
                 }
@@ -135,8 +145,14 @@ class MySqlGetDelegate(
         requestFields: List<FieldModel>,
         responseEntity: MutableEntityModel
     ): GetCompositionResult {
-        if (requestFields.isEmpty()) return GetCompositionResult.Entity(responseEntity)
         val entityMeta = requireNotNull(responseEntity.meta) { "Entity meta is missing" }
+        // Core never delivers composition-key values for single/root gets (their fetch is skipped), so this
+        // delegate additionally SELECTs the entity's composition-key leaves from meta and decodes them into the
+        // response shells. As a result, single-composition gets always return composition keys when the entity
+        // has them, even if the request did not ask for them.
+        val compositionKeyFieldsMeta = getKeyFieldsMeta(entityMeta).filter { isCompositionFieldMeta(it) }
+        if (requestFields.isEmpty() && compositionKeyFieldsMeta.isEmpty())
+            return GetCompositionResult.Entity(responseEntity)
         val tableName = getEntityMetaTableFullName(entityMeta, databasePrefix)
         val select = SelectCommandBuilder(tableName)
         if (ancestorKeys.isEmpty()) select.addWhereColumn(SINGLETON_SQL_COLUMN)
@@ -159,6 +175,9 @@ class MySqlGetDelegate(
                 )
             )
         }
+        compositionKeyFieldsMeta.forEach { compositionKeyFieldMeta ->
+            addCompositionKeySelectColumnsFromMeta(select, compositionKeyFieldMeta)
+        }
         val statement: PreparedStatement = select.prepareStatement(connection)
         if (logCommands) logger.info { statement.getBoundSql() }
         return try {
@@ -169,6 +188,14 @@ class MySqlGetDelegate(
                 requestFields.forEach { requestField ->
                     val responseField = responseEntity.getOrNewField(getFieldName(requestField))
                     val (fieldErrors, columnsConsumed) = setResponseField(result, columnIndex, responseField)
+                    errors.addAll(fieldErrors)
+                    columnIndex += columnsConsumed
+                }
+                compositionKeyFieldsMeta.forEach { compositionKeyFieldMeta ->
+                    val responseKeyField =
+                        responseEntity.getOrNewField(getMetaName(compositionKeyFieldMeta)) as MutableSingleFieldModel
+                    val (fieldErrors, columnsConsumed) =
+                        setResponseCompositionKeyField(result, columnIndex, responseKeyField)
                     errors.addAll(fieldErrors)
                     columnIndex += columnsConsumed
                 }
@@ -187,11 +214,50 @@ class MySqlGetDelegate(
 
     private fun getAncestorKeyColumns(ancestorKeys: Keys): List<SqlColumn> {
         val ancestorFirstKey = ancestorKeys.available.firstOrNull() ?: return emptyList()
-        val ancestorFirstKeyMeta = requireNotNull(ancestorFirstKey.meta) { "Ancestor key field meta is missing" }
-        val ancestorEntityMeta =
-            requireNotNull(getParentEntityMeta(ancestorFirstKeyMeta)) { "Ancestor key parent entity is missing" }
-        val ancestorTableName = getEntityMetaTableName(ancestorEntityMeta)
+        val ancestorEntity = getTrueOwnerEntity(ancestorFirstKey)
+        val ancestorTableName = getEntityTableName(ancestorEntity)
         return ancestorKeys.available.flatMap { getSqlColumns(ancestorTableName, it, setEntityDelegates) }
+    }
+
+    /**
+     * SELECTs composition-key leaves in key-meta order. Leaves present in the request filter the rows (WHERE);
+     * absent (or null-valued) leaves are wildcards (SELECT-only).
+     */
+    private fun addCompositionKeySelectColumns(select: SelectCommandBuilder, requestKey: SingleFieldModel) {
+        val keyFieldMeta = requireNotNull(requestKey.meta) { "Composition-key field meta is missing" }
+        val targetEntityMeta = getMetaModelResolved(keyFieldMeta)?.compositionMeta
+            ?: throw IllegalStateException("Composition meta-model is not resolved")
+        val keyChildEntity = requestKey.value as EntityModel?
+        val keyFieldName = getFieldName(requestKey)
+        getKeyFieldsMeta(targetEntityMeta).forEach { leafMeta ->
+            val leafField = keyChildEntity?.getField(getMetaName(leafMeta)) as SingleFieldModel?
+            if (leafField != null) {
+                val columns = getSqlColumns(null, leafField, setEntityDelegates)
+                select.addSelectColumns(columns)
+                if (leafField.value != null) select.addWhereColumns(columns)
+            } else addLeafSelectColumn(select, keyFieldName, leafMeta)
+        }
+    }
+
+    /** SELECTs all composition-key leaves (in key-meta order) without filtering. Used for single/root gets. */
+    private fun addCompositionKeySelectColumnsFromMeta(select: SelectCommandBuilder, keyFieldMeta: EntityModel) {
+        val targetEntityMeta = getMetaModelResolved(keyFieldMeta)?.compositionMeta
+            ?: throw IllegalStateException("Composition meta-model is not resolved")
+        val keyFieldName = getMetaName(keyFieldMeta)
+        getKeyFieldsMeta(targetEntityMeta).forEach { leafMeta -> addLeafSelectColumn(select, keyFieldName, leafMeta) }
+    }
+
+    private fun addLeafSelectColumn(select: SelectCommandBuilder, keyFieldName: String, leafMeta: EntityModel) {
+        select.addSelectColumns(
+            getSqlColumnsForMeta(
+                null,
+                getCompositionKeyLeafColumnName(keyFieldName, getMetaName(leafMeta)),
+                leafMeta,
+                null,
+                setEntityDelegates,
+                null
+            )
+        )
     }
 
     private fun setResponseField(
@@ -220,6 +286,28 @@ class MySqlGetDelegate(
         val buffer = Buffer().writeUtf8(json)
         val decodeErrors = decodeJsonField(buffer, responseAssociationField)
         return SetResponseFieldResult(decodeErrors, 1)
+    }
+
+    /**
+     * Decodes composition-key leaf columns (in key-meta order, matching the SELECT order) into the
+     * composition-key shell in the response.
+     */
+    private fun setResponseCompositionKeyField(
+        result: ResultSet,
+        columnIndex: Int,
+        responseKeyField: MutableSingleFieldModel
+    ): SetResponseFieldResult {
+        val keyFieldMeta = requireNotNull(responseKeyField.meta) { "Composition-key field meta is missing" }
+        val targetEntityMeta = getMetaModelResolved(keyFieldMeta)?.compositionMeta
+            ?: throw IllegalStateException("Composition meta-model is not resolved")
+        val keyChildEntity = responseKeyField.getOrNewValue() as MutableEntityModel
+        var columnsConsumed = 0
+        getKeyFieldsMeta(targetEntityMeta).forEach { leafMeta ->
+            val leafField = keyChildEntity.getOrNewField(getMetaName(leafMeta)) as MutableSingleFieldModel
+            setResponseSingleField(result, columnIndex + columnsConsumed, leafField)
+            columnsConsumed += 1
+        }
+        return SetResponseFieldResult(emptyList(), columnsConsumed)
     }
 
     private fun setResponseCompositionField(

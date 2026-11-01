@@ -1,0 +1,18 @@
+{
+  "shipments": [
+    {
+      "id": {
+        "code": "S",
+        "seq": 1
+      },
+      "description": "First shipment"
+    },
+    {
+      "id": {
+        "code": "S",
+        "seq": 2
+      },
+      "description": "Second shipment"
+    }
+  ]
+}
