@@ -1,0 +1,34 @@
+{
+  "name": null,
+  "favorite_shipment": null,
+  "shipments": [
+    {
+      "id": {
+        "code": null,
+        "seq": null
+      },
+      "description": null,
+      "hub": null,
+      "parcels": [
+        {
+          "tracking_id": null,
+          "weight": null
+        }
+      ],
+      "label": {
+        "text": null
+      }
+    }
+  ],
+  "warehouses": [
+    {
+      "id": {
+        "code": null
+      },
+      "location": null
+    }
+  ],
+  "primary_shipment": {
+    "description": null
+  }
+}
